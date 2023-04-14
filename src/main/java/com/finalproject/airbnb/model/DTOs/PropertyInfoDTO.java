@@ -12,7 +12,7 @@ import java.util.List;
 @Setter
 @Getter
 @NoArgsConstructor
-public class CreatePropertyDTO {
+public class PropertyInfoDTO {
 
     private Address address;
 
