@@ -12,8 +12,6 @@ import java.util.List;
 public class Category extends BaseEntity{
 
 
-
-
     @Column
     private String category;
 
