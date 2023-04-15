@@ -1,9 +1,11 @@
 package com.finalproject.airbnb.controller;
 
+import com.finalproject.airbnb.Utility;
 import com.finalproject.airbnb.model.DTOs.ErrorDTO;
 import com.finalproject.airbnb.model.exceptions.BadRequestException;
 import com.finalproject.airbnb.model.exceptions.NotFoundException;
 import com.finalproject.airbnb.model.exceptions.UnauthorizedException;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -43,4 +45,13 @@ public abstract class AbstractController {
                 .status(s.value())
                 .build();
     }
+
+    protected int getLoggedId(HttpSession s){
+        if(s.getAttribute(Utility.LOGGED) == null){
+            throw new UnauthorizedException("You have to login first");
+        }
+        return (int) s.getAttribute(Utility.LOGGED_ID);
+    }
+}
+
 }
