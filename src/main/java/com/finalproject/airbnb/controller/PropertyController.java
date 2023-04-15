@@ -1,9 +1,12 @@
 package com.finalproject.airbnb.controller;
 
+import com.finalproject.airbnb.Utility;
 import com.finalproject.airbnb.model.DTOs.PropertyInfoDTO;
 import com.finalproject.airbnb.model.DTOs.PropertySearchDTO;
 import com.finalproject.airbnb.model.DTOs.ReviewInfoDTO;
+import com.finalproject.airbnb.model.exceptions.UnauthorizedException;
 import com.finalproject.airbnb.service.PropertyService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,15 +16,16 @@ public class PropertyController extends AbstractController {
     @Autowired
     private PropertyService propertyService;
 
+<<<<<<< HEAD
 /*
+=======
+>>>>>>> a8eb47a3d1afcce2157b28ca8e614d137c8ae34d
     @PostMapping("/properties")
-    public CreatePropertyDTO createProperty(CreatePropertyDTO dto){
-        return propertyService.createproperty;
-    }
-
-    @PostMapping("/properties")
-    public PropertyInfoDTO createProperty(@RequestBody PropertyInfoDTO dto){
-        return propertyService.createProperty;
+    public PropertyInfoDTO createProperty(@RequestBody PropertyInfoDTO dto, HttpSession s){
+        if(s.getAttribute(Utility.LOGGED) == null){
+            throw new UnauthorizedException("Please log in first!");
+        }
+        return propertyService.createProperty(dto, getLoggedId(s));
     }
 
     @PutMapping("/properties/{id}")
@@ -53,6 +57,9 @@ public class PropertyController extends AbstractController {
     public PropertySearchDTO search(@PathVariable int id, @RequestBody PropertySearchDTO dto) {
         return propertyService.search(dto);
     }
+<<<<<<< HEAD
 
 */
+=======
+>>>>>>> a8eb47a3d1afcce2157b28ca8e614d137c8ae34d
 }
