@@ -13,8 +13,8 @@ public class PropertyController {
     @Autowired
     private PropertyService propertyService;
 
-    @PostMapping("/properties")
-    public CreatePropertyDTO createProperty(CreatePropertyDTO dto){
-        return propertyService.createproperty;
-    }
+//    @PostMapping("/properties")
+//    public CreatePropertyDTO createProperty(CreatePropertyDTO dto){
+////        return propertyService.createproperty;
+//    }
 }

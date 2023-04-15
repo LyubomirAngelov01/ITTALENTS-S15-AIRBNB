@@ -8,11 +8,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity(name = "photos")
-public class Photos {
+public class Photos extends BaseEntity{
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
 
     @ManyToOne
     @JoinColumn(name = "property_id")

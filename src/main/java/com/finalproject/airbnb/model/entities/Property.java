@@ -9,11 +9,8 @@ import java.util.List;
 @Getter
 @Setter
 @Entity(name = "properties")
-public class Property {
+public class Property extends BaseEntity{
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
 
     @ManyToOne
     @JoinColumn(name = "address_id")

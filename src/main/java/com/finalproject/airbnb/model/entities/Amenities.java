@@ -7,11 +7,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity(name = "amenities")
-public class Amenities {
+public class Amenities extends BaseEntity{
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+
 
     @OneToOne
     @JoinColumn(name = "property_id")
