@@ -27,7 +27,7 @@ public class User extends BaseEntity{
     private String email;
 
     @Column
-    @Pattern(regexp = "^(?=.*d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z])(?=.*[!@#$%^_*-]).{8,}$", message = "Weak password")
+    //@Pattern(regexp = "^(?=.*d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z])(?=.*[!@#$%^_*-]).{8,}$", message = "Weak password")
     private String password;
     @ManyToOne
     @JoinColumn(name = "country_code_id", referencedColumnName = "id")
