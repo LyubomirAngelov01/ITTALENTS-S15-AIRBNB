@@ -13,10 +13,10 @@ import java.time.LocalDate;
 @Entity(name = "users")
 public class User extends BaseEntity{
 
-    @NotBlank
+    @NotBlank(message = "enter a valid first name")
     @Column(name = "first_name")
     private String firstName;
-    @NotBlank
+    @NotBlank(message = "enter a valid last name")
     @Column(name = "last_name")
     private String lastName;
     @Column
@@ -27,7 +27,7 @@ public class User extends BaseEntity{
     private String email;
 
     @Column
-    @Pattern(regexp = "^(?=.*d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z])(?=.*[!@#$-]).{8,}$", message = "Weak password")
+    @Pattern(regexp = "^(?=.*d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z])(?=.*[!@#$%^_*-]).{8,}$", message = "Weak password")
     private String password;
     @ManyToOne
     @JoinColumn(name = "country_code_id", referencedColumnName = "id")
@@ -40,9 +40,7 @@ public class User extends BaseEntity{
     private String phoneNumber;
 
 
-    @ManyToOne
-    @JoinColumn(name = "address_id",referencedColumnName = "id")
-    private Address address;
+
     @Column(name = "is_host")
     private boolean isHost;
 
