@@ -2,10 +2,7 @@ package com.finalproject.airbnb.model.entities;
 
 import com.finalproject.airbnb.Utility;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Range;
@@ -16,10 +13,10 @@ import java.time.LocalDate;
 @Entity(name = "users")
 public class User extends BaseEntity{
 
-    //@Min(value = 2)
+    @NotBlank
     @Column(name = "first_name")
     private String firstName;
-    //@Min(value = 2)
+    @NotBlank
     @Column(name = "last_name")
     private String lastName;
     @Column
@@ -38,7 +35,7 @@ public class User extends BaseEntity{
 
 
     @Column(name = "phone_number")
-    //@Size(min = 7, max = 12)
+    @NotBlank
     @Pattern(regexp = "^[0-9]+$",message = "invalid phone number")
     private String phoneNumber;
 

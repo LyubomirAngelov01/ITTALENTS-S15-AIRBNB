@@ -16,10 +16,6 @@ public class PropertyController extends AbstractController {
     @Autowired
     private PropertyService propertyService;
 
-<<<<<<< HEAD
-/*
-=======
->>>>>>> a8eb47a3d1afcce2157b28ca8e614d137c8ae34d
     @PostMapping("/properties")
     public PropertyInfoDTO createProperty(@RequestBody PropertyInfoDTO dto, HttpSession s){
         if(s.getAttribute(Utility.LOGGED) == null){
@@ -57,9 +53,4 @@ public class PropertyController extends AbstractController {
     public PropertySearchDTO search(@PathVariable int id, @RequestBody PropertySearchDTO dto) {
         return propertyService.search(dto);
     }
-<<<<<<< HEAD
-
-*/
-=======
->>>>>>> a8eb47a3d1afcce2157b28ca8e614d137c8ae34d
 }
