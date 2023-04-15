@@ -9,11 +9,10 @@ import java.util.List;
 @Getter
 @Setter
 @Entity(name = "categories")
-public class Category {
+public class Category extends BaseEntity{
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+
+
 
     @Column
     private String category;

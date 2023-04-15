@@ -9,11 +9,9 @@ import java.util.List;
 @Getter
 @Setter
 @Entity(name = "addresses")
-public class Address {
+public class Address extends BaseEntity{
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+
 
     @ManyToOne
     @JoinColumn(name = "country_id")

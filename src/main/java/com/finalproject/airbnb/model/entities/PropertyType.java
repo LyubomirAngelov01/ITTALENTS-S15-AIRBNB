@@ -9,11 +9,10 @@ import java.util.List;
 @Getter
 @Setter
 @Entity(name = "property_types")
-public class PropertyType {
+public class PropertyType extends BaseEntity{
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+
+
 
     @Column()
     private String type;
