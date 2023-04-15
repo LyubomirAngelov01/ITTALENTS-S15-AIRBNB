@@ -10,7 +10,7 @@ import java.util.Optional;
 @Repository
 public interface PropertyRepository extends JpaRepository<Property, Integer> {
 
-    Optional<Property> getById(int id);
+    //Optional<Property> getById(int id);
 
 
     default boolean userOwnsProperty(int userId, int propertyId) {
