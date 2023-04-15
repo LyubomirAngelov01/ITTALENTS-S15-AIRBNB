@@ -16,10 +16,7 @@ public class CountryCodeService extends AbstractService{
 
 
     public CountryCode findById (int id) {
-        return countryCodeRepository.findById(id).orElseThrow(()->{new NotFoundException("no country code found");
-            return null;
-        });
-
+        return countryCodeRepository.findById(id).orElseThrow(()->new NotFoundException("no country code found"));
     }
 
 }

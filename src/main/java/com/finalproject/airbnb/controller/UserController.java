@@ -23,11 +23,18 @@ public class UserController extends  AbstractController{
         return userService.register(dto);
     }
 
+    @PostMapping("/users/login")
     public UserWithoutPasswordDTO login(@RequestBody LoginDTO dto, HttpSession session){
         UserWithoutPasswordDTO responseDto = userService.login(dto);
         session.setAttribute(Utility.LOGGED,true);
+        session.
         session.setAttribute(Utility.LOGGED_ID,responseDto.getId());
         return responseDto;
+    }
+
+    @PostMapping("/users/logout")
+    public UserLogoutDTO logout(){
+
     }
 
 
