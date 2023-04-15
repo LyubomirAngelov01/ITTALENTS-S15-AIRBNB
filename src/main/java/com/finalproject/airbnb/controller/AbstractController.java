@@ -1,5 +1,6 @@
 package com.finalproject.airbnb.controller;
 
+<<<<<<< HEAD
         import com.finalproject.airbnb.model.DTOs.ErrorDTO;
         import com.finalproject.airbnb.model.exceptions.BadRequestException;
         import com.finalproject.airbnb.model.exceptions.NotFoundException;
@@ -8,6 +9,17 @@ package com.finalproject.airbnb.controller;
         import org.springframework.http.HttpStatus;
         import org.springframework.web.bind.annotation.ExceptionHandler;
         import org.springframework.web.bind.annotation.ResponseStatus;
+=======
+import com.finalproject.airbnb.Utility;
+import com.finalproject.airbnb.model.DTOs.ErrorDTO;
+import com.finalproject.airbnb.model.exceptions.BadRequestException;
+import com.finalproject.airbnb.model.exceptions.NotFoundException;
+import com.finalproject.airbnb.model.exceptions.UnauthorizedException;
+import jakarta.servlet.http.HttpSession;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
+>>>>>>> a8eb47a3d1afcce2157b28ca8e614d137c8ae34d
 
         import java.time.LocalDateTime;
 
@@ -44,12 +56,24 @@ public abstract class AbstractController {
                 .status(s.value())
                 .build();
     }
+<<<<<<< HEAD
     protected int getLoggedId(HttpSession s){
         if(s.getAttribute("LOGGED_ID") == null){
             throw new UnauthorizedException("You have to login first");
         }
         return (int) s.getAttribute("LOGGED_ID");
     }
+=======
+
+    protected int getLoggedId(HttpSession s){
+        if(s.getAttribute(Utility.LOGGED) == null){
+            throw new UnauthorizedException("You have to login first");
+        }
+        return (int) s.getAttribute(Utility.LOGGED_ID);
+    }
+}
+
+>>>>>>> a8eb47a3d1afcce2157b28ca8e614d137c8ae34d
 }
 
 
