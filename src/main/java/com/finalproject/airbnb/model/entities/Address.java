@@ -1,6 +1,8 @@
 package com.finalproject.airbnb.model.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,15 +20,19 @@ public class Address extends BaseEntity{
     private Country country;
 
     @Column
+    @NotBlank
     private String streetAddress;
 
     @Column
+    @NotBlank
     private String zipCode;
 
     @Column
+    @NotBlank
     private String region;
 
     @Column
+    @NotBlank
     private String city;
 
     @OneToMany(mappedBy = "address")
