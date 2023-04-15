@@ -15,7 +15,6 @@ public class Country extends BaseEntity{
 
 
 
-
     @Column
     @NotBlank
     private String countryName;
