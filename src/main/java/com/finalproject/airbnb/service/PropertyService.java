@@ -27,7 +27,6 @@ public class PropertyService extends AbstractService {
         if (countryRepository.findCountriesById(countryId) == false) {
             throw new BadRequestException("Invalid country");
         }
-        property.getAddress().getCountry().setCountryName(countryRepository.setCountriesById(countryId));
         if (property.getBedrooms() > 50) {
             throw new BadRequestException("Maximum of 50 bedrooms");
         }
@@ -68,7 +67,7 @@ public class PropertyService extends AbstractService {
         if (countryRepository.findCountriesById(countryId) == false) {
             throw new BadRequestException("Invalid country");
         }
-        property.getAddress().getCountry().setCountryName(countryRepository.setCountriesById(countryId));
+
         if (property.getBedrooms() > 50) {
             throw new BadRequestException("Maximum of 50 bedrooms");
         }

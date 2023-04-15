@@ -10,14 +10,14 @@ import java.time.LocalDate;
 @Getter
 @NoArgsConstructor
 public class RegisterDTO {
-    public String firstName;
-    public String lastName;
-    public LocalDate birthdate;
-    public String email;
-    public String password;
-    public String confirmPassword;
-    public int countryCodeId;
-    public String phoneNumber;
+    private String firstName;
+    private String lastName;
+    private LocalDate birthdate;
+    private String email;
+    private String password;
+    private String confirmPassword;
+    private int countryCodeId;
+    private String phoneNumber;
 
 
 }

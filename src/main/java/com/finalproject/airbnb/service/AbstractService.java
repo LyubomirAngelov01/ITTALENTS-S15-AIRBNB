@@ -27,13 +27,13 @@ public class AbstractService {
     protected ModelMapper mapper;
 
     @Autowired
-    protected UserRepository userRepository;
+    protected UserRepository userRepository;// REMOVE LATER
 
     @Autowired
-    protected PropertyRepository propertyRepository;
+    protected PropertyRepository propertyRepository;// REMOVE LATER
 
     @Autowired
-    protected CountryRepository countryRepository;
+    protected CountryRepository countryRepository;// REMOVE LATER
 
     protected User getUserById(int id){
         return userRepository.findById(id).orElseThrow(() -> new NotFoundException("User not found"));
