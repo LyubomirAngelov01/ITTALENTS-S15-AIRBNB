@@ -56,24 +56,7 @@ public abstract class AbstractController {
                 .status(s.value())
                 .build();
     }
-<<<<<<< HEAD
-    protected int getLoggedId(HttpSession s){
-        if(s.getAttribute("LOGGED_ID") == null){
-            throw new UnauthorizedException("You have to login first");
-        }
-        return (int) s.getAttribute("LOGGED_ID");
-    }
-=======
 
-    protected int getLoggedId(HttpSession s){
-        if(s.getAttribute(Utility.LOGGED) == null){
-            throw new UnauthorizedException("You have to login first");
-        }
-        return (int) s.getAttribute(Utility.LOGGED_ID);
-    }
-}
-
->>>>>>> a8eb47a3d1afcce2157b28ca8e614d137c8ae34d
 }
 
 
