@@ -1,21 +1,18 @@
 package com.finalproject.airbnb.controller;
 
 import com.finalproject.airbnb.Utility;
-import com.finalproject.airbnb.model.DTOs.LoginDTO;
-import com.finalproject.airbnb.model.DTOs.RegisterDTO;
-import com.finalproject.airbnb.model.DTOs.UserLogoutDTO;
-import com.finalproject.airbnb.model.DTOs.UserWithoutPasswordDTO;
+import com.finalproject.airbnb.model.DTOs.*;
+import com.finalproject.airbnb.model.exceptions.BadRequestException;
+import com.finalproject.airbnb.model.exceptions.UnauthorizedException;
 import com.finalproject.airbnb.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class UserController extends  AbstractController{
+
 
     @Autowired
     private UserService userService;
@@ -33,8 +30,28 @@ public class UserController extends  AbstractController{
     }
 
     @PostMapping("/users/logout")
-    public UserLogoutDTO logout(){
+    public void logout(HttpSession session){
+        session.invalidate();
+    }
 
+    @PutMapping("/users/profile/info")
+    public UserWithoutPasswordDTO editProfile(@RequestBody EditProfileInfoDTO dto, HttpSession session){
+        if (session.isNew()){
+            throw new BadRequestException("you have to login");
+        }
+        int id = getLoggedId(session);
+        return userService.editProfileInfo(dto,id);
+    }
+    @DeleteMapping("/users")
+    public DeletedAccountDTO deleteAccount( HttpSession session){
+        if (session.isNew()){
+            throw new BadRequestException("you have to log in");
+        }
+        return userService.deleteAccount(getLoggedId(session));
+    }
+    @GetMapping("/users/{id}")
+    public UserWithoutPasswordDTO checkUserProfile(@PathVariable int id){
+        return userService.checkProfile(id);
     }
 
 

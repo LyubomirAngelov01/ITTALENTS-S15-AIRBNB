@@ -4,10 +4,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter
 @Setter
+@Getter
 @NoArgsConstructor
-public class UserLogoutDTO {
-
-    private String msg;
+public class DeletedAccountDTO {
+    private final String msg = "ACCOUNT HAS BEEN DELETED";
 }
