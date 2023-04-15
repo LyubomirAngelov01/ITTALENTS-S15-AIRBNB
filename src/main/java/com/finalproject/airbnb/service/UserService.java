@@ -12,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -19,6 +20,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserService extends AbstractService{
 
+    private final EmailService emailService;
     private final BCryptPasswordEncoder encoder;
     private final UserRepository userRepository;
     private final CountryCodeService countryCodeService;
@@ -33,6 +35,7 @@ public class UserService extends AbstractService{
 
         userRepository.save(user);
 
+        emailService.sendEmail(generateMessageOnRegistration(dto));
         return  mapper.map(user, UserWithoutPasswordDTO.class);
     }
 
@@ -67,7 +70,7 @@ public class UserService extends AbstractService{
     }
 
     private void validateRegisterDto(RegisterDTO dto) {
-        if (!dto.getPassword().equals(dto.confirmPassword)){
+        if (!dto.getPassword().equals(dto.getConfirmPassword())){
             throw new BadRequestException("Passwords mismatch");
         }
         if (userRepository.existsByEmail(dto.getEmail())){
@@ -84,5 +87,13 @@ public class UserService extends AbstractService{
         User u = userRepository.findById(id).orElseThrow(()-> new NotFoundException("user not found"));
         userRepository.delete(u);
         return new DeletedAccountDTO();
+    }
+
+    private SimpleMessageDTO generateMessageOnRegistration(RegisterDTO registerDTO){
+        SimpleMessageDTO dto = new SimpleMessageDTO();
+        dto.setRecipient(registerDTO.getEmail());
+        dto.setContent("Welcome to Airbnb " + registerDTO.getFirstName() + " " + registerDTO.getLastName() + "!");
+        dto.setSubject("Registration");
+        return dto;
     }
 }

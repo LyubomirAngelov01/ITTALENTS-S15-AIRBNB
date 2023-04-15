@@ -25,34 +25,34 @@ public class PropertyController extends AbstractController {
         return propertyService.createProperty(dto, files,  getLoggedId(s));
     }
 
-    @PutMapping("/properties/{id}")
-    public PropertyInfoDTO editProperty(@PathVariable int id, @RequestBody PropertyInfoDTO dto
-            , @RequestParam("files") MultipartFile[] files, HttpSession s) {
-        return propertyService.editProperty(id, dto, files, getLoggedId(s));
-    }
-
-    @GetMapping("/properties/{id}")
-    public PropertyInfoDTO showProperty(@PathVariable int id){
-        return propertyService.showProperty(id);
-    }
-
-    @DeleteMapping("/properties/{id}")
-    public void deleteProperty(@PathVariable int id) {
-        propertyService.deleteProperty(id);
-    }
-
-    @GetMapping("/properties/{id}/reviews")
-    public ReviewInfoDTO checkReviews(@PathVariable int id) {
-        return propertyService.checkReviews;
-    }
-
-    @PostMapping("/properties/{id}/wishlist")
-    public void addToWishlist(@PathVariable int id) {
-        return propertyService.addToWishlist;
-    }
-
-    @PostMapping("/properties/{id}/all")
-    public PropertySearchDTO search(@PathVariable int id, @RequestBody PropertySearchDTO dto) {
-        return propertyService.search(dto);
-    }
+//    @PutMapping("/properties/{id}")
+//    public PropertyInfoDTO editProperty(@PathVariable int id, @RequestBody PropertyInfoDTO dto
+//            , @RequestParam("files") MultipartFile[] files, HttpSession s) {
+//        return propertyService.editProperty(id, dto, files, getLoggedId(s));
+//    }
+//
+//    @GetMapping("/properties/{id}")
+//    public PropertyInfoDTO showProperty(@PathVariable int id){
+//        return propertyService.showProperty(id);
+//    }
+//
+//    @DeleteMapping("/properties/{id}")
+//    public void deleteProperty(@PathVariable int id) {
+//        propertyService.deleteProperty(id);
+//    }
+//
+//    @GetMapping("/properties/{id}/reviews")
+//    public ReviewInfoDTO checkReviews(@PathVariable int id) {
+//        return propertyService.checkReviews;
+//    }
+//
+//    @PostMapping("/properties/{id}/wishlist")
+//    public void addToWishlist(@PathVariable int id) {
+//        return propertyService.addToWishlist;
+//    }
+//
+//    @PostMapping("/properties/{id}/all")
+//    public PropertySearchDTO search(@PathVariable int id, @RequestBody PropertySearchDTO dto) {
+//        return propertyService.search(dto);
+//    }
 }

@@ -36,17 +36,13 @@ public class UserController extends  AbstractController{
 
     @PutMapping("/users/profile/info")
     public UserWithoutPasswordDTO editProfile(@RequestBody EditProfileInfoDTO dto, HttpSession session){
-        if (session.isNew()){
-            throw new BadRequestException("you have to login");
-        }
+
         int id = getLoggedId(session);
         return userService.editProfileInfo(dto,id);
     }
     @DeleteMapping("/users")
     public DeletedAccountDTO deleteAccount( HttpSession session){
-        if (session.isNew()){
-            throw new BadRequestException("you have to log in");
-        }
+
         return userService.deleteAccount(getLoggedId(session));
     }
     @GetMapping("/users/{id}")
