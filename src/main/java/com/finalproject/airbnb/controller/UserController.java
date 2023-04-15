@@ -3,6 +3,7 @@ package com.finalproject.airbnb.controller;
 import com.finalproject.airbnb.Utility;
 import com.finalproject.airbnb.model.DTOs.LoginDTO;
 import com.finalproject.airbnb.model.DTOs.RegisterDTO;
+import com.finalproject.airbnb.model.DTOs.UserLogoutDTO;
 import com.finalproject.airbnb.model.DTOs.UserWithoutPasswordDTO;
 import com.finalproject.airbnb.service.UserService;
 import jakarta.servlet.http.HttpSession;
