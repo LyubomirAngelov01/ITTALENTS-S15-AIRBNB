@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @RestController
 public class PropertyController extends AbstractController {
 
@@ -18,10 +20,7 @@ public class PropertyController extends AbstractController {
     private PropertyService propertyService;
 
     @PostMapping("/properties")
-    public PropertyInfoDTO createProperty(@RequestBody PropertyInfoDTO dto, @RequestParam("files") MultipartFile[] files, HttpSession s){
-        if(s.getAttribute(Utility.LOGGED) == null){
-            throw new UnauthorizedException("Please log in first!");
-        }
+    public PropertyInfoDTO createProperty( @RequestPart("files") MultipartFile[] files, @RequestBody PropertyInfoDTO dto,HttpSession s){
         return propertyService.createProperty(dto, files,  getLoggedId(s));
     }
 
@@ -37,22 +36,22 @@ public class PropertyController extends AbstractController {
     }
 
     @DeleteMapping("/properties/{id}")
-    public void deleteProperty(@PathVariable int id) {
-        propertyService.deleteProperty(id);
+    public void deleteProperty(@PathVariable int id, HttpSession s) {
+        propertyService.deleteProperty(id, getLoggedId(s));
     }
 
     @GetMapping("/properties/{id}/reviews")
-    public ReviewInfoDTO checkReviews(@PathVariable int id) {
-        return propertyService.checkReviews;
+    public List<ReviewInfoDTO> checkReviews(@PathVariable int id) {
+        return propertyService.checkReviews(id);
     }
 
-    @PostMapping("/properties/{id}/wishlist")
-    public void addToWishlist(@PathVariable int id) {
-        return propertyService.addToWishlist;
-    }
+//    @PostMapping("/properties/{id}/wishlist")
+//    public void addToWishlist(@PathVariable int id, HttpSession s) {
+//        return propertyService.addToWishlist(id, getLoggedId(s));
+//    }
 
-    @PostMapping("/properties/{id}/all")
-    public PropertySearchDTO search(@PathVariable int id, @RequestBody PropertySearchDTO dto) {
+    @PostMapping("/properties/all")
+    public List<PropertySearchDTO> search(@PathVariable int id, @RequestBody PropertySearchDTO dto) {
         return propertyService.search(dto);
     }
 }
