@@ -13,7 +13,7 @@ public class PropertyController extends AbstractController {
     @Autowired
     private PropertyService propertyService;
 
-
+/*
     @PostMapping("/properties")
     public CreatePropertyDTO createProperty(CreatePropertyDTO dto){
         return propertyService.createproperty;
@@ -50,9 +50,9 @@ public class PropertyController extends AbstractController {
     }
 
     @PostMapping("/properties/{id}/all")
-    public PropertySearchDTO search(@PathVariable int id, @RequestBody PropertySearchDTO) {
-        return propertyService.search;
+    public PropertySearchDTO search(@PathVariable int id, @RequestBody PropertySearchDTO dto) {
+        return propertyService.search(dto);
     }
 
->>>>>>> 373d34bf8d7f0c93c686c45fad6ef16d969ee52b
+*/
 }
