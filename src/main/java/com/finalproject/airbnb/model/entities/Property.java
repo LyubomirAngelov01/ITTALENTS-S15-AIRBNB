@@ -1,12 +1,11 @@
 package com.finalproject.airbnb.model.entities;
 
 import jakarta.persistence.*;
-import lombok.EqualsAndHashCode;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.validator.constraints.Range;
 
-import java.io.Serializable;
 import java.util.List;
 
 @Getter
@@ -15,11 +14,24 @@ import java.util.List;
 public class Property extends BaseEntity{
 
 
-    @ManyToOne
-    @JoinColumn(name = "address_id")
-    private Address address;
+    @Column
+    private String streetAddress;
 
     @Column
+    private String zipCode;
+
+    @Column
+    private String region;
+
+    @Column
+    private String city;
+
+    @ManyToOne
+    @JoinColumn(name = "country_id")
+    private Country country;
+
+    @Column
+    @Range()
     private int beds;
 
     @Column
@@ -43,10 +55,6 @@ public class Property extends BaseEntity{
     @ManyToOne
     @JoinColumn(name = "owner_id")
     private User owner;
-
-    @ManyToOne
-    @JoinColumn(name = "property_type_id")
-    private PropertyType propertyType;
 
     @ManyToOne
     @JoinColumn(name = "category_id")

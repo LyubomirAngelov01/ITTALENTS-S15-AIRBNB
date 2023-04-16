@@ -4,8 +4,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
 @Entity(name = "categories")
@@ -13,8 +11,6 @@ public class Category extends BaseEntity{
 
 
     @Column
-    private String category;
+    private String categoryName;
 
-    @OneToMany(mappedBy = "category")
-    private List<Property> properties;
 }

@@ -1,25 +1,12 @@
 package com.finalproject.airbnb.service;
 
-import com.finalproject.airbnb.model.DTOs.PropertyInfoDTO;
-import com.finalproject.airbnb.model.entities.Photos;
-import com.finalproject.airbnb.model.entities.Property;
+
 import com.finalproject.airbnb.model.entities.User;
-import com.finalproject.airbnb.model.exceptions.BadRequestException;
 import com.finalproject.airbnb.model.exceptions.NotFoundException;
-import com.finalproject.airbnb.model.repositories.CountryRepository;
-import com.finalproject.airbnb.model.repositories.PropertyRepository;
-import com.finalproject.airbnb.model.repositories.ReviewRepository;
-import com.finalproject.airbnb.model.repositories.UserRepository;
-import lombok.SneakyThrows;
+import com.finalproject.airbnb.model.repositories.*;
 import org.modelmapper.ModelMapper;
-import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.File;
-import java.nio.file.Files;
-import java.util.UUID;
 
 @Service
 public class AbstractService {
@@ -38,6 +25,15 @@ public class AbstractService {
 
     @Autowired
     protected ReviewRepository reviewRepository;
+
+    @Autowired
+    protected PhotosRepository photosRepository;
+
+    @Autowired
+    protected CategoryRepository categoryRepository;
+
+    @Autowired
+    protected AmenitiesRepository amenitiesRepository;
 
     protected User getUserById(int id){
         return userRepository.findById(id).orElseThrow(() -> new NotFoundException("User not found"));

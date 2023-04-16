@@ -8,7 +8,8 @@ import lombok.Setter;
 @Setter
 @Getter
 @NoArgsConstructor
-public class AllReviewsDTO {
+public class DeleteReviewDTO {
 
+    private final String msg = "PROPERTY HAS BEEN DELETED";
 
 }
