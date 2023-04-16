@@ -8,6 +8,7 @@ import com.finalproject.airbnb.model.exceptions.NotFoundException;
 import com.finalproject.airbnb.model.exceptions.UnauthorizedException;
 import com.finalproject.airbnb.model.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -17,13 +18,19 @@ import java.util.Optional;
 
 
 @Service
-@RequiredArgsConstructor
 public class UserService extends AbstractService{
 
-    private final EmailService emailService;
-    private final BCryptPasswordEncoder encoder;
-    private final UserRepository userRepository;
-    private final CountryCodeService countryCodeService;
+    @Autowired
+    private EmailService emailService;
+
+    @Autowired
+    private BCryptPasswordEncoder encoder;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private CountryCodeService countryCodeService;
 
 
     public UserWithoutPasswordDTO register(RegisterDTO dto){
