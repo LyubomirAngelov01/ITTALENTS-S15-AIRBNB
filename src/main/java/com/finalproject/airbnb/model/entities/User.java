@@ -3,13 +3,19 @@ package com.finalproject.airbnb.model.entities;
 import com.finalproject.airbnb.Utility;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Range;
 
 import java.time.LocalDate;
+import java.util.List;
+
 @Setter
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity(name = "users")
 public class User extends BaseEntity{
 

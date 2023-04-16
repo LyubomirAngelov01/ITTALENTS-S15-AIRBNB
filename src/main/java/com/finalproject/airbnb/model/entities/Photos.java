@@ -15,6 +15,6 @@ public class Photos extends BaseEntity{
     @JoinColumn(name = "property_id")
     private Property property;
 
-    @Column
+    @Column(name = "photo_url")
     private String photoUrl;
 }
