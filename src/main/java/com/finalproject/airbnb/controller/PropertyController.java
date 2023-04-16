@@ -7,15 +7,17 @@ import com.finalproject.airbnb.model.DTOs.ReviewInfoDTO;
 import com.finalproject.airbnb.model.exceptions.UnauthorizedException;
 import com.finalproject.airbnb.service.PropertyService;
 import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
+@RequiredArgsConstructor
 public class PropertyController extends AbstractController {
 
-    @Autowired
-    private PropertyService propertyService;
+
+    private final PropertyService propertyService;
 
     @PostMapping("/properties")
     public PropertyInfoDTO createProperty(@RequestBody PropertyInfoDTO dto, @RequestParam("files") MultipartFile[] files, HttpSession s){
@@ -48,7 +50,7 @@ public class PropertyController extends AbstractController {
 
     @PostMapping("/properties/{id}/wishlist")
     public void addToWishlist(@PathVariable int id) {
-        return propertyService.addToWishlistg;
+        return propertyService.addToWishlist;
     }
 
     @PostMapping("/properties/{id}/all")

@@ -2,16 +2,19 @@ package com.finalproject.airbnb.service;
 
 import com.finalproject.airbnb.Utility;
 import com.finalproject.airbnb.model.DTOs.*;
+import com.finalproject.airbnb.model.entities.Reservation;
 import com.finalproject.airbnb.model.entities.User;
 import com.finalproject.airbnb.model.exceptions.BadRequestException;
 import com.finalproject.airbnb.model.exceptions.NotFoundException;
 import com.finalproject.airbnb.model.exceptions.UnauthorizedException;
+import com.finalproject.airbnb.model.repositories.ReservationRepository;
 import com.finalproject.airbnb.model.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,6 +27,7 @@ public class UserService extends AbstractService{
     private final BCryptPasswordEncoder encoder;
     private final UserRepository userRepository;
     private final CountryCodeService countryCodeService;
+    private final ReservationRepository reservationRepository;
 
 
     public UserWithoutPasswordDTO register(RegisterDTO dto){
@@ -95,5 +99,16 @@ public class UserService extends AbstractService{
         dto.setContent("Welcome to Airbnb " + registerDTO.getFirstName() + " " + registerDTO.getLastName() + "!");
         dto.setSubject("Registration");
         return dto;
+    }
+
+    public List<TripDTO> listAllTrips(int userId) {
+        User u = userRepository.findById(userId).orElseThrow(()-> new NotFoundException("user not found"));
+        List <Reservation>  reservations = reservationRepository.findAllByUser(u);
+        List<TripDTO> trips = new ArrayList();
+        for (Reservation reservation : reservations) {
+            TripDTO tripDTO = mapper.map(reservation,TripDTO.class);
+            trips.add(tripDTO);
+        }
+        return trips;
     }
 }
