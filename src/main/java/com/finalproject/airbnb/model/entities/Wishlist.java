@@ -3,14 +3,13 @@ package com.finalproject.airbnb.model.entities;
 
 import com.finalproject.airbnb.compositeKeysClasses.WishlistKeys;
 import jakarta.persistence.*;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
-@EqualsAndHashCode
 @Entity(name = "wishlist")
+@AllArgsConstructor
+@NoArgsConstructor
 @IdClass(WishlistKeys.class)
 public class Wishlist {
 

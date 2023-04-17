@@ -28,7 +28,7 @@ public class MessageController extends AbstractController{
     }
     @GetMapping("/users/messages")
     public List<User> getInbox(HttpSession session){
-        messageService.getInbox(getLoggedId(session));
+        return messageService.getInbox(getLoggedId(session));
     }
 
 }
