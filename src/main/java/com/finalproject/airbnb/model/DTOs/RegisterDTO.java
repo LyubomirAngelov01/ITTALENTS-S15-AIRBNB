@@ -20,12 +20,13 @@ public class RegisterDTO {
     private String lastName;
 
     private LocalDate birthdate;
-    @Email(message = "invalid email")
+    @Email(message = "invalid email, email should be structured as shown by this example: example@mailexample.com")
     private String email;
-    @Pattern(regexp = "^(?=.*d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z])(?=.*[!@#$%^_*-]).{8,}$", message = "Weak password")
+    @Pattern(regexp = "^(?=.*[A-Z])(?=.*[!@#$&^*])(?=.*[0-9])(?=.*[a-z]).{8,}$", message = "Weak password, the password must include at least 1 uppercase character" +
+            ", 1 lowercase character, 1 special symbol of (!,@,#,$,&,^,*), 1 number from 0 to 9 and at least 8 total symbols!")
     private String password;
     private String confirmPassword;
-    private int countryCodeId;
+    private int countryCode;
     @NotBlank
     @Pattern(regexp = "^[0-9]+$",message = "invalid phone number")
     private String phoneNumber;

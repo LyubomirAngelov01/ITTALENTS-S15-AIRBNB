@@ -1,6 +1,7 @@
 package com.finalproject.airbnb.model.DTOs;
 
-import com.finalproject.airbnb.model.entities.Address;
+
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
@@ -15,6 +16,8 @@ public class EditProfileInfoDTO {
     private String firstName;
     @NotBlank(message = "enter a valid last name")
     private String lastName;
+    @Email(message = "invalid email, email should be structured as shown by this example: example@mailexample.com")
+    private String email;
     @NotBlank
     @Pattern(regexp = "^[0-9]+$",message = "invalid phone number")
     private String phoneNumber;

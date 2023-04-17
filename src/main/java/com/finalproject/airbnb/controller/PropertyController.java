@@ -46,10 +46,10 @@ public class PropertyController extends AbstractController {
         return propertyService.checkReviews(id);
     }
 
-//    @PostMapping("/properties/{id}/wishlist")
-//    public void addToWishlist(@PathVariable int id) {
-//        return propertyService.addToWishlist;
-//    }
+    @PostMapping("/properties/{id}/wishlist")
+    public void addToWishlist(@PathVariable int id) {
+        return propertyService.addToWishlist;
+    }
 
     @PostMapping("/properties/all")
     public List<PropertySearchDTO> search(@RequestBody PropertySearchDTO dto) {
