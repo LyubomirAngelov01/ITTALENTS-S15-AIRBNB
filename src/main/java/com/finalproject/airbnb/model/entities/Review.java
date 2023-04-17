@@ -28,5 +28,5 @@ public class Review {
     private String comment;
 
     @Column
-    private int rating;
+    private double rating;
 }

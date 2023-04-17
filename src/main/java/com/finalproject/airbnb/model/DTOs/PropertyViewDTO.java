@@ -1,61 +1,41 @@
 package com.finalproject.airbnb.model.DTOs;
 
-
-import com.finalproject.airbnb.model.entities.*;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.NotBlank;
+import com.finalproject.airbnb.model.entities.Photos;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.Range;
 
 import java.util.List;
 
 @Setter
 @Getter
 @NoArgsConstructor
-public class PropertyInfoDTO {
-
-    @NotBlank(message = "Write down a street address!")
+public class PropertyViewDTO {
     private String streetAddress;
 
-    @NotBlank(message = "Write down a region!")
     private String region;
 
-    @NotBlank(message = "Write down a zip code!")
     private String zipCode;
 
-    @NotBlank(message = "Write down a city!")
     private String city;
 
-    private int countryNum;
+    private String countryName;
 
-    @Range(min = 0, max = 50)
     private int beds;
-
 
     private int maxGuests;
 
-    @Range(min = 18, max = 17729)
     private double price;
 
-    @Range(min = 0, max = 50)
     private int bathrooms;
 
-    @Range(min = 0, max = 50)
     private int bedrooms;
 
-    @NotBlank
-    @Length(max = 500)
     private String description;
 
-    @NotBlank
-    @Length(max = 32)
     private String title;
 
-
-    private int categoryNum;
+    private String categoryName;
 
     private boolean wifiConnection;
 
@@ -72,5 +52,4 @@ public class PropertyInfoDTO {
     private boolean kitchen;
 
     private List<Photos> photos;
-
 }
