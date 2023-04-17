@@ -18,11 +18,11 @@ public class ReservationController extends AbstractController{
     @PostMapping("/properties/{property_id}/reservations")
     public SuccessfulReservationDTO makeReservation(@PathVariable int propertyId, @RequestBody ReservationDTO reservationDTO, HttpSession session){
         int userId = getLoggedId(session);
-         return reservationService.makeReservation(userId,propertyId,reservationDTO);
+        return reservationService.makeReservation(userId,propertyId,reservationDTO);
     }
 
     @DeleteMapping("/users/reservations/{id}")
-    public void deleteReservation(@PathVariable int reservationId,HttpSession session){
+    public void removeReservation(@PathVariable int reservationId, HttpSession session){
         reservationService.removeReservation(reservationId,getLoggedId(session));
     }
     @GetMapping("/users/reservations")

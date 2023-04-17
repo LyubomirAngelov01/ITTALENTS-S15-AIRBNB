@@ -2,7 +2,9 @@ package com.finalproject.airbnb.service;
 
 import com.finalproject.airbnb.model.DTOs.ReservationDTO;
 import com.finalproject.airbnb.model.DTOs.SuccessfulReservationDTO;
+import com.finalproject.airbnb.model.entities.Property;
 import com.finalproject.airbnb.model.entities.Reservation;
+import com.finalproject.airbnb.model.exceptions.BadRequestException;
 import com.finalproject.airbnb.model.exceptions.NotFoundException;
 import com.finalproject.airbnb.model.repositories.PropertyRepository;
 import com.finalproject.airbnb.model.repositories.ReservationRepository;
@@ -22,13 +24,15 @@ public class ReservationService extends AbstractService{
     private final PropertyRepository propertyRepository;
 
     public SuccessfulReservationDTO makeReservation(int userId, int propertyId, ReservationDTO reservationDTO){
-        validateDates(reservationDTO);
+        if (!validDates(reservationDTO,propertyId)){
+            throw new BadRequestException("select valid dates for reservation");
+        }
         Reservation reservation = new Reservation();
 
         reservation.setUser(userRepository.findById(userId).orElseThrow(()-> new NotFoundException("user not found")));
         reservation.setProperty(propertyRepository.findById(propertyId).orElseThrow(()->new NotFoundException("Property not found")));
         reservation.setCheckInDate(reservationDTO.getCheckInDate());
-        reservation.setCheckOutDate(reservationDTO.getGetCheckOutDate());
+        reservation.setCheckOutDate(reservationDTO.getCheckOutDate());
         reservation.setGuests(reservationDTO.getGuests());
 
         SuccessfulReservationDTO successfulReservation = mapper.map(reservation,SuccessfulReservationDTO.class);
@@ -55,8 +59,18 @@ public class ReservationService extends AbstractService{
 
 
 
-    private boolean validateDates(ReservationDTO reservationDTO) {
-    //TODO
+    private boolean validDates(ReservationDTO reservationDTO,int propertyId) {
+        Property property = propertyRepository.findById(propertyId).orElseThrow(()-> new NotFoundException("property not found"));
+        List<Reservation> reservations = reservationRepository.findAllByProperty(property);
+        for (Reservation reservation: reservations) {
+            if((reservationDTO.getCheckInDate().isAfter(reservation.getCheckInDate().minusDays(1))) ||
+                    (reservationDTO.getCheckOutDate().isBefore(reservation.getCheckOutDate().plusDays(1))) ||
+                    (reservationDTO.getCheckInDate().isBefore(reservation.getCheckOutDate().plusDays(1))) ||
+                    (reservationDTO.getCheckOutDate().isAfter(reservation.getCheckInDate().minusDays(1)))){
+                return false;
+            }
+        }
+        return true;
     }
 
 }
