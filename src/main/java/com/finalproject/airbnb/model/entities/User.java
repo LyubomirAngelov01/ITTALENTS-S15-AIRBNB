@@ -29,11 +29,9 @@ public class User extends BaseEntity{
     private LocalDate birthdate;
 
     @Column
-    @Email(message = "invalid email")
     private String email;
 
     @Column
-    @Pattern(regexp = "^(?=.*d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z])(?=.*[!@#$%^_*-]).{8,}$", message = "Weak password")
     private String password;
     @ManyToOne
     @JoinColumn(name = "country_code_id", referencedColumnName = "id")
@@ -41,8 +39,7 @@ public class User extends BaseEntity{
 
 
     @Column(name = "phone_number")
-    @NotBlank
-    @Pattern(regexp = "^[0-9]+$",message = "invalid phone number")
+
     private String phoneNumber;
 
 

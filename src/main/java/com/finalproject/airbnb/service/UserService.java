@@ -2,35 +2,32 @@ package com.finalproject.airbnb.service;
 
 import com.finalproject.airbnb.Utility;
 import com.finalproject.airbnb.model.DTOs.*;
+import com.finalproject.airbnb.model.entities.Reservation;
 import com.finalproject.airbnb.model.entities.User;
 import com.finalproject.airbnb.model.exceptions.BadRequestException;
 import com.finalproject.airbnb.model.exceptions.NotFoundException;
 import com.finalproject.airbnb.model.exceptions.UnauthorizedException;
+import com.finalproject.airbnb.model.repositories.ReservationRepository;
 import com.finalproject.airbnb.model.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 
 @Service
+@RequiredArgsConstructor
 public class UserService extends AbstractService{
 
-    @Autowired
-    private EmailService emailService;
-
-    @Autowired
-    private BCryptPasswordEncoder encoder;
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private CountryCodeService countryCodeService;
+    private final EmailService emailService;
+    private final BCryptPasswordEncoder encoder;
+    private final UserRepository userRepository;
+    private final CountryCodeService   countryCodeService;
+    private final ReservationRepository reservationRepository;
 
 
     public UserWithoutPasswordDTO register(RegisterDTO dto){
@@ -42,7 +39,7 @@ public class UserService extends AbstractService{
 
         userRepository.save(user);
 
-        emailService.sendEmail(generateMessageOnRegistration(dto));
+        //emailService.sendEmail(generateMessageOnRegistration(dto));
         return  mapper.map(user, UserWithoutPasswordDTO.class);
     }
 
@@ -69,12 +66,48 @@ public class UserService extends AbstractService{
         User u = userRepository.findById(id).orElseThrow(()-> new NotFoundException("User not found"));
 
         mapper.map(dto,u);
-        u.setCountryCode(countryCodeService.findById(dto.getCountryCodeId()));
+        u.setCountryCode(countryCodeService.findById(dto.getCountryCode()));
         userRepository.save(u);
 
         UserWithoutPasswordDTO user = mapper.map(u,UserWithoutPasswordDTO.class);
         return user;
     }
+
+
+
+    public void deleteAccount(int id) {
+
+        userRepository.deleteById(id);
+
+    }
+
+
+
+    public List<TripDTO> listAllTrips(int userId) {
+        User u = userRepository.findById(userId).orElseThrow(()-> new NotFoundException("user not found"));
+        List <Reservation>  reservations = reservationRepository.findAllByUser(u);
+        List<TripDTO> trips = new ArrayList();
+        for (Reservation reservation : reservations) {
+            TripDTO tripDTO = mapper.map(reservation,TripDTO.class);
+            trips.add(tripDTO);
+        }
+        return trips;
+    }
+
+
+
+    public UserWithoutPasswordDTO editLoginCredetials(int id,EditLoginCredentialsDTO dto) {
+        if (!dto.getNewPassword().equals(dto.getConfirmNewPassword())){
+            throw new BadRequestException("Passwords mismatch");
+        }
+        User user = userRepository.findById(id).orElseThrow(()-> new UnauthorizedException("not a valid user"));
+        user.setEmail(dto.getEmail());
+        user.setPassword(encoder.encode(dto.getNewPassword()));
+        userRepository.save(user);
+        return mapper.map(user, UserWithoutPasswordDTO.class);
+
+    }
+
 
     private void validateRegisterDto(RegisterDTO dto) {
         if (!dto.getPassword().equals(dto.getConfirmPassword())){
@@ -88,12 +121,6 @@ public class UserService extends AbstractService{
         if (dto.getBirthdate().isAfter(validateYear)){
             throw new BadRequestException("not a valid birthdate");
         }
-    }
-
-    public DeletedAccountDTO deleteAccount(int id) {
-        User u = userRepository.findById(id).orElseThrow(()-> new NotFoundException("user not found"));
-        userRepository.delete(u);
-        return new DeletedAccountDTO();
     }
 
     private SimpleMessageDTO generateMessageOnRegistration(RegisterDTO registerDTO){
