@@ -1,11 +1,10 @@
 package com.finalproject.airbnb.controller;
 
-import com.finalproject.airbnb.Utility;
 import com.finalproject.airbnb.model.DTOs.PropertyInfoDTO;
 import com.finalproject.airbnb.model.DTOs.PropertySearchDTO;
 import com.finalproject.airbnb.model.DTOs.PropertyViewDTO;
 import com.finalproject.airbnb.model.DTOs.ReviewInfoDTO;
-import com.finalproject.airbnb.model.exceptions.UnauthorizedException;
+import com.finalproject.airbnb.service.PhotoService;
 import com.finalproject.airbnb.service.PropertyService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -20,6 +19,7 @@ public class PropertyController extends AbstractController {
 
     @Autowired
     private PropertyService propertyService;
+
 
     @PostMapping("/properties")
     public PropertyViewDTO createProperty(@Valid @RequestBody PropertyInfoDTO dto, HttpSession s){
@@ -52,7 +52,7 @@ public class PropertyController extends AbstractController {
 //    }
 
     @PostMapping("/properties/all")
-    public List<PropertySearchDTO> search(@RequestBody PropertySearchDTO dto) {
+    public List<PropertyViewDTO> search(@RequestBody PropertySearchDTO dto) {
         return propertyService.search(dto);
     }
 }

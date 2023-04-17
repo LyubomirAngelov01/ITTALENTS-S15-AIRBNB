@@ -31,7 +31,6 @@ public class Property extends BaseEntity{
     private Country country;
 
     @Column
-    @Range()
     private int beds;
 
     @Column

@@ -21,25 +21,25 @@ public class ReservationService extends AbstractService{
     private final UserRepository userRepository;
     private final PropertyRepository propertyRepository;
 
-    public SuccessfulReservationDTO makeReservation(int userId, int propertyId, ReservationDTO reservationDTO){
-        validateDates(reservationDTO);
-        Reservation reservation = new Reservation();
-
-        reservation.setUser(userRepository.findById(userId).orElseThrow(()-> new NotFoundException("user not found")));
-        reservation.setProperty(propertyRepository.findById(propertyId).orElseThrow(()->new NotFoundException("Property not found")));
-        reservation.setCheckInDate(reservationDTO.getCheckInDate());
-        reservation.setCheckOutDate(reservationDTO.getGetCheckOutDate());
-        reservation.setGuests(reservationDTO.getGuests());
-
-        SuccessfulReservationDTO successfulReservation = mapper.map(reservation,SuccessfulReservationDTO.class);
-        reservationRepository.save(reservation);
-
-        successfulReservation.setMsg("Reservation successful for " + reservation.getProperty().getTitle() + " from "
-                + reservation.getCheckInDate() + " to " + reservation.getCheckOutDate() + "!");
-
-        return successfulReservation;
-
-    }
+//    public SuccessfulReservationDTO makeReservation(int userId, int propertyId, ReservationDTO reservationDTO){
+//        validateDates(reservationDTO);
+//        Reservation reservation = new Reservation();
+//
+//        reservation.setUser(userRepository.findById(userId).orElseThrow(()-> new NotFoundException("user not found")));
+//        reservation.setProperty(propertyRepository.findById(propertyId).orElseThrow(()->new NotFoundException("Property not found")));
+//        reservation.setCheckInDate(reservationDTO.getCheckInDate());
+//        reservation.setCheckOutDate(reservationDTO.getGetCheckOutDate());
+//        reservation.setGuests(reservationDTO.getGuests());
+//
+//        SuccessfulReservationDTO successfulReservation = mapper.map(reservation,SuccessfulReservationDTO.class);
+//        reservationRepository.save(reservation);
+//
+//        successfulReservation.setMsg("Reservation successful for " + reservation.getProperty().getTitle() + " from "
+//                + reservation.getCheckInDate() + " to " + reservation.getCheckOutDate() + "!");
+//
+//        return successfulReservation;
+//
+//    }
 
 
     public List<Reservation> listUpcomingReservationsForAClient(int loggedId) {
@@ -55,8 +55,8 @@ public class ReservationService extends AbstractService{
 
 
 
-    private boolean validateDates(ReservationDTO reservationDTO) {
-    //TODO
-    }
+//    private boolean validateDates(ReservationDTO reservationDTO) {
+//    //TODO
+//    }
 
 }
