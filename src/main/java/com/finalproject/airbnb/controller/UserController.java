@@ -36,7 +36,7 @@ public class UserController extends  AbstractController{
 
     @PostMapping("/users/logout")
     public void logout(HttpSession session){
-        session.setAttribute(Utility.LOGGED,false);
+        session.setAttribute(Utility.LOGGED,null);
         session.setAttribute(Utility.LOGGED_ID,null);
     }
 
@@ -47,24 +47,25 @@ public class UserController extends  AbstractController{
         return userService.editProfileInfo(dto,id);
     }
 
-//    @PutMapping("/users/profile/login&security")
-//    public UserWithoutPasswordDTO editLoginCredentials(@RequestBody){
-//        return userService.editLoginCredetials();
-//    }
-//    @DeleteMapping("/users")
-//    public DeletedAccountDTO deleteAccount( HttpSession session){
-//
-//        return userService.deleteAccount(getLoggedId(session));
-//    }
-//    @GetMapping("/users/{id}")
-//    public UserWithoutPasswordDTO checkUserProfile(@PathVariable int id){
-//        return userService.checkProfile(id);
-//    }
-//    @GetMapping("/users/trips")
-//    public List<TripDTO> checkTrips(HttpSession session){
-//        int userId = getLoggedId(session);
-//        return userService.listAllTrips(userId);
-//    }
+    @PutMapping("/users/profile/login&security")
+    public UserWithoutPasswordDTO editLoginCredentials(@RequestBody EditLoginCredentialsDTO dto, HttpSession session){
+        int id = getLoggedId(session);
+        return userService.editLoginCredetials(id,dto);
+    }
+    @DeleteMapping("/users")
+    public void deleteAccount( HttpSession session){
+
+        userService.deleteAccount(getLoggedId(session));
+    }
+    @GetMapping("/users/{id}")
+    public UserWithoutPasswordDTO checkUserProfile(@PathVariable int id){
+        return userService.checkProfile(id);
+    }
+    @GetMapping("/users/trips")
+    public List<TripDTO> checkTrips(HttpSession session){
+        int userId = getLoggedId(session);
+        return userService.listAllTrips(userId);
+    }
 
 
 }
