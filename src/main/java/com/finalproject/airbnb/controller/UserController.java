@@ -36,7 +36,7 @@ public class UserController extends  AbstractController{
 
     @PostMapping("/users/logout")
     public void logout(HttpSession session){
-        session.setAttribute(Utility.LOGGED,false);
+        session.setAttribute(Utility.LOGGED,null);
         session.setAttribute(Utility.LOGGED_ID,null);
     }
 
@@ -48,13 +48,14 @@ public class UserController extends  AbstractController{
     }
 
     @PutMapping("/users/profile/login&security")
-    public UserWithoutPasswordDTO editLoginCredentials(@RequestBody){
-        return userService.editLoginCredetials();
+    public UserWithoutPasswordDTO editLoginCredentials(@RequestBody EditLoginCredentialsDTO dto, HttpSession session){
+        int id = getLoggedId(session);
+        return userService.editLoginCredetials(id,dto);
     }
     @DeleteMapping("/users")
-    public DeletedAccountDTO deleteAccount( HttpSession session){
+    public void deleteAccount( HttpSession session){
 
-        return userService.deleteAccount(getLoggedId(session));
+        userService.deleteAccount(getLoggedId(session));
     }
     @GetMapping("/users/{id}")
     public UserWithoutPasswordDTO checkUserProfile(@PathVariable int id){

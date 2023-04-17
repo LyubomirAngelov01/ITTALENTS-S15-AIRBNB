@@ -5,18 +5,33 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+import java.time.LocalDateTime;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity(name = "messages")
 public class Message extends BaseEntity {
 
     @Column
     private String message;
-    @Column
+
+
     @ManyToOne
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "sender_id")
     private User sender;
-    @Column
+
+
     @ManyToOne
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "receiver_id")
     private User receiver;
+
+    @Column(name = "time_sent")
+    private LocalDateTime timeSent;
 }

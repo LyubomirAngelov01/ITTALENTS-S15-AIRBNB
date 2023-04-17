@@ -16,7 +16,6 @@ import java.util.Optional;
 @Service
 public class PropertyService extends AbstractService {
 
-
     public PropertyInfoDTO createProperty(PropertyInfoDTO dto, MultipartFile[] files, int loggedId) {
         User u = getUserById(loggedId);
         if (!u.isHost()) {
@@ -116,6 +115,7 @@ public class PropertyService extends AbstractService {
         }
     }
 }
+
 
 
 

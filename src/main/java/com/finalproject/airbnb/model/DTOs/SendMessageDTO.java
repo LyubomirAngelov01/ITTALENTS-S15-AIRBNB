@@ -1,16 +1,19 @@
 package com.finalproject.airbnb.model.DTOs;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @NoArgsConstructor
-public class ReservationDTO {
-    private LocalDate checkInDate;
-    private LocalDate checkOutDate;
-    private int guests;
+public class SendMessageDTO {
+
+    @NotBlank
+    private String text;
+
+
 }
