@@ -30,7 +30,7 @@ public class ReviewService extends AbstractService {
                 .orElseThrow(() -> new NotFoundException("Property not found!"));
         Review review = reviewRepository.findById(id2)
                 .orElseThrow(() -> new NotFoundException("Review not found!"));
-        if(!reviewRepository.existsByPropertyIdAndUserId(u.getId(), property.getId())) {
+        if(!reviewRepository.existsByPropertyIdAndUserId(property.getId(), u.getId())) {
             throw new UnauthorizedException
                     ("Review is not owned by the user or the property does not own the review!");
         }

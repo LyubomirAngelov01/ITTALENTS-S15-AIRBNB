@@ -7,10 +7,14 @@ package com.finalproject.airbnb.controller;
         import com.finalproject.airbnb.model.exceptions.UnauthorizedException;
         import jakarta.servlet.http.HttpSession;
         import org.springframework.http.HttpStatus;
+        import org.springframework.validation.FieldError;
+        import org.springframework.web.bind.MethodArgumentNotValidException;
         import org.springframework.web.bind.annotation.ExceptionHandler;
         import org.springframework.web.bind.annotation.ResponseStatus;
         import com.finalproject.airbnb.Utility;
         import java.time.LocalDateTime;
+        import java.util.HashMap;
+        import java.util.Map;
 
 public abstract class AbstractController {
 
@@ -38,6 +42,18 @@ public abstract class AbstractController {
         return generateErrorDTO(e, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ErrorDTO handleValidationExceptions(
+            MethodArgumentNotValidException ex) {
+        Map<String, String> errors = new HashMap<>();
+        ex.getBindingResult().getAllErrors().forEach((error) -> {
+            String fieldName = ((FieldError) error).getField();
+            String errorMessage = error.getDefaultMessage();
+            errors.put(fieldName, errorMessage);
+        });
+        return generateValidationErrorDTO(errors, HttpStatus.BAD_REQUEST);
+    }
+
     private ErrorDTO generateErrorDTO(Exception e, HttpStatus s){
         return ErrorDTO.builder()
                 .msg(e.getMessage())
@@ -45,6 +61,16 @@ public abstract class AbstractController {
                 .status(s.value())
                 .build();
     }
+
+    private ErrorDTO generateValidationErrorDTO(Object e, HttpStatus s){
+        return ErrorDTO.builder()
+                .msg(e)
+                .time(LocalDateTime.now())
+                .status(s.value())
+                .build();
+    }
+
+
 
     protected int getLoggedId(HttpSession s){
         if(s.getAttribute(Utility.LOGGED) == null){

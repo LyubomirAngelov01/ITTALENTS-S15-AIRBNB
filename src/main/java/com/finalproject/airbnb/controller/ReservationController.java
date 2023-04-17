@@ -15,11 +15,11 @@ import java.util.List;
 public class ReservationController extends AbstractController{
     private final ReservationService reservationService;
 
-    @PostMapping("/properties/{property_id}/reservations")
-    public SuccessfulReservationDTO makeReservation(@PathVariable int propertyId, @RequestBody ReservationDTO reservationDTO, HttpSession session){
-        int userId = getLoggedId(session);
-         return reservationService.makeReservation(userId,propertyId,reservationDTO);
-    }
+//    @PostMapping("/properties/{property_id}/reservations")
+//    public SuccessfulReservationDTO makeReservation(@PathVariable int propertyId, @RequestBody ReservationDTO reservationDTO, HttpSession session){
+//        int userId = getLoggedId(session);
+//         return reservationService.makeReservation(userId,propertyId,reservationDTO);
+//    }
 
     @DeleteMapping("/users/reservations/{id}")
     public void deleteReservation(@PathVariable int reservationId,HttpSession session){
