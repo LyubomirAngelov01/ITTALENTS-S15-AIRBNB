@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 
 import lombok.*;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -12,10 +14,12 @@ import lombok.*;
 public class CountryCode extends BaseEntity{
 
 
+
     @Column(name = "code")
     private String code;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "country_id")
     private Country country;
+
 }
