@@ -7,6 +7,7 @@ import com.finalproject.airbnb.model.entities.Wishlist;
 import com.finalproject.airbnb.model.exceptions.NotFoundException;
 import com.finalproject.airbnb.model.repositories.PropertyRepository;
 import com.finalproject.airbnb.model.repositories.WishlistRepository;
+import jakarta.transaction.Transactional;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -24,7 +25,10 @@ import java.util.stream.Collectors;
 public class WishlistService extends AbstractService{
     @Autowired
     private WishlistRepository wishlistRepository;
+    @Autowired
     private PropertyRepository propertyRepository;
+
+    @Autowired
     private UserService userService;
 
     public List<Property> takeWishlistOfUser(int userId){
@@ -41,6 +45,7 @@ public class WishlistService extends AbstractService{
 
     }
 
+    @Transactional
     public void removeFromWishlist(int propertyId, int loggedId) {
          wishlistRepository.deleteByUserIdAndPropertyId(loggedId,propertyId);
     }
