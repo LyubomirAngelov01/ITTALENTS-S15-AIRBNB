@@ -1,6 +1,7 @@
 package com.finalproject.airbnb.service;
 
 
+import com.finalproject.airbnb.controller.PropertyController;
 import com.finalproject.airbnb.model.DTOs.*;
 import com.finalproject.airbnb.model.entities.*;
 import com.finalproject.airbnb.model.exceptions.BadRequestException;
@@ -9,12 +10,17 @@ import com.finalproject.airbnb.model.exceptions.UnauthorizedException;
 import jakarta.transaction.Transactional;
 import lombok.SneakyThrows;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -22,6 +28,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class PropertyService extends AbstractService {
+
+    private static final Logger logger = LogManager.getLogger(PropertyService.class);
 
 
     @Transactional
@@ -47,6 +55,7 @@ public class PropertyService extends AbstractService {
         PropertyViewDTO propertyViewDTO = mapper.map(dto, PropertyViewDTO.class);
         propertyViewDTO.setCategoryName(property.getCategory().getCategoryName());
         propertyViewDTO.setCountryName(property.getCountry().getCountryName());
+        logger.info("Created property" + LocalDate.now());
         return propertyViewDTO;
     }
 
@@ -72,6 +81,7 @@ public class PropertyService extends AbstractService {
         PropertyViewDTO propertyViewDTO = mapper.map(dto, PropertyViewDTO.class);
         propertyViewDTO.setCategoryName(property.getCategory().getCategoryName());
         propertyViewDTO.setCountryName(property.getCountry().getCountryName());
+        //logger.info("Property created");
         return propertyViewDTO;
     }
 
