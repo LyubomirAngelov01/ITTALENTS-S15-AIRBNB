@@ -22,7 +22,7 @@ public class PhotoController extends AbstractController {
     private PhotoService photoService;
 
     @PostMapping("/properties/{id}/photos")
-    public List<PhotoDTO> uploadPhoto(@PathVariable int id, MultipartFile[] files, HttpSession s){
+    public List<PhotoDTO> uploadPhoto(@PathVariable int id, @RequestParam("files") MultipartFile[] files, HttpSession s){
         return photoService.upload(id, files, getLoggedId(s));
     }
 

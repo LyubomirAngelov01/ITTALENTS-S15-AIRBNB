@@ -1,6 +1,7 @@
 package com.finalproject.airbnb.controller;
 
 import com.finalproject.airbnb.model.DTOs.InboxUserDTO;
+import com.finalproject.airbnb.model.DTOs.MessageWithUserDTO;
 import com.finalproject.airbnb.model.DTOs.SendMessageDTO;
 import com.finalproject.airbnb.model.entities.Message;
 import com.finalproject.airbnb.model.entities.User;
@@ -26,12 +27,12 @@ public class MessageController extends AbstractController{
         messageService.sendMessage(senderId,idReceiver, dto.getText());
     }
     @GetMapping("/users/messages/{receiverId}")
-    public List<Message> listChatWithAUser(@PathVariable int receiverId,HttpSession session){
+    public List<MessageWithUserDTO> listChatWithAUser(@PathVariable int receiverId, HttpSession session){
 
         return messageService.listChatWithAUser(getLoggedId(session),receiverId);
     }
     @GetMapping("/users/messages")
-    public List<InboxUserDTO> getInbox(HttpSession session){
+    public List<InboxUserDTO> getInbox(HttpSession session) {
         return messageService.getInbox(getLoggedId(session));
     }
 

@@ -4,6 +4,7 @@ import com.finalproject.airbnb.model.entities.Property;
 import com.finalproject.airbnb.model.entities.Reservation;
 import com.finalproject.airbnb.model.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -16,5 +17,10 @@ public interface ReservationRepository extends JpaRepository<Reservation,Integer
     List<Reservation> findAllByUserIdAndAndCheckInDateAfter(int userId,LocalDate checkInDate);
     void deleteByIdAndUserId(int id,int userId);
     List<Reservation> findAllByProperty(Property property);
+    @Query("SELECT r FROM reservations AS r WHERE r.checkInDate > curdate()")
+    List<Reservation> getAllAfterCurrentDate();
+
+    public void deleteById(int id);
+
 
 }

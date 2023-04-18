@@ -11,9 +11,9 @@ import java.time.LocalDate;
 @Getter
 @NoArgsConstructor
 public class SuccessfulReservationDTO {
-    private Property property;
+    private int propertyId;
     private LocalDate checkInDate;
     private LocalDate checkOutDate;
-    private String msg;
+
 
 }

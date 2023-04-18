@@ -1,6 +1,7 @@
 package com.finalproject.airbnb.controller;
 
 import com.finalproject.airbnb.Utility;
+import com.finalproject.airbnb.model.DTOs.WishlistPropertyDTO;
 import com.finalproject.airbnb.model.entities.Property;
 import com.finalproject.airbnb.model.entities.User;
 import com.finalproject.airbnb.model.entities.Wishlist;
@@ -20,7 +21,7 @@ public class WishlistController extends AbstractController{
     private final WishlistService wishlistService;
     private final UserRepository userRepository;
     @GetMapping("/users/wishlist")
-    public List<Property> wishlist(HttpSession session){
+    public List<WishlistPropertyDTO> wishlist(HttpSession session){
         return wishlistService.takeWishlistOfUser(getLoggedId(session));
     }
     @PostMapping("/properties/{propertyId}/wishlist")

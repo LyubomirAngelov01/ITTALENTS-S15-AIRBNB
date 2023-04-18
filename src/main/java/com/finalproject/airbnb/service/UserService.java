@@ -13,6 +13,8 @@ import com.finalproject.airbnb.model.repositories.ReservationRepository;
 import com.finalproject.airbnb.model.repositories.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +22,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -43,7 +46,7 @@ public class UserService extends AbstractService{
 
         userRepository.save(user);
 
-        //emailService.sendEmail(generateMessageOnRegistration(dto));
+        emailService.sendEmail(generateMessageOnRegistration(dto));
         return  mapper.map(user, UserWithoutPasswordDTO.class);
     }
 
@@ -93,11 +96,9 @@ public class UserService extends AbstractService{
     public List<TripDTO> listAllTrips(int userId) {
         User u = userRepository.findById(userId).orElseThrow(()-> new NotFoundException("user not found"));
         List <Reservation>  reservations = reservationRepository.findAllByUser(u);
-        List<TripDTO> trips = new ArrayList();
-        for (Reservation reservation : reservations) {
-            TripDTO tripDTO = mapper.map(reservation,TripDTO.class);
-            trips.add(tripDTO);
-        }
+        List<TripDTO> trips = reservations.stream()
+                .map(reservation -> new TripDTO(reservation.getCheckInDate(),reservation.getCheckOutDate(),reservation.getProperty().getId(),reservation.getProperty().getTitle()))
+                .collect(Collectors.toList());
         return trips;
     }
 

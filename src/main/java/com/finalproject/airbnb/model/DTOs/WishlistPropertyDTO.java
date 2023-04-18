@@ -1,23 +1,22 @@
 package com.finalproject.airbnb.model.DTOs;
 
-import com.finalproject.airbnb.model.entities.Property;
+import com.finalproject.airbnb.model.entities.Photos;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class TripDTO {
+public class WishlistPropertyDTO {
 
-    private LocalDate checkInDate;
-    private LocalDate checkOutDate;
-    private int propertyId;
     private String title;
-
-
+    private List<String> photosUrl;
+    private double avgRating;
+    private double price;
 
 }

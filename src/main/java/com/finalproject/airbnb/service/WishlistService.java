@@ -1,6 +1,8 @@
 package com.finalproject.airbnb.service;
 
 import com.fasterxml.jackson.databind.annotation.JsonAppend;
+import com.finalproject.airbnb.model.DTOs.WishlistPropertyDTO;
+import com.finalproject.airbnb.model.entities.Photos;
 import com.finalproject.airbnb.model.entities.Property;
 import com.finalproject.airbnb.model.entities.User;
 import com.finalproject.airbnb.model.entities.Wishlist;
@@ -31,12 +33,24 @@ public class WishlistService extends AbstractService{
     @Autowired
     private UserService userService;
 
-    public List<Property> takeWishlistOfUser(int userId){
+    public List<WishlistPropertyDTO> takeWishlistOfUser(int userId){
         List<Wishlist> wishlists = wishlistRepository.findAllByUserId(userId);
         List<Property> properties = wishlists.stream()
                 .map(wishlist -> wishlist.getProperty())
                 .collect(Collectors.toList());
-        return properties;
+        List<WishlistPropertyDTO> wishlistProperties = properties.stream()
+                .map(property -> mapper.map(property, WishlistPropertyDTO.class))
+                .collect(Collectors.toList());
+
+        for (int i = 0; i < properties.size(); i++) {
+            List<Photos> photos = properties.get(i).getPhotos();
+            List<String> urls = new ArrayList();
+            for (Photos photo: photos) {
+                urls.add(photo.getPhotoUrl());
+            }
+            wishlistProperties.get(i).setPhotosUrl(urls);
+        }
+        return wishlistProperties;
     }
     public void addToWishlist(int propertyId,int userId){
         Property property = propertyRepository.findById(propertyId).orElseThrow(()->new NotFoundException("Property not found"));

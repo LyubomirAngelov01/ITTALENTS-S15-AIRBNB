@@ -3,16 +3,17 @@ package com.finalproject.airbnb.service;
 import com.finalproject.airbnb.model.DTOs.SimpleMessageDTO;
 import com.finalproject.airbnb.model.exceptions.EmailServiceException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 @Service
-@RequiredArgsConstructor
 public class EmailService extends AbstractService{
 
-    private final JavaMailSender emailSender;
+    @Autowired
+    private JavaMailSender emailSender;
     @Value("${spring.mail.from}")
     private String emailFrom;
 

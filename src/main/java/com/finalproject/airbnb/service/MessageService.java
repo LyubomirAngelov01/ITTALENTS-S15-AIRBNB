@@ -1,8 +1,10 @@
 package com.finalproject.airbnb.service;
 
 import com.finalproject.airbnb.model.DTOs.InboxUserDTO;
+import com.finalproject.airbnb.model.DTOs.MessageWithUserDTO;
 import com.finalproject.airbnb.model.entities.Message;
 import com.finalproject.airbnb.model.entities.User;
+import com.finalproject.airbnb.model.exceptions.BadRequestException;
 import com.finalproject.airbnb.model.exceptions.NotFoundException;
 import com.finalproject.airbnb.model.exceptions.UnauthorizedException;
 import com.finalproject.airbnb.model.repositories.MessageRepository;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,23 +34,37 @@ public class MessageService extends AbstractService {
         messageRepository.save(new Message(text, sender, receiver, LocalDateTime.now()));
     }
 
-    public List<Message> listChatWithAUser(int loggedId, int receiverId) {
+    public List<MessageWithUserDTO> listChatWithAUser(int loggedId, int receiverId) {
         User sender = userRepository.findById(loggedId).orElseThrow(()-> new UnauthorizedException("log in first"));
         User receiver = userRepository.findById(receiverId).orElseThrow(()-> new NotFoundException("user not found"));
         List<Message> messages = messageRepository.findAllBySenderAndReceiver(sender,receiver);
         messages.addAll(messageRepository.findAllBySenderAndReceiver(receiver,sender));
-        return messages;
+        List<MessageWithUserDTO> messagesWithUser = new ArrayList();
+        for (Message message: messages) {
+            messagesWithUser.add(new MessageWithUserDTO(message.getSender().getId(),message.getSender().getFirstName(),
+                    message.getSender().getLastName(),message.getMessage(),message.getTimeSent()));
+        }
+        messagesWithUser = messagesWithUser.stream()
+                .sorted(Comparator.comparing(MessageWithUserDTO::getTimeSent))
+                .collect(Collectors.toList());
+        return messagesWithUser;
     }
 
     public List<InboxUserDTO> getInbox(int loggedId) {
-        User sender = getUserById(loggedId);
-        List <Message> messages = messageRepository.findAllBySender(sender);
-        List<User> contacts = messages.stream()
-                .map(message -> message.getReceiver())
-                .collect(Collectors.toList());
-        List<InboxUserDTO> inbox = contacts.stream()
-                .map(user -> mapper.map(user,InboxUserDTO.class))
-                .collect(Collectors.toList());
+
+
+        List<Integer> contactsIds = messageRepository.getAllBySenderId(loggedId);
+        contactsIds.addAll(messageRepository.getAllByReceiverId(loggedId));
+
+        contactsIds = contactsIds.stream().distinct().collect(Collectors.toList());
+
+        List<InboxUserDTO> inbox = new ArrayList<>();
+        for (Integer id: contactsIds) {
+            User user = userRepository.findById(id).orElseThrow(()-> new BadRequestException("user not found"));
+
+            inbox.add(new InboxUserDTO(user.getFirstName(),user.getLastName(),user.getId()));
+
+        }
 
         return inbox;
     }
