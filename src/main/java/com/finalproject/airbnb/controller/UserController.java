@@ -16,18 +16,18 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-public class UserController extends  AbstractController{
+public class UserController extends AbstractController{
 
 
 
     private final UserService userService;
     @PostMapping("/users/signup")
-    public UserWithoutPasswordDTO register( @Valid @RequestBody RegisterDTO dto){
+    public UserWithoutPasswordDTO register(@Valid @RequestBody RegisterDTO dto){
         return userService.register(dto);
     }
 
     @PostMapping("/users/login")
-    public UserWithoutPasswordDTO login(@RequestBody LoginDTO dto, HttpSession session){
+    public UserWithoutPasswordDTO login(@Valid @RequestBody LoginDTO dto, HttpSession session){
         UserWithoutPasswordDTO responseDto = userService.login(dto);
         session.setAttribute(Utility.LOGGED,true);
         session.setAttribute(Utility.LOGGED_ID,responseDto.getId());

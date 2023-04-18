@@ -47,7 +47,7 @@ public class PropertyController extends AbstractController {
     }
 
     @PostMapping("/properties/all")
-    public List<PropertyViewDTO> search(@Valid@RequestBody PropertySearchDTO dto) {
+    public List<PropertyViewDTO> search(@Valid @RequestBody PropertySearchDTO dto) {
         return propertyService.search(dto);
     }
 }

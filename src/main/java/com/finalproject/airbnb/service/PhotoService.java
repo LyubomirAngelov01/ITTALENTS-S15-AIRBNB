@@ -75,6 +75,17 @@ public class PhotoService extends AbstractService {
                 .collect(Collectors.toList());
     }
 
+    public List<PhotoDTO> listAllPhotos(int id){
+        if(propertyRepository.findById(id).isEmpty()) {
+            throw new NotFoundException("Property not found!");
+        }
+        List<PhotoDTO> photos = photosRepository.findAllByPropertyId(id)
+                .stream()
+                .map(p -> mapper.map(p, PhotoDTO.class))
+                .collect(Collectors.toList());
+        return photos;
+    }
+
 
 
     public File viewPhoto(int id, String name) {

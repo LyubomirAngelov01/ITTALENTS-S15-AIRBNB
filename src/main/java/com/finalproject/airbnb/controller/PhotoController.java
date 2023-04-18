@@ -26,6 +26,12 @@ public class PhotoController extends AbstractController {
         return photoService.upload(id, files, getLoggedId(s));
     }
 
+
+    @GetMapping("/properties/{id}/photos")
+    public List<PhotoDTO> viewAllPhotos(@PathVariable int id){
+        return photoService.listAllPhotos(id);
+    }
+
     @SneakyThrows
     @GetMapping("/properties/{id}/photos/{fileName}")
     public void viewPhoto(@PathVariable("id") int id, @PathVariable String fileName, HttpServletResponse resp){
