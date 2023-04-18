@@ -39,6 +39,7 @@ public abstract class AbstractController {
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorDTO handleRest(Exception e){
+        e.printStackTrace();
         return generateErrorDTO(e, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 

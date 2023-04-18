@@ -10,6 +10,6 @@ import lombok.Setter;
 @NoArgsConstructor
 public class DeleteReviewDTO {
 
-    private final String msg = "PROPERTY HAS BEEN DELETED";
+    private final String msg = "REVIEW HAS BEEN DELETED";
 
 }
