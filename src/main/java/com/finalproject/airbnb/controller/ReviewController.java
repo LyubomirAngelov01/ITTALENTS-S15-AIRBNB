@@ -4,6 +4,7 @@ import com.finalproject.airbnb.model.DTOs.DeleteReviewDTO;
 import com.finalproject.airbnb.model.DTOs.ReviewInfoDTO;
 import com.finalproject.airbnb.service.ReviewService;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,12 +15,12 @@ public class ReviewController extends AbstractController{
     private ReviewService reviewService;
 
     @PostMapping("/properties/{id}/reviews")
-    public ReviewInfoDTO addReview(@PathVariable int id, @RequestBody ReviewInfoDTO dto, HttpSession s) {
+    public ReviewInfoDTO addReview(@PathVariable int id, @Valid @RequestBody ReviewInfoDTO dto, HttpSession s) {
         return reviewService.createReview(id, dto, getLoggedId(s));
     }
 
-    @DeleteMapping("/properties/{id}/reviews/{reviewId}")
-    private DeleteReviewDTO deleteReview(@PathVariable("id") int id, @PathVariable("reviewId") int ReviewId, HttpSession s) {
-        return reviewService.deleteReview(id, ReviewId, getLoggedId(s));
+    @DeleteMapping("/reviews/{reviewId}")
+    private DeleteReviewDTO deleteReview(@PathVariable("reviewId") int ReviewId, HttpSession s) {
+        return reviewService.deleteReview(ReviewId, getLoggedId(s));
     }
 }

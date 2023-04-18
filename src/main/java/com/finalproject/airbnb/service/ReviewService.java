@@ -32,15 +32,13 @@ public class ReviewService extends AbstractService {
         return mapper.map(review, ReviewInfoDTO.class);
     }
 
-    public DeleteReviewDTO deleteReview(int id, int id2, int loggedId) {
+    public DeleteReviewDTO deleteReview(int reviewId, int loggedId) {
         User u = getUserById(loggedId);
-        Property property = propertyRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Property not found!"));
-        Review review = reviewRepository.findById(id2)
+        Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new NotFoundException("Review not found!"));
-        if(!reviewRepository.existsByPropertyIdAndUserId(property.getId(), u.getId())) {
+        if(!reviewRepository.existsByOwner(u)) {
             throw new UnauthorizedException
-                    ("Review is not owned by the user or the property does not own the review!");
+                    ("Review is not owned by the user!");
         }
         reviewRepository.delete(review);
         return new DeleteReviewDTO();

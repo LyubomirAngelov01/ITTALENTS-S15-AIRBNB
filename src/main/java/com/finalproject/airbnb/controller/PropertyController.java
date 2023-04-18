@@ -4,14 +4,13 @@ import com.finalproject.airbnb.model.DTOs.PropertyInfoDTO;
 import com.finalproject.airbnb.model.DTOs.PropertySearchDTO;
 import com.finalproject.airbnb.model.DTOs.PropertyViewDTO;
 import com.finalproject.airbnb.model.DTOs.ReviewInfoDTO;
-import com.finalproject.airbnb.service.PhotoService;
 import com.finalproject.airbnb.service.PropertyService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -24,6 +23,7 @@ public class PropertyController extends AbstractController {
     @PostMapping("/properties")
     public PropertyViewDTO createProperty(@Valid @RequestBody PropertyInfoDTO dto, HttpSession s){
         return propertyService.createProperty(dto, getLoggedId(s));
+
     }
 
     @PutMapping("/properties/{id}")
@@ -47,7 +47,7 @@ public class PropertyController extends AbstractController {
     }
 
     @PostMapping("/properties/all")
-    public List<PropertyViewDTO> search(@Valid@RequestBody PropertySearchDTO dto) {
+    public List<PropertyViewDTO> search(@Valid @RequestBody PropertySearchDTO dto) {
         return propertyService.search(dto);
     }
 }

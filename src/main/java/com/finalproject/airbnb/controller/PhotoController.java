@@ -26,6 +26,12 @@ public class PhotoController extends AbstractController {
         return photoService.upload(id, files, getLoggedId(s));
     }
 
+
+    @GetMapping("/properties/{id}/photos")
+    public List<PhotoDTO> viewAllPhotos(@PathVariable int id){
+        return photoService.listAllPhotos(id);
+    }
+
     @SneakyThrows
     @GetMapping("/properties/{id}/photos/{fileName}")
     public void viewPhoto(@PathVariable("id") int id, @PathVariable String fileName, HttpServletResponse resp){
@@ -33,12 +39,12 @@ public class PhotoController extends AbstractController {
             Files.copy(f.toPath(), resp.getOutputStream());
     }
 
-//    @DeleteMapping("/properties/{id}/photos/{id2}") without properties
-    public DeletePhotoDTO deletePhotoById(@PathVariable("id") int id, @PathVariable("id2") int id2, HttpSession s){
-        return  photoService.deletePhotoById(id, id2, getLoggedId(s));
+    @DeleteMapping("/photos/{id}")
+    public DeletePhotoDTO deletePhotoById(@PathVariable("id") int id, HttpSession s){
+        return  photoService.deletePhotoById(id, getLoggedId(s));
     }
 
-//    @DeleteMapping("/properties/{id}/photos/all") without properties
+    @DeleteMapping("photos/{id}/all")
     public DeleteAllPhotosDTO deleteAllPhotos(@PathVariable("id") int id, HttpSession s){
         return  photoService.deleteAllPhotos(id, getLoggedId(s));
     }

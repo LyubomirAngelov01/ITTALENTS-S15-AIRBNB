@@ -35,7 +35,7 @@ public class PropertyInfoDTO {
     @Range(min = 0, max = 50)
     private int beds;
 
-
+    @Range(min = 1)
     private int maxGuests;
 
     @Range(min = 18, max = 17729)
