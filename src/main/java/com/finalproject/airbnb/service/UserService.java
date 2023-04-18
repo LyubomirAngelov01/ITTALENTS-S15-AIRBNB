@@ -2,13 +2,16 @@ package com.finalproject.airbnb.service;
 
 import com.finalproject.airbnb.Utility;
 import com.finalproject.airbnb.model.DTOs.*;
+import com.finalproject.airbnb.model.entities.CountryCode;
 import com.finalproject.airbnb.model.entities.Reservation;
 import com.finalproject.airbnb.model.entities.User;
 import com.finalproject.airbnb.model.exceptions.BadRequestException;
 import com.finalproject.airbnb.model.exceptions.NotFoundException;
 import com.finalproject.airbnb.model.exceptions.UnauthorizedException;
+import com.finalproject.airbnb.model.repositories.CountryCodeRepository;
 import com.finalproject.airbnb.model.repositories.ReservationRepository;
 import com.finalproject.airbnb.model.repositories.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -28,6 +31,7 @@ public class UserService extends AbstractService{
     private final UserRepository userRepository;
     private final CountryCodeService   countryCodeService;
     private final ReservationRepository reservationRepository;
+    private CountryCodeRepository countryCodeRepository;
 
 
     public UserWithoutPasswordDTO register(RegisterDTO dto){
@@ -35,7 +39,7 @@ public class UserService extends AbstractService{
 
         User user = mapper.map(dto,User.class);
         user.setPassword(encoder.encode(user.getPassword()));
-        user.setCountryCode(countryCodeService.findById(dto.getCountryCodeId()));
+        user.setCountryCode(countryCodeService.findById(dto.getCountryCode()));
 
         userRepository.save(user);
 
@@ -62,12 +66,17 @@ public class UserService extends AbstractService{
         return mapper.map(u,UserWithoutPasswordDTO.class);
     }
 
+    @Transactional
     public UserWithoutPasswordDTO editProfileInfo(EditProfileInfoDTO dto, int id){
         User u = userRepository.findById(id).orElseThrow(()-> new NotFoundException("User not found"));
 
-        mapper.map(dto,u);
+
+        u.setEmail(dto.getEmail());
+        u.setFirstName(dto.getFirstName());
+        u.setLastName(dto.getLastName());
+        u.setPhoneNumber(dto.getPhoneNumber());
         u.setCountryCode(countryCodeService.findById(dto.getCountryCode()));
-        userRepository.save(u);
+        //mapper.map(dto,u);
 
         UserWithoutPasswordDTO user = mapper.map(u,UserWithoutPasswordDTO.class);
         return user;
@@ -76,9 +85,7 @@ public class UserService extends AbstractService{
 
 
     public void deleteAccount(int id) {
-
         userRepository.deleteById(id);
-
     }
 
 
@@ -100,8 +107,9 @@ public class UserService extends AbstractService{
         if (!dto.getNewPassword().equals(dto.getConfirmNewPassword())){
             throw new BadRequestException("Passwords mismatch");
         }
+
         User user = userRepository.findById(id).orElseThrow(()-> new UnauthorizedException("not a valid user"));
-        user.setEmail(dto.getEmail());
+
         user.setPassword(encoder.encode(dto.getNewPassword()));
         userRepository.save(user);
         return mapper.map(user, UserWithoutPasswordDTO.class);
