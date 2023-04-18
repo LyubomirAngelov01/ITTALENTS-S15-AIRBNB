@@ -44,8 +44,7 @@ public class PropertyService extends AbstractService {
         amenitiesRepository.save(amenities);
         countryRepository.save(country);
         categoryRepository.save(category);
-        propertyRepository.save(property);
-        PropertyViewDTO propertyViewDTO = mapper.map(property, PropertyViewDTO.class);
+        PropertyViewDTO propertyViewDTO = mapper.map(dto, PropertyViewDTO.class);
         propertyViewDTO.setCategoryName(property.getCategory().getCategoryName());
         propertyViewDTO.setCountryName(property.getCountry().getCountryName());
         return propertyViewDTO;
@@ -70,7 +69,7 @@ public class PropertyService extends AbstractService {
         categoryRepository.save(category);
         mapper.map(dto, property);
         propertyRepository.save(property);
-        PropertyViewDTO propertyViewDTO = mapper.map(property, PropertyViewDTO.class);
+        PropertyViewDTO propertyViewDTO = mapper.map(dto, PropertyViewDTO.class);
         propertyViewDTO.setCategoryName(property.getCategory().getCategoryName());
         propertyViewDTO.setCountryName(property.getCountry().getCountryName());
         return propertyViewDTO;

@@ -18,8 +18,8 @@ public class ReviewController extends AbstractController{
         return reviewService.createReview(id, dto, getLoggedId(s));
     }
 
-    @DeleteMapping("/properties/{id}/reviews/{id2}")
-    private DeleteReviewDTO deleteReview(@PathVariable("id") int id, @PathVariable("id2") int id2, HttpSession s) {
-        return reviewService.deleteReview(id, id2, getLoggedId(s));
+    @DeleteMapping("/properties/{id}/reviews/{reviewId}")
+    private DeleteReviewDTO deleteReview(@PathVariable("id") int id, @PathVariable("reviewId") int ReviewId, HttpSession s) {
+        return reviewService.deleteReview(id, ReviewId, getLoggedId(s));
     }
 }

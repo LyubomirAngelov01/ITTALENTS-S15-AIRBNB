@@ -41,13 +41,13 @@ public class PropertyController extends AbstractController {
         propertyService.deleteProperty(id, getLoggedId(s));
     }
 
-    @GetMapping("/properties/{id}/reviews")
+//    @GetMapping("/properties/{id}/reviews")
     public List<ReviewInfoDTO> checkReviews(@PathVariable int id) {
         return propertyService.checkReviews(id);
     }
 
     @PostMapping("/properties/all")
-    public List<PropertyViewDTO> search(@RequestBody PropertySearchDTO dto) {
+    public List<PropertyViewDTO> search(@Valid@RequestBody PropertySearchDTO dto) {
         return propertyService.search(dto);
     }
 }
