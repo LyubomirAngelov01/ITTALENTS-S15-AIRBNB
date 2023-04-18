@@ -9,6 +9,7 @@ import com.finalproject.airbnb.model.exceptions.NotFoundException;
 import com.finalproject.airbnb.model.repositories.PropertyRepository;
 import com.finalproject.airbnb.model.repositories.ReservationRepository;
 import com.finalproject.airbnb.model.repositories.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -34,10 +35,8 @@ public class ReservationService extends AbstractService{
         reservation.setCheckInDate(reservationDTO.getCheckInDate());
         reservation.setCheckOutDate(reservationDTO.getCheckOutDate());
         reservation.setGuests(reservationDTO.getGuests());
-
-        SuccessfulReservationDTO successfulReservation = mapper.map(reservation,SuccessfulReservationDTO.class);
         reservationRepository.save(reservation);
-
+        SuccessfulReservationDTO successfulReservation = mapper.map(reservation,SuccessfulReservationDTO.class);
         successfulReservation.setMsg("Reservation successful for " + reservation.getProperty().getTitle() + " from "
                 + reservation.getCheckInDate() + " to " + reservation.getCheckOutDate() + "!");
 
@@ -51,7 +50,11 @@ public class ReservationService extends AbstractService{
     }
 
 
+    @Transactional
     public void removeReservation(int reservationId, int loggedId) {
+        if(reservationRepository.findById(reservationId).isEmpty()){
+            throw new NotFoundException("Reservation not found!");
+        }
         reservationRepository.deleteByIdAndUserId(reservationId,loggedId);
     }
 

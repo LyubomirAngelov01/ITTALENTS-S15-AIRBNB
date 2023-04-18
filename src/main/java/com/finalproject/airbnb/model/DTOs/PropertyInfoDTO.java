@@ -29,6 +29,7 @@ public class PropertyInfoDTO {
     @NotBlank(message = "Write down a city!")
     private String city;
 
+    @Range(min = 0, max = 196)
     private int countryNum;
 
     @Range(min = 0, max = 50)
@@ -54,7 +55,7 @@ public class PropertyInfoDTO {
     @Length(max = 32)
     private String title;
 
-
+    @Range(min = 0, max = 3)
     private int categoryNum;
 
     private boolean wifiConnection;
@@ -70,7 +71,5 @@ public class PropertyInfoDTO {
     private boolean gym;
     private boolean washer;
     private boolean kitchen;
-
-    private List<Photos> photos;
 
 }

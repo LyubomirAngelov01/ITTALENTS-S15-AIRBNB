@@ -1,6 +1,7 @@
 package com.finalproject.airbnb.model.repositories;
 
 import com.finalproject.airbnb.model.entities.Amenities;
+import com.finalproject.airbnb.model.entities.Property;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -18,6 +19,10 @@ public interface AmenitiesRepository extends JpaRepository<Amenities, Integer> {
 //    void saveAmenity(@Param("wifiConnection") boolean wifiConnection, @Param("pool") boolean pool, @Param("tv") boolean tv, @Param("parking") boolean parking, @Param("airConditioning") boolean airConditioning
 //            , @Param("barbecue") boolean barbecue, @Param("smokeAlarm") boolean smokeAlarm, @Param("firstAid") boolean firstAid, @Param("fireExtinguisher") boolean fireExtinguisher,
 //                     @Param("gym") boolean gym, @Param("washer") boolean washer, @Param("kitchen") boolean kitchen, @Param("propertyId") int propertyId);
+
+    Amenities getByProperty(Property property);
 }
+
+
 
 
