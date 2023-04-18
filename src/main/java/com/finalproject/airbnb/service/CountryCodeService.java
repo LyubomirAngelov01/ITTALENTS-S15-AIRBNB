@@ -14,9 +14,9 @@ import java.util.Optional;
 public class CountryCodeService extends AbstractService{
     private final CountryCodeRepository countryCodeRepository;
 
-
-    public CountryCode findById (int id) {
-        return countryCodeRepository.findById(id).orElseThrow(()->new NotFoundException("no country code found"));
+    public CountryCode findById(int id){
+        return countryCodeRepository.findById(id).orElseThrow(()->new NotFoundException("country code not found"));
     }
+
 
 }

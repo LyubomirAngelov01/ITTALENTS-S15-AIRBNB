@@ -11,12 +11,13 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class EditLoginCredentialsDTO {
-    @Email
+
     @NotBlank
-    private String email;
     private String password;
-    @Pattern(regexp = "^(?=.*d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z])(?=.*[!@#$%^_*-]).{8,}$", message = "Weak password")
     @NotBlank
+    @Pattern(regexp = "^(?=.*[A-Z])(?=.*[!@#$&^*])(?=.*[0-9])(?=.*[a-z]).{8,}$", message = "Weak password, the password must include at least 1 uppercase character" +
+            ", 1 lowercase character, 1 special symbol of (!,@,#,$,&,^,*), 1 number from 0 to 9 and at least 8 total symbols!")
     private String newPassword;
+    @NotBlank
     private String confirmNewPassword;
 }
