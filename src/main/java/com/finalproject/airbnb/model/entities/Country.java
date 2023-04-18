@@ -17,7 +17,5 @@ public class Country extends BaseEntity{
     @NotBlank
     private String countryName;
 
-//    @OneToMany(mappedBy = "country")
-//    private List<Property> properties;
 
 }

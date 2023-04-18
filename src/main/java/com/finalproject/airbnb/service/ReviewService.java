@@ -20,6 +20,14 @@ public class ReviewService extends AbstractService {
         Review review = mapper.map(dto, Review.class);
         review.setOwner(u);
         review.setProperty(property);
+        if(review.getRating() > 5 || review.getRating() < 0) {
+            throw new BadRequestException("Rating must be from 0 to 5!");
+        }
+        if(property.getAvgRating() == 0){
+            property.setAvgRating(review.getRating());
+        }
+            property.setAvgRating((property.getAvgRating() + review.getRating()) / 2);
+        propertyRepository.save(property);
         reviewRepository.save(review);
         return mapper.map(review, ReviewInfoDTO.class);
     }

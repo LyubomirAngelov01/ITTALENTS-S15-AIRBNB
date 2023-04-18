@@ -20,14 +20,16 @@ public class PropertySearchDTO {
     @NotBlank
     private double price;
 
+    @Range(min = 0, max = 50)
     private int bathrooms;
 
-    @Range(min = 0)
+    @Range(min = 0, max = 50)
     private int bedrooms;
 
     @Range(min = 0, max = 50)
     private int beds;
 
+    @Range(min = 0, max = 3)
     private int categoryNum;
 
 }

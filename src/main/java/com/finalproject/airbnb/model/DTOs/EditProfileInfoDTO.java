@@ -1,6 +1,5 @@
 package com.finalproject.airbnb.model.DTOs;
 
-import com.finalproject.airbnb.model.entities.Address;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.Getter;

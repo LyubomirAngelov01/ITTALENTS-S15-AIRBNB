@@ -15,15 +15,15 @@ import java.util.List;
 public class ReservationController extends AbstractController{
     private final ReservationService reservationService;
 
-    @PostMapping("/properties/{property_id}/reservations")
-    public SuccessfulReservationDTO makeReservation(@PathVariable int propertyId, @RequestBody ReservationDTO reservationDTO, HttpSession session){
+    @PostMapping("/properties/{id}/reservations")
+    public SuccessfulReservationDTO makeReservation(@PathVariable int id, @RequestBody ReservationDTO reservationDTO, HttpSession session){
         int userId = getLoggedId(session);
-        return reservationService.makeReservation(userId,propertyId,reservationDTO);
+        return reservationService.makeReservation(userId,id,reservationDTO);
     }
 
     @DeleteMapping("/users/reservations/{id}")
-    public void removeReservation(@PathVariable int reservationId, HttpSession session){
-        reservationService.removeReservation(reservationId,getLoggedId(session));
+    public void removeReservation(@PathVariable int id, HttpSession session){
+        reservationService.removeReservation(id,getLoggedId(session));
     }
     @GetMapping("/users/reservations")
     public List<Reservation> checkUpcomingReservations(HttpSession session){

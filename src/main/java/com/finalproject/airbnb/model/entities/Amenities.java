@@ -11,7 +11,6 @@ import lombok.Setter;
 public class Amenities extends BaseEntity{
 
 
-
     @OneToOne
     @JoinColumn(name = "property_id")
     private Property property;

@@ -50,6 +50,4 @@ public class PropertyViewDTO {
     private boolean gym;
     private boolean washer;
     private boolean kitchen;
-
-    private List<Photos> photos;
 }
