@@ -27,19 +27,19 @@ public class PhotoController extends AbstractController {
     }
 
     @SneakyThrows
-        @GetMapping("/properties/{id}/photos/{fileName}")
-    public void viewPhoto(@PathVariable("id") int id, @PathVariable("filename") String name, HttpServletResponse resp){
-            File f = photoService.viewPhoto(id, name);
+    @GetMapping("/properties/{id}/photos/{fileName}")
+    public void viewPhoto(@PathVariable("id") int id, @PathVariable String fileName, HttpServletResponse resp){
+            File f = photoService.viewPhoto(id, fileName);
             Files.copy(f.toPath(), resp.getOutputStream());
     }
 
-    @DeleteMapping("/properties/{id}/photos/{id2}")
+//    @DeleteMapping("/properties/{id}/photos/{id2}") without properties
     public DeletePhotoDTO deletePhotoById(@PathVariable("id") int id, @PathVariable("id2") int id2, HttpSession s){
         return  photoService.deletePhotoById(id, id2, getLoggedId(s));
     }
 
-    @DeleteMapping("/properties/{id}/photos/all")
-    public DeleteAllPhotosDTO deleteAllPhotosd(@PathVariable("id") int id, HttpSession s){
+//    @DeleteMapping("/properties/{id}/photos/all") without properties
+    public DeleteAllPhotosDTO deleteAllPhotos(@PathVariable("id") int id, HttpSession s){
         return  photoService.deleteAllPhotos(id, getLoggedId(s));
     }
 }

@@ -9,7 +9,6 @@ import com.finalproject.airbnb.model.entities.User;
 import com.finalproject.airbnb.model.exceptions.BadRequestException;
 import com.finalproject.airbnb.model.exceptions.NotFoundException;
 import com.finalproject.airbnb.model.exceptions.UnauthorizedException;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import lombok.SneakyThrows;
 import org.apache.commons.io.FilenameUtils;
@@ -18,8 +17,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -31,7 +28,7 @@ public class PhotoService extends AbstractService {
     @SneakyThrows
     public List<PhotoDTO> upload(int id, MultipartFile[] files, int loggedId) {
         User u = getUserById(loggedId);
-        Property property = photoValidation(id, u);
+        Property property = validatePhoto(id, u);
         if (photosRepository.findAllByPropertyId(id).size() > 10) {
             List <Photos> photos = photosRepository.findAllByPropertyId(id);
             return photos.stream()
@@ -87,7 +84,7 @@ public class PhotoService extends AbstractService {
 
     public DeletePhotoDTO deletePhotoById(int id, int id2, int loggedId) {
         User u = getUserById(loggedId);
-        photoValidation(id, u);
+        validatePhoto(id, u);
         if(photosRepository.findById(id2).isEmpty()){
             throw new NotFoundException("Photo does not exist!");
         }
@@ -98,15 +95,15 @@ public class PhotoService extends AbstractService {
     @Transactional
     public DeleteAllPhotosDTO deleteAllPhotos(int id, int loggedId){
         User u = getUserById(loggedId);
-        photoValidation(id, u);
-        if(photosRepository.findAll().isEmpty()){
+        validatePhoto(id, u);
+        if(photosRepository.findAllByPropertyId(id).isEmpty()){
             throw new NotFoundException("Photos do not exist!");
         }
         photosRepository.deleteAllByPropertyId(id);
         return new DeleteAllPhotosDTO();
     }
 
-    public Property photoValidation(int id, User u){
+    public Property validatePhoto(int id, User u){
         Property property = propertyRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Property not found!"));
         if (!propertyRepository.userOwnsProperty(u.getId(), property.getId())) {
