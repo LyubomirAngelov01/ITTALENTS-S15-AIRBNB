@@ -2,14 +2,10 @@ package com.finalproject.airbnb.controller;
 
 import com.finalproject.airbnb.Utility;
 import com.finalproject.airbnb.model.DTOs.*;
-import com.finalproject.airbnb.model.entities.User;
-import com.finalproject.airbnb.model.exceptions.BadRequestException;
-import com.finalproject.airbnb.model.exceptions.UnauthorizedException;
 import com.finalproject.airbnb.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -49,7 +45,7 @@ public class UserController extends  AbstractController{
     @PutMapping("/users/profile/login&security")
     public UserWithoutPasswordDTO editLoginCredentials(@Valid @RequestBody EditLoginCredentialsDTO dto, HttpSession session){
         int id = getLoggedId(session);
-        return userService.editLoginCredetials(id,dto);
+        return userService.editLoginCredentials(id,dto);
     }
     @DeleteMapping("/users")
     public void deleteAccount( HttpSession session){
@@ -64,6 +60,11 @@ public class UserController extends  AbstractController{
     public List<TripDTO> checkTrips(HttpSession session){
         int userId = getLoggedId(session);
         return userService.listAllTrips(userId);
+    }
+    @PutMapping("/users/become_host")
+    public BecomeHostDTO becomeHost(HttpSession session){
+        int id = getLoggedId(session);
+        return userService.setHostStatus(id);
     }
 
 
