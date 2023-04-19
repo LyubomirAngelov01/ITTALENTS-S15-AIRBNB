@@ -12,6 +12,8 @@ import com.finalproject.airbnb.model.repositories.ReservationRepository;
 import com.finalproject.airbnb.model.repositories.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +32,7 @@ public class UserService extends AbstractService{
     private final UserRepository userRepository;
     private final CountryCodeService   countryCodeService;
     private final ReservationRepository reservationRepository;
-    private CountryCodeRepository countryCodeRepository;
+    private static final Logger logger = LogManager.getLogger(UserService.class);
 
 
     public UserWithoutPasswordDTO register(RegisterDTO dto){
@@ -43,25 +45,23 @@ public class UserService extends AbstractService{
         userRepository.save(user);
 
         emailService.sendEmail(generateMessageOnRegistration(dto));
+        logger.info("New user registered with id " + user.getId());
         return  mapper.map(user, UserWithoutPasswordDTO.class);
     }
 
     public UserWithoutPasswordDTO login (LoginDTO dto){
-        Optional<User> u = userRepository.getByEmail(dto.getEmail());
-        if(!u.isPresent()){
+        User u = userRepository.getByEmail(dto.getEmail()).orElseThrow(()->new UnauthorizedException("Wrong credentials"));
+
+        if(!encoder.matches(dto.getPassword(), u.getPassword())){
+            logger.error("user " + u.getId() + " tried to log in with wrong credentials");
             throw new UnauthorizedException("Wrong credentials");
         }
-        if(!encoder.matches(dto.getPassword(), u.get().getPassword())){
-            throw new UnauthorizedException("Wrong credentials");
-        }
+        logger.info(u.getId() + " user logged in");
         return mapper.map(u, UserWithoutPasswordDTO.class);
     }
     public UserWithoutPasswordDTO checkProfile(int id){
-        Optional <User> opt = userRepository.findById(id);
-        if (!opt.isPresent()){
-            throw new NotFoundException("user not found");
-        }
-        User u = opt.get();
+        User u = getUserById(id);
+
         return mapper.map(u,UserWithoutPasswordDTO.class);
     }
 
@@ -84,6 +84,8 @@ public class UserService extends AbstractService{
 
 
     public void deleteAccount(int id) {
+        logger.info(id + " user have been deleted from the database");
+
         userRepository.deleteById(id);
     }
 
@@ -114,6 +116,7 @@ public class UserService extends AbstractService{
 
         user.setPassword(encoder.encode(dto.getNewPassword()));
         userRepository.save(user);
+        logger.info(user.getId() + " user changed password");
         return mapper.map(user, UserWithoutPasswordDTO.class);
 
     }
@@ -121,14 +124,17 @@ public class UserService extends AbstractService{
 
     private void validateRegisterDto(RegisterDTO dto) {
         if (!dto.getPassword().equals(dto.getConfirmPassword())){
+            logger.error("a new user tried to register without passwords matching");
             throw new BadRequestException("Passwords mismatch");
         }
         if (userRepository.existsByEmail(dto.getEmail())){
+            logger.error("a new user tried to register with already existing email");
             throw new BadRequestException("This email already exists!");
         }
 
         LocalDate validateYear = LocalDate.now().minusYears(Utility.VALID_AGE);
         if (dto.getBirthdate().isAfter(validateYear)){
+            logger.error("a new user tried to register with invalid birthdate");
             throw new BadRequestException("not a valid birthdate");
         }
     }
@@ -145,6 +151,8 @@ public class UserService extends AbstractService{
         User user = getUserById(id);
         user.setHost(true);
         userRepository.save(user);
+        logger.info(user.getId() + " became a host");
+
         return mapper.map(user, BecomeHostDTO.class);
     }
 }

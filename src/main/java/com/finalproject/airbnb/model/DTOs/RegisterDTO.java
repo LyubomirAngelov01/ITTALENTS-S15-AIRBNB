@@ -14,9 +14,11 @@ import java.time.LocalDate;
 @Getter
 @NoArgsConstructor
 public class RegisterDTO {
-    @NotBlank(message = "enter a valid first name")
+
+    @Pattern(regexp = "^[A-Z][a-z]{1,29}([-'][A-Z][a-z]{1,29})?$",message = "enter a valid first name")
     private String firstName;
-    @NotBlank(message = "enter a valid last name")
+
+    @Pattern(regexp = "^[A-Z][a-z]{1,29}([-'][A-Z][a-z]{1,29})?$",message = "enter a valid first name")
     private String lastName;
 
     private LocalDate birthdate;
