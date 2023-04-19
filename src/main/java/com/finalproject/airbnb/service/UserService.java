@@ -2,7 +2,6 @@ package com.finalproject.airbnb.service;
 
 import com.finalproject.airbnb.Utility;
 import com.finalproject.airbnb.model.DTOs.*;
-import com.finalproject.airbnb.model.entities.CountryCode;
 import com.finalproject.airbnb.model.entities.Reservation;
 import com.finalproject.airbnb.model.entities.User;
 import com.finalproject.airbnb.model.exceptions.BadRequestException;
@@ -13,13 +12,10 @@ import com.finalproject.airbnb.model.repositories.ReservationRepository;
 import com.finalproject.airbnb.model.repositories.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.event.EventListener;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -104,12 +100,17 @@ public class UserService extends AbstractService{
 
 
 
-    public UserWithoutPasswordDTO editLoginCredetials(int id,EditLoginCredentialsDTO dto) {
+    public UserWithoutPasswordDTO editLoginCredentials(int id, EditLoginCredentialsDTO dto) {
+        User user = getUserById(id);
+        if (!encoder.matches(dto.getPassword(), user.getPassword())){
+            throw new UnauthorizedException("wrong password");
+        }
+        if (dto.getPassword().equals(dto.getNewPassword())){
+            throw new BadRequestException("your new password should be different from your previous");
+        }
         if (!dto.getNewPassword().equals(dto.getConfirmNewPassword())){
             throw new BadRequestException("Passwords mismatch");
         }
-
-        User user = userRepository.findById(id).orElseThrow(()-> new UnauthorizedException("not a valid user"));
 
         user.setPassword(encoder.encode(dto.getNewPassword()));
         userRepository.save(user);
@@ -138,5 +139,12 @@ public class UserService extends AbstractService{
         dto.setContent("Welcome to Airbnb " + registerDTO.getFirstName() + " " + registerDTO.getLastName() + "!");
         dto.setSubject("Registration");
         return dto;
+    }
+
+    public BecomeHostDTO setHostStatus(int id) {
+        User user = getUserById(id);
+        user.setHost(true);
+        userRepository.save(user);
+        return mapper.map(user, BecomeHostDTO.class);
     }
 }
