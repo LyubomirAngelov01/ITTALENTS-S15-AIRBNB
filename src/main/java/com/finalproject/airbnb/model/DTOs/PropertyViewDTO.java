@@ -11,43 +11,43 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 public class PropertyViewDTO {
-    private String streetAddress;
+        private String streetAddress;
 
-    private String region;
+        private String region;
 
-    private String zipCode;
+        private String zipCode;
 
-    private String city;
+        private String city;
 
-    private String countryName;
+        private String countryName;
 
-    private int beds;
+        private int beds;
 
-    private int maxGuests;
+        private int maxGuests;
 
-    private double price;
+        private double price;
 
-    private int bathrooms;
+        private int bathrooms;
 
-    private int bedrooms;
+        private int bedrooms;
 
-    private String description;
+        private String description;
 
-    private String title;
+        private String title;
 
-    private String categoryName;
+        private String categoryName;
 
-    private boolean wifiConnection;
+        private boolean wifiConnection;
 
-    private boolean pool;
-    private boolean tv;
-    private boolean parking;
-    private boolean airConditioning;
-    private boolean barbecue;
-    private boolean smokeAlarm;
-    private boolean firstAid;
-    private boolean fireExtinguisher;
-    private boolean gym;
-    private boolean washer;
-    private boolean kitchen;
-}
+        private boolean pool;
+        private boolean tv;
+        private boolean parking;
+        private boolean airConditioning;
+        private boolean barbecue;
+        private boolean smokeAlarm;
+        private boolean firstAid;
+        private boolean fireExtinguisher;
+        private boolean gym;
+        private boolean washer;
+        private boolean kitchen;
+    }
