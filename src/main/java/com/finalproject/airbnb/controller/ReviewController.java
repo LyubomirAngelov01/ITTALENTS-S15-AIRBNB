@@ -23,4 +23,5 @@ public class ReviewController extends AbstractController{
     private DeleteReviewDTO deleteReview(@PathVariable("reviewId") int ReviewId, HttpSession s) {
         return reviewService.deleteReview(ReviewId, getLoggedId(s));
     }
+
 }

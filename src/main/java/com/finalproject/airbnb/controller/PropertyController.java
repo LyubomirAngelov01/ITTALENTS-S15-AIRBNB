@@ -1,12 +1,10 @@
 package com.finalproject.airbnb.controller;
 
-import com.finalproject.airbnb.model.DTOs.PropertyInfoDTO;
-import com.finalproject.airbnb.model.DTOs.PropertySearchDTO;
-import com.finalproject.airbnb.model.DTOs.PropertyViewDTO;
-import com.finalproject.airbnb.model.DTOs.ReviewInfoDTO;
+import com.finalproject.airbnb.model.DTOs.*;
 import com.finalproject.airbnb.service.PropertyService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,6 +12,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @RestController
+@AllArgsConstructor
 public class PropertyController extends AbstractController {
 
     @Autowired
@@ -23,8 +22,8 @@ public class PropertyController extends AbstractController {
     @PostMapping("/properties")
     public PropertyViewDTO createProperty(@Valid @RequestBody PropertyInfoDTO dto, HttpSession s){
         return propertyService.createProperty(dto, getLoggedId(s));
-
     }
+
 
     @PutMapping("/properties/{id}")
     public PropertyViewDTO editProperty(@PathVariable int id,@Valid @RequestBody PropertyInfoDTO dto, HttpSession s) {
@@ -37,11 +36,11 @@ public class PropertyController extends AbstractController {
     }
 
     @DeleteMapping("/properties/{id}")
-    public void deleteProperty(@PathVariable int id, HttpSession s) {
-        propertyService.deleteProperty(id, getLoggedId(s));
+    public DeletedPropertyDTO deleteProperty(@PathVariable int id, HttpSession s) {
+        return propertyService.deleteProperty(id, getLoggedId(s));
     }
 
-//    @GetMapping("/properties/{id}/reviews")
+    @GetMapping("/properties/{id}/reviews")
     public List<ReviewInfoDTO> checkReviews(@PathVariable int id) {
         return propertyService.checkReviews(id);
     }

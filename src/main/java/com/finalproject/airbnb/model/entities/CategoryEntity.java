@@ -10,7 +10,7 @@ import lombok.Setter;
 public class CategoryEntity extends BaseEntity{
 
 
-    @Column(name = "category")
+    @Column
     private String categoryName;
 
 }

@@ -100,7 +100,6 @@ public class PropertyService extends AbstractService {
                 .stream()
                 .map(r -> mapper.map(r, ReviewInfoDTO.class))
                 .collect(Collectors.toList());
-
     }
 
     public List<PropertyViewDTO> search(PropertySearchDTO dto) {
