@@ -15,6 +15,5 @@ public class ReviewInfoDTO {
     @NotBlank
     private String comment;
 
-    @DecimalMax("5.0")
     private Double rating;
 }

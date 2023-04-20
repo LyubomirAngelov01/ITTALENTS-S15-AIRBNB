@@ -10,5 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class PhotoDTO {
 
+    private int id;
+
     private String photoUrl;
 }

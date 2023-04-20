@@ -11,25 +11,18 @@ import org.hibernate.validator.constraints.Range;
 @NoArgsConstructor
 public class PropertySearchDTO {
 
-    @NotBlank
     private String streetAddress;
 
-    @NotBlank
-    private int maxGuests;
+    private Integer maxGuests;
 
-    @NotBlank
-    private double price;
+    private Double price;
 
-    @Range(min = 0, max = 50)
-    private int bathrooms;
+    private Integer bathrooms;
 
-    @Range(min = 0, max = 50)
-    private int bedrooms;
+    private Integer bedrooms;
 
-    @Range(min = 0, max = 50)
-    private int beds;
+    private Integer beds;
 
-    @Range(min = 0, max = 3)
-    private int categoryNum;
+    private Integer categoryNum;
 
 }

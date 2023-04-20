@@ -40,13 +40,13 @@ public class PropertyController extends AbstractController {
         return propertyService.deleteProperty(id, getLoggedId(s));
     }
 
-    @GetMapping("/properties/{id}/reviews")
-    public List<ReviewInfoDTO> checkReviews(@PathVariable int id) {
-        return propertyService.checkReviews(id);
+    @GetMapping("/properties/{id}/reviews/{page}")
+    public List<ReviewInfoDTO> checkReviews(@PathVariable int id, @PathVariable int page) {
+        return propertyService.checkReviews(id, page);
     }
 
-    @PostMapping("/properties/all")
-    public List<PropertyViewDTO> search(@Valid @RequestBody PropertySearchDTO dto) {
-        return propertyService.search(dto);
+    @PostMapping("/properties/all/{page}")
+    public List<PropertyViewDTO> search(@Valid @RequestBody PropertySearchDTO dto, @PathVariable int page) {
+        return propertyService.search(dto,  page);
     }
 }

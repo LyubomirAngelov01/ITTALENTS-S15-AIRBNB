@@ -4,6 +4,7 @@ import com.finalproject.airbnb.Utility;
 import com.finalproject.airbnb.model.DTOs.DeleteReviewDTO;
 import com.finalproject.airbnb.service.ReviewService;
 import jakarta.servlet.http.HttpSession;
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,8 @@ class ReviewControllerTest {
 
 
     @Test
-    public void deleteReview_ReturnsDeleteReviewDTO() throws Exception {
+    @SneakyThrows
+    public void deleteReview() {
         int reviewId = 1;
         int loggedId = 2;
         DeleteReviewDTO deleteReviewDTO = new DeleteReviewDTO();

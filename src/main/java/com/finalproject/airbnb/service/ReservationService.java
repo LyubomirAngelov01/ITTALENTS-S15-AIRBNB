@@ -77,7 +77,7 @@ public class ReservationService extends AbstractService{
 
     private boolean validDates(ReservationDTO reservationDTO,int propertyId) {
         if ((reservationDTO.getCheckInDate().isBefore(LocalDate.now())) ||
-                (reservationDTO.getCheckOutDate().isBefore(reservationDTO.getCheckInDate().plusDays(1)))){
+                (reservationDTO.getCheckOutDate().isBefore(LocalDate.now()))){
             return false;
         }
 //        Property property = propertyRepository.findById(propertyId).orElseThrow(()-> new NotFoundException("property not found"));

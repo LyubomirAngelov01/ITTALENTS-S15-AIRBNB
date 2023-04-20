@@ -2,7 +2,11 @@ package com.finalproject.airbnb.model.repositories;
 
 import com.finalproject.airbnb.model.entities.PropertyEntity;
 import com.finalproject.airbnb.model.entities.UserEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -25,4 +29,24 @@ public interface PropertyRepository extends JpaRepository<PropertyEntity, Intege
         }
         return false;
     }
+
+    @Query
+            ("SELECT p FROM properties p WHERE "
+            + "(:streetAddress IS NULL OR p.streetAddress = :streetAddress) AND "
+            + "(:maxGuests IS NULL OR p.maxGuests <= :maxGuests) AND "
+            + "(:price IS NULL OR p.price <= :price) AND "
+            + "(:bathrooms IS NULL OR p.bathrooms = :bathrooms) AND "
+            + "(:bedrooms IS NULL OR p.bedrooms = :bedrooms) AND "
+            + "(:beds IS NULL OR p.beds = :beds) AND "
+            + "(:categoryNum IS NULL OR p.category.id = :categoryNum)")
+    Page<PropertyEntity> findBySearchParams(
+            @Param("streetAddress") String streetAddress,
+            @Param("maxGuests") Integer maxGuests,
+            @Param("price") Double price,
+            @Param("bathrooms") Integer bathrooms,
+            @Param("bedrooms") Integer bedrooms,
+            @Param("beds") Integer beds,
+            @Param("categoryNum") Integer categoryNum,
+            Pageable pageable);
+
 }

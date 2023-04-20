@@ -1,17 +1,32 @@
 package com.finalproject.airbnb.service;
 
 
+import com.finalproject.airbnb.controller.PropertyController;
 import com.finalproject.airbnb.model.DTOs.*;
 import com.finalproject.airbnb.model.entities.*;
+import com.finalproject.airbnb.model.exceptions.BadRequestException;
 import com.finalproject.airbnb.model.exceptions.NotFoundException;
 import com.finalproject.airbnb.model.exceptions.UnauthorizedException;
 import jakarta.transaction.Transactional;
+import lombok.SneakyThrows;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -33,6 +48,7 @@ public class PropertyService extends AbstractService {
                 .orElseThrow(() -> new NotFoundException("Country not found!"));
         AmenitiesEntity amenities = mapper.map(dto, AmenitiesEntity.class);
         amenities.setProperty(property);
+        property.setAmenities(amenities);
         property.setCountry(country);
         property.setCategory(category);
         property.setOwner(u);
@@ -87,38 +103,48 @@ public class PropertyService extends AbstractService {
         if (!propertyRepository.userOwnsProperty(u.getId(), property.getId())) {
             throw new UnauthorizedException("Property is not owned by the user!");
         }
+        int amenitiesId = property.getAmenities().getId();
+        amenitiesRepository.deleteById(amenitiesId);
         propertyRepository.delete(property);
         return new DeletedPropertyDTO();
     }
 
-    public List<ReviewInfoDTO> checkReviews(int id) {
+    public List<ReviewInfoDTO> checkReviews(int id, int page) {
+        int pageSize = 5;
         PropertyEntity property = propertyRepository.findById(id).orElseThrow(() -> new NotFoundException("Property not found"));
-        if (reviewRepository.findAllByProperty(property).isEmpty()) {
+
+        List<ReviewEntity> reviews = reviewRepository.findAllByProperty(property, PageRequest.of(page - 1, pageSize));
+        if (reviews.isEmpty()) {
             throw new NotFoundException("No reviews found!");
         }
-        return reviewRepository.findAllByProperty(property)
-                .stream()
+
+        return reviews.stream()
                 .map(r -> mapper.map(r, ReviewInfoDTO.class))
                 .collect(Collectors.toList());
     }
 
-    public List<PropertyViewDTO> search(PropertySearchDTO dto) {
-        List<PropertyViewDTO> properties = propertyRepository.findAll()
-                .stream()
-                .filter(p -> p.getPrice() <= dto.getPrice())
-                .filter(p -> p.getBeds() >= dto.getBeds())
-                .filter(p -> p.getBedrooms() >= dto.getBedrooms())
-                .filter(p -> p.getBathrooms() >= dto.getBathrooms())
-                .filter(p -> p.getStreetAddress().equals(dto.getStreetAddress()))
-                .filter(p -> p.getMaxGuests() >= dto.getMaxGuests())
-                .filter(p -> p.getCategory().getId() == dto.getCategoryNum())
-                .map(p -> mapper.map(p, PropertyViewDTO.class))
-                .collect(Collectors.toList());
-        if (properties.isEmpty()) {
-            throw new NotFoundException("Property not found!");
+        public List<PropertyViewDTO> search(PropertySearchDTO dto, int page) {
+            int pageSize = 5;
+            Pageable pageable = PageRequest.of(page -1, pageSize);
+            Page<PropertyEntity> propertyPage = propertyRepository.findBySearchParams(
+                    dto.getStreetAddress(),
+                    dto.getMaxGuests(),
+                    dto.getPrice(),
+                    dto.getBathrooms(),
+                    dto.getBedrooms(),
+                    dto.getBeds(),
+                    dto.getCategoryNum(),
+                    pageable);
+
+            if(propertyPage.isEmpty()){
+                throw new NotFoundException("No properties found!");
+            }
+
+            return propertyPage
+                    .stream()
+                    .map(p -> mapper.map(p, PropertyViewDTO.class))
+                    .collect(Collectors.toList());
         }
-        return properties;
-    }
 }
 
 
