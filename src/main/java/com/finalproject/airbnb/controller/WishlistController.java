@@ -1,13 +1,7 @@
 package com.finalproject.airbnb.controller;
 
-import com.finalproject.airbnb.Utility;
 import com.finalproject.airbnb.model.DTOs.WishlistPropertyDTO;
-import com.finalproject.airbnb.model.entities.Property;
-import com.finalproject.airbnb.model.entities.User;
-import com.finalproject.airbnb.model.entities.Wishlist;
-import com.finalproject.airbnb.model.exceptions.UnauthorizedException;
 import com.finalproject.airbnb.model.repositories.UserRepository;
-import com.finalproject.airbnb.model.repositories.WishlistRepository;
 import com.finalproject.airbnb.service.WishlistService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;

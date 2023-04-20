@@ -2,45 +2,60 @@ package com.finalproject.airbnb.service;
 
 import com.finalproject.airbnb.Utility;
 import com.finalproject.airbnb.model.DTOs.*;
-import com.finalproject.airbnb.model.entities.Reservation;
-import com.finalproject.airbnb.model.entities.User;
+import com.finalproject.airbnb.model.entities.ReservationEntity;
+import com.finalproject.airbnb.model.entities.UserEntity;
 import com.finalproject.airbnb.model.exceptions.BadRequestException;
 import com.finalproject.airbnb.model.exceptions.NotFoundException;
 import com.finalproject.airbnb.model.exceptions.UnauthorizedException;
-import com.finalproject.airbnb.model.repositories.CountryCodeRepository;
 import com.finalproject.airbnb.model.repositories.ReservationRepository;
 import com.finalproject.airbnb.model.repositories.UserRepository;
+import jakarta.mail.internet.MimeMessage;
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.modelmapper.internal.bytebuddy.utility.RandomString;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMailMessage;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 
 @Service
-@RequiredArgsConstructor
 public class UserService extends AbstractService{
 
-    private final EmailService emailService;
-    private final BCryptPasswordEncoder encoder;
-    private final UserRepository userRepository;
-    private final CountryCodeService   countryCodeService;
-    private final ReservationRepository reservationRepository;
-    private static final Logger logger = LogManager.getLogger(UserService.class);
+    @Autowired
+    private EmailService emailService;
+    @Autowired
+    private BCryptPasswordEncoder encoder;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private CountryCodeService   countryCodeService;
+    @Autowired
+    private ReservationRepository reservationRepository;
+    @Autowired
+    private static Logger logger = LogManager.getLogger(UserService.class);
+    @Autowired
+    private JavaMailSender mailSender;
+
 
 
     public UserWithoutPasswordDTO register(RegisterDTO dto){
         validateRegisterDto(dto);
 
-        User user = mapper.map(dto,User.class);
+        UserEntity user = mapper.map(dto,UserEntity.class);
         user.setPassword(encoder.encode(user.getPassword()));
         user.setCountryCode(countryCodeService.findById(dto.getCountryCode()));
+        String randomCode = RandomString.make(64);
+        user.setVerificationCode(randomCode);
+        user.setEnabled(false);
 
         userRepository.save(user);
 
@@ -50,7 +65,7 @@ public class UserService extends AbstractService{
     }
 
     public UserWithoutPasswordDTO login (LoginDTO dto){
-        User u = userRepository.getByEmail(dto.getEmail()).orElseThrow(()->new UnauthorizedException("Wrong credentials"));
+        UserEntity u = userRepository.getByEmail(dto.getEmail()).orElseThrow(()->new UnauthorizedException("Wrong credentials"));
 
         if(!encoder.matches(dto.getPassword(), u.getPassword())){
             logger.error("user " + u.getId() + " tried to log in with wrong credentials");
@@ -60,14 +75,14 @@ public class UserService extends AbstractService{
         return mapper.map(u, UserWithoutPasswordDTO.class);
     }
     public UserWithoutPasswordDTO checkProfile(int id){
-        User u = getUserById(id);
+        UserEntity u = getUserById(id);
 
         return mapper.map(u,UserWithoutPasswordDTO.class);
     }
 
     @Transactional
     public UserWithoutPasswordDTO editProfileInfo(EditProfileInfoDTO dto, int id){
-        User u = userRepository.findById(id).orElseThrow(()-> new NotFoundException("User not found"));
+        UserEntity u = userRepository.findById(id).orElseThrow(()-> new NotFoundException("User not found"));
 
 
         u.setEmail(dto.getEmail());
@@ -92,8 +107,8 @@ public class UserService extends AbstractService{
 
 
     public List<TripDTO> listAllTrips(int userId) {
-        User u = userRepository.findById(userId).orElseThrow(()-> new NotFoundException("user not found"));
-        List <Reservation>  reservations = reservationRepository.findAllByUser(u);
+        UserEntity u = userRepository.findById(userId).orElseThrow(()-> new NotFoundException("user not found"));
+        List <ReservationEntity>  reservations = reservationRepository.findAllByUser(u);
         List<TripDTO> trips = reservations.stream()
                 .map(reservation -> new TripDTO(reservation.getCheckInDate(),reservation.getCheckOutDate(),reservation.getProperty().getId(),reservation.getProperty().getTitle()))
                 .collect(Collectors.toList());
@@ -103,7 +118,7 @@ public class UserService extends AbstractService{
 
 
     public UserWithoutPasswordDTO editLoginCredentials(int id, EditLoginCredentialsDTO dto) {
-        User user = getUserById(id);
+        UserEntity user = getUserById(id);
         if (!encoder.matches(dto.getPassword(), user.getPassword())){
             throw new UnauthorizedException("wrong password");
         }
@@ -122,37 +137,66 @@ public class UserService extends AbstractService{
     }
 
 
-    private void validateRegisterDto(RegisterDTO dto) {
-        if (!dto.getPassword().equals(dto.getConfirmPassword())){
-            logger.error("a new user tried to register without passwords matching");
-            throw new BadRequestException("Passwords mismatch");
-        }
-        if (userRepository.existsByEmail(dto.getEmail())){
-            logger.error("a new user tried to register with already existing email");
-            throw new BadRequestException("This email already exists!");
-        }
-
-        LocalDate validateYear = LocalDate.now().minusYears(Utility.VALID_AGE);
-        if (dto.getBirthdate().isAfter(validateYear)){
-            logger.error("a new user tried to register with invalid birthdate");
-            throw new BadRequestException("not a valid birthdate");
-        }
-    }
-
-    private SimpleMessageDTO generateMessageOnRegistration(RegisterDTO registerDTO){
-        SimpleMessageDTO dto = new SimpleMessageDTO();
-        dto.setRecipient(registerDTO.getEmail());
-        dto.setContent("Welcome to Airbnb " + registerDTO.getFirstName() + " " + registerDTO.getLastName() + "!");
-        dto.setSubject("Registration");
-        return dto;
-    }
-
     public BecomeHostDTO setHostStatus(int id) {
-        User user = getUserById(id);
+        UserEntity user = getUserById(id);
         user.setHost(true);
         userRepository.save(user);
         logger.info(user.getId() + " became a host");
 
         return mapper.map(user, BecomeHostDTO.class);
     }
+
+    public UserEntity getByEmail(String userEmail) {
+        return userRepository.getByEmail(userEmail).orElseThrow(()-> new NotFoundException("user not found"));
+    }
+    private SimpleMessageDTO generateMessageOnRegistration(RegisterDTO registerDTO){
+        SimpleMessageDTO dto = new SimpleMessageDTO();
+        dto.setSendTo(registerDTO.getEmail());
+        dto.setContent("Dear "+registerDTO.getFirstName() + " " + registerDTO.getLastName() + " welcome to Airbnb");
+        dto.setSubject("Registration on Airbnb");
+        return dto;
+    }
+    private void validateRegisterDto(RegisterDTO dto) {
+        if (!dto.getPassword().equals(dto.getConfirmPassword())){
+            throw new BadRequestException("Passwords mismatch");
+        }
+        if (userRepository.existsByEmail(dto.getEmail())){
+            throw new BadRequestException("This email already exists!");
+        }
+
+        LocalDate validateYear = LocalDate.now().minusYears(Utility.VALID_AGE);
+        if (dto.getBirthdate().isAfter(validateYear)){
+            throw new BadRequestException("not a valid birthdate");
+        }
+    }
+    @SneakyThrows
+    private void sendVerificationEmail(UserEntity user, String siteUrl){
+        String toAddress = user.getEmail();
+        String fromAddress = "aliubomir@gmail.com";
+        String senderName = "Airbnb";
+        String subject = "Please verify your registration";
+        String content = ("Dear [[name]],<br>"
+                + "Please click the link below to verify your registration:<br>"
+                + "<h3><a href=\"[[URL]]\" target=\"_self\">VERIFY</a></h3>"
+                + "Thank you,<br>"
+                + "Your company name.");
+
+
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message);
+
+        helper.setFrom(fromAddress, senderName);
+        helper.setTo(toAddress);
+        helper.setSubject(subject);
+
+        content = content.replace("[[name]]", user.getFirstName() + " " + user.getLastName());
+        String verifyURL = siteUrl + "/verify?code=" + user.getVerificationCode();
+
+        content = content.replace("[[URL]]", verifyURL);
+
+        helper.setText(content, true);
+
+        mailSender.send(message);
+    }
+
 }

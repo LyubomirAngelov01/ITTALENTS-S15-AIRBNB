@@ -8,15 +8,15 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity(name = "reviews")
-public class Review extends BaseEntity {
+public class ReviewEntity extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User owner;
+    private UserEntity owner;
 
     @ManyToOne
     @JoinColumn(name = "property_id")
-    private Property property;
+    private PropertyEntity property;
 
     @Column
     private String comment;

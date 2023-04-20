@@ -1,29 +1,17 @@
 package com.finalproject.airbnb.service;
 
 
-import com.finalproject.airbnb.controller.PropertyController;
 import com.finalproject.airbnb.model.DTOs.*;
 import com.finalproject.airbnb.model.entities.*;
-import com.finalproject.airbnb.model.exceptions.BadRequestException;
 import com.finalproject.airbnb.model.exceptions.NotFoundException;
 import com.finalproject.airbnb.model.exceptions.UnauthorizedException;
 import jakarta.transaction.Transactional;
-import lombok.SneakyThrows;
-import org.apache.commons.io.FilenameUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,16 +22,16 @@ public class PropertyService extends AbstractService {
 
     @Transactional
     public PropertyViewDTO createProperty(PropertyInfoDTO dto, int loggedId) {
-        User u = getUserById(loggedId);
+        UserEntity u = getUserById(loggedId);
         if (!u.isHost()) {
             throw new UnauthorizedException("You must be a host to list a property!");
         }
-        Property property = mapper.map(dto, Property.class);
-        Category category = categoryRepository.findById(dto.getCategoryNum())
+        PropertyEntity property = mapper.map(dto, PropertyEntity.class);
+        CategoryEntity category = categoryRepository.findById(dto.getCategoryNum())
                 .orElseThrow(() -> new NotFoundException("Category not found!"));
-        Country country = countryRepository.findById(dto.getCountryNum())
+        CountryEntity country = countryRepository.findById(dto.getCountryNum())
                 .orElseThrow(() -> new NotFoundException("Country not found!"));
-        Amenities amenities = mapper.map(dto, Amenities.class);
+        AmenitiesEntity amenities = mapper.map(dto, AmenitiesEntity.class);
         amenities.setProperty(property);
         property.setCountry(country);
         property.setCategory(category);
@@ -60,16 +48,16 @@ public class PropertyService extends AbstractService {
     }
 
     public PropertyViewDTO editProperty(int id, PropertyInfoDTO dto, int loggedId) {
-        User u = getUserById(loggedId);
-        Property property = propertyRepository.findById(id).orElseThrow(() -> new NotFoundException("Property not found!"));
+        UserEntity u = getUserById(loggedId);
+        PropertyEntity property = propertyRepository.findById(id).orElseThrow(() -> new NotFoundException("Property not found!"));
         if (!propertyRepository.userOwnsProperty(u.getId(), property.getId())) {
             throw new UnauthorizedException("User does not own the property!");
         }
-        Category category = categoryRepository.findById(dto.getCategoryNum())
+        CategoryEntity category = categoryRepository.findById(dto.getCategoryNum())
                 .orElseThrow(() -> new NotFoundException("Category not found!"));
-        Country country = countryRepository.findById(dto.getCountryNum())
+        CountryEntity country = countryRepository.findById(dto.getCountryNum())
                 .orElseThrow(() -> new NotFoundException("Country not found!"));
-        Amenities amenities = amenitiesRepository.getByProperty(property);
+        AmenitiesEntity amenities = amenitiesRepository.getByProperty(property);
         mapper.map(dto, amenities);
         property.setCountry(country);
         property.setCategory(category);
@@ -86,7 +74,7 @@ public class PropertyService extends AbstractService {
     }
 
     public PropertyViewDTO showProperty(int id) {
-        Property property = propertyRepository.findById(id).orElseThrow(() -> new NotFoundException("Property not found!"));
+        PropertyEntity property = propertyRepository.findById(id).orElseThrow(() -> new NotFoundException("Property not found!"));
         PropertyViewDTO dto = mapper.map(property, PropertyViewDTO.class);
         dto.setCategoryName(property.getCategory().getCategoryName());
         dto.setCountryName(property.getCountry().getCountryName());
@@ -94,8 +82,8 @@ public class PropertyService extends AbstractService {
     }
 
     public DeletedPropertyDTO deleteProperty(int id, int loggedId) {
-        User u = getUserById(loggedId);
-        Property property = propertyRepository.findById(id).orElseThrow(() -> new NotFoundException("Property not found!"));
+        UserEntity u = getUserById(loggedId);
+        PropertyEntity property = propertyRepository.findById(id).orElseThrow(() -> new NotFoundException("Property not found!"));
         if (!propertyRepository.userOwnsProperty(u.getId(), property.getId())) {
             throw new UnauthorizedException("Property is not owned by the user!");
         }
@@ -104,7 +92,7 @@ public class PropertyService extends AbstractService {
     }
 
     public List<ReviewInfoDTO> checkReviews(int id) {
-        Property property = propertyRepository.findById(id).orElseThrow(() -> new NotFoundException("Property not found"));
+        PropertyEntity property = propertyRepository.findById(id).orElseThrow(() -> new NotFoundException("Property not found"));
         if (reviewRepository.findAllByProperty(property).isEmpty()) {
             throw new NotFoundException("No reviews found!");
         }

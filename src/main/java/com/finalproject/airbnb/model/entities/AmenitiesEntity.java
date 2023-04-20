@@ -1,19 +1,18 @@
 package com.finalproject.airbnb.model.entities;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
 @Entity(name = "amenities")
-public class Amenities extends BaseEntity{
+public class AmenitiesEntity extends BaseEntity{
 
 
     @OneToOne
     @JoinColumn(name = "property_id")
-    private Property property;
+    private PropertyEntity property;
 
     @Column
     private boolean wifiConnection;

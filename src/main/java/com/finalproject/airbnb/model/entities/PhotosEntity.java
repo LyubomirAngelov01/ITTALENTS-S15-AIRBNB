@@ -8,12 +8,12 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity(name = "photos")
-public class Photos extends BaseEntity{
+public class PhotosEntity extends BaseEntity{
 
 
     @ManyToOne
     @JoinColumn(name = "property_id")
-    private Property property;
+    private PropertyEntity property;
 
     @Column(name = "photo_url")
     private String photoUrl;

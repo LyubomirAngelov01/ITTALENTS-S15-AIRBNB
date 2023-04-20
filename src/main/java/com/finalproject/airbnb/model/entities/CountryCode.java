@@ -4,8 +4,6 @@ import jakarta.persistence.*;
 
 import lombok.*;
 
-import java.util.List;
-
 @Getter
 @Setter
 @NoArgsConstructor
@@ -20,6 +18,6 @@ public class CountryCode extends BaseEntity{
 
     @OneToOne
     @JoinColumn(name = "country_id")
-    private Country country;
+    private CountryEntity country;
 
 }

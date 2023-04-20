@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity(name = "messages")
-public class Message extends BaseEntity {
+public class MessageEntity extends BaseEntity {
 
     @Column
     private String message;
@@ -25,12 +25,12 @@ public class Message extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "sender_id")
-    private User sender;
+    private UserEntity sender;
 
 
     @ManyToOne
     @JoinColumn(name = "receiver_id")
-    private User receiver;
+    private UserEntity receiver;
 
     @Column(name = "time_sent")
     private LocalDateTime timeSent;

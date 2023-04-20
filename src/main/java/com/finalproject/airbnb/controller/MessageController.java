@@ -3,12 +3,9 @@ package com.finalproject.airbnb.controller;
 import com.finalproject.airbnb.model.DTOs.InboxUserDTO;
 import com.finalproject.airbnb.model.DTOs.MessageWithUserDTO;
 import com.finalproject.airbnb.model.DTOs.SendMessageDTO;
-import com.finalproject.airbnb.model.entities.Message;
-import com.finalproject.airbnb.model.entities.User;
 import com.finalproject.airbnb.service.MessageService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

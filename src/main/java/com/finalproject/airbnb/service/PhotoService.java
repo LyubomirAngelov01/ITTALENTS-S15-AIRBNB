@@ -3,9 +3,9 @@ package com.finalproject.airbnb.service;
 import com.finalproject.airbnb.model.DTOs.DeleteAllPhotosDTO;
 import com.finalproject.airbnb.model.DTOs.DeletePhotoDTO;
 import com.finalproject.airbnb.model.DTOs.PhotoDTO;
-import com.finalproject.airbnb.model.entities.Photos;
-import com.finalproject.airbnb.model.entities.Property;
-import com.finalproject.airbnb.model.entities.User;
+import com.finalproject.airbnb.model.entities.PhotosEntity;
+import com.finalproject.airbnb.model.entities.PropertyEntity;
+import com.finalproject.airbnb.model.entities.UserEntity;
 import com.finalproject.airbnb.model.exceptions.BadRequestException;
 import com.finalproject.airbnb.model.exceptions.NotFoundException;
 import com.finalproject.airbnb.model.exceptions.UnauthorizedException;
@@ -13,7 +13,6 @@ import jakarta.transaction.Transactional;
 import lombok.SneakyThrows;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -29,14 +28,14 @@ public class PhotoService extends AbstractService {
     @SneakyThrows
     @Transactional
     public List<PhotoDTO> upload(int id, MultipartFile[] files, int loggedId) {
-        User u = getUserById(loggedId);
-        Property property = propertyRepository.findById(id)
+        UserEntity u = getUserById(loggedId);
+        PropertyEntity property = propertyRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Property not found!"));
         if (!propertyRepository.userOwnsProperty(u.getId(), property.getId())) {
             throw new UnauthorizedException("Property is not owned by the user!");
         }
         if (photosRepository.findAllByPropertyId(id).size() > 10) {
-            List <Photos> photos = photosRepository.findAllByPropertyId(id);
+            List <PhotosEntity> photos = photosRepository.findAllByPropertyId(id);
             return photos.stream()
                     .map(p -> mapper.map(p, PhotoDTO.class))
                     .collect(Collectors.toList());
@@ -50,9 +49,9 @@ public class PhotoService extends AbstractService {
                 throw new BadRequestException("Only JPEG and PNG files are allowed.");
             }
         }
-        List<Photos> photoEntities = new ArrayList<>();
+        List<PhotosEntity> photoEntities = new ArrayList<>();
         for (MultipartFile photo : files) {
-            Photos photos = new Photos();
+            PhotosEntity photos = new PhotosEntity();
             String name = UUID.randomUUID().toString();
             String ext = FilenameUtils.getExtension(photo.getOriginalFilename());
 
@@ -101,15 +100,15 @@ public class PhotoService extends AbstractService {
     }
 
     public DeletePhotoDTO deletePhotoById(int id, int loggedId) {
-        User u = getUserById(loggedId);
-        Photos photo = photosRepository.findById(id).orElseThrow(() -> new NotFoundException("Photo not found"));
-        List<Property> properties = propertyRepository.findAllByOwner(u);
+        UserEntity u = getUserById(loggedId);
+        PhotosEntity photo = photosRepository.findById(id).orElseThrow(() -> new NotFoundException("Photo not found"));
+        List<PropertyEntity> properties = propertyRepository.findAllByOwner(u);
         if (properties.isEmpty()) {
             throw new NotFoundException("No property found for this user!");
         }
-        for (Property property : properties) {
-            List<Photos> photos = photosRepository.findByProperty(property);
-            for (Photos p : photos)
+        for (PropertyEntity property : properties) {
+            List<PhotosEntity> photos = photosRepository.findByProperty(property);
+            for (PhotosEntity p : photos)
                 if (photo.equals(p)) {
                     photosRepository.deleteById(id);
                     return new DeletePhotoDTO();
@@ -120,8 +119,8 @@ public class PhotoService extends AbstractService {
 
     @Transactional
     public DeleteAllPhotosDTO deleteAllPhotos(int id, int loggedId) {
-        User u = getUserById(loggedId);
-        Property property = propertyRepository.findById(id)
+        UserEntity u = getUserById(loggedId);
+        PropertyEntity property = propertyRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Property not found!"));
         if (!propertyRepository.userOwnsProperty(u.getId(), property.getId())) {
             throw new UnauthorizedException("Property is not owned by the user!");

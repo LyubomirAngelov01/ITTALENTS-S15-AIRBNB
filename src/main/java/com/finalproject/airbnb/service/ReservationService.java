@@ -3,8 +3,8 @@ package com.finalproject.airbnb.service;
 import com.finalproject.airbnb.model.DTOs.ReservationDTO;
 import com.finalproject.airbnb.model.DTOs.SuccessfulReservationDTO;
 import com.finalproject.airbnb.model.DTOs.UpcomingReservationClientDTO;
-import com.finalproject.airbnb.model.entities.Property;
-import com.finalproject.airbnb.model.entities.Reservation;
+import com.finalproject.airbnb.model.entities.PropertyEntity;
+import com.finalproject.airbnb.model.entities.ReservationEntity;
 import com.finalproject.airbnb.model.exceptions.BadRequestException;
 import com.finalproject.airbnb.model.exceptions.NotFoundException;
 import com.finalproject.airbnb.model.exceptions.UnauthorizedException;
@@ -31,9 +31,9 @@ public class ReservationService extends AbstractService{
         if (!validDates(reservationDTO,propertyId)){
             throw new BadRequestException("select valid dates for reservation");
         }
-        Reservation reservation = new Reservation();
+        ReservationEntity reservation = new ReservationEntity();
 
-        Property property = propertyRepository.findById(propertyId).orElseThrow(()->new NotFoundException("Property not found"));
+        PropertyEntity property = propertyRepository.findById(propertyId).orElseThrow(()->new NotFoundException("Property not found"));
         reservation.setUser(userRepository.findById(userId).orElseThrow(()-> new NotFoundException("user not found")));
         reservation.setProperty(property);
         reservation.setCheckInDate(reservationDTO.getCheckInDate());
@@ -51,7 +51,7 @@ public class ReservationService extends AbstractService{
 
 
     public List<UpcomingReservationClientDTO> listUpcomingReservationsForAClient(int loggedId) {
-        List<Reservation> reservations = reservationRepository.findAllByUserIdAndAndCheckInDateAfter(loggedId, LocalDate.now());
+        List<ReservationEntity> reservations = reservationRepository.findAllByUserIdAndAndCheckInDateAfter(loggedId, LocalDate.now());
         List<UpcomingReservationClientDTO> upcomingReservations = reservations.stream()
                 .map(reservation -> new UpcomingReservationClientDTO(
                         reservation.getCheckInDate(),reservation.getCheckOutDate(),reservation.getProperty().getId(),reservation.getProperty().getTitle()))
@@ -64,7 +64,7 @@ public class ReservationService extends AbstractService{
 
     @Transactional
     public void removeReservation(int reservationId, int loggedId) {
-        Reservation reservation = reservationRepository.findById(reservationId).orElseThrow(()->new NotFoundException("reservation not found"));
+        ReservationEntity reservation = reservationRepository.findById(reservationId).orElseThrow(()->new NotFoundException("reservation not found"));
         if (reservation.getUser().getId() != loggedId){
             throw new UnauthorizedException("you can remove your reservations only");
         }

@@ -11,16 +11,16 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @IdClass(WishlistKeys.class)
-public class Wishlist {
+public class WishlistEntity {
 
     @Id
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User user;
+    private UserEntity user;
 
     @Id
     @ManyToOne
     @JoinColumn(name = "property_id")
-    private Property property;
+    private PropertyEntity property;
 
 }

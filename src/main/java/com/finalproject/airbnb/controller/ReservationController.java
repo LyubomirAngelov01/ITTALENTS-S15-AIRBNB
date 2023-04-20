@@ -3,7 +3,6 @@ package com.finalproject.airbnb.controller;
 import com.finalproject.airbnb.model.DTOs.ReservationDTO;
 import com.finalproject.airbnb.model.DTOs.SuccessfulReservationDTO;
 import com.finalproject.airbnb.model.DTOs.UpcomingReservationClientDTO;
-import com.finalproject.airbnb.model.entities.Reservation;
 import com.finalproject.airbnb.service.ReservationService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;

@@ -1,8 +1,7 @@
 package com.finalproject.airbnb.compositeKeysClasses;
 
-import com.finalproject.airbnb.model.entities.Property;
-import com.finalproject.airbnb.model.entities.User;
-import jakarta.persistence.IdClass;
+import com.finalproject.airbnb.model.entities.PropertyEntity;
+import com.finalproject.airbnb.model.entities.UserEntity;
 import lombok.*;
 
 import java.io.Serializable;
@@ -13,7 +12,7 @@ import java.io.Serializable;
 @EqualsAndHashCode
 public class WishlistKeys implements Serializable {
 
-    private User user;
-    private Property property;
+    private UserEntity user;
+    private PropertyEntity property;
 
 }

@@ -16,12 +16,12 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "reservations")
-public class Reservation extends BaseEntity{
+public class ReservationEntity extends BaseEntity{
 
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User user;
+    private UserEntity user;
     @Column(name = "check_in_date")
     private LocalDate checkInDate;
     @Column(name = "check_out_date")
@@ -30,6 +30,6 @@ public class Reservation extends BaseEntity{
     private int guests;
     @ManyToOne
     @JoinColumn(name = "property_id")
-    private Property property;
+    private PropertyEntity property;
 
 }

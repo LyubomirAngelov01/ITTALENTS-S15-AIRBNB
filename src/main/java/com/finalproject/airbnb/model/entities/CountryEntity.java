@@ -5,12 +5,10 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
 @Entity(name = "countries")
-public class Country extends BaseEntity{
+public class CountryEntity extends BaseEntity{
 
 
     @Column

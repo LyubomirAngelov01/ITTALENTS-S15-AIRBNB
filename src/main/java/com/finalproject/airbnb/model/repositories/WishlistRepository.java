@@ -1,16 +1,14 @@
 package com.finalproject.airbnb.model.repositories;
 
 import com.finalproject.airbnb.compositeKeysClasses.WishlistKeys;
-import com.finalproject.airbnb.model.entities.Property;
-import com.finalproject.airbnb.model.entities.User;
-import com.finalproject.airbnb.model.entities.Wishlist;
+import com.finalproject.airbnb.model.entities.WishlistEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface WishlistRepository extends JpaRepository<Wishlist, WishlistKeys> {
+public interface WishlistRepository extends JpaRepository<WishlistEntity, WishlistKeys> {
 
-    List<Wishlist> findAllByUserId(int userId);
+    List<WishlistEntity> findAllByUserId(int userId);
     void deleteByUserIdAndPropertyId(int userId,int propertyId);
 
 }

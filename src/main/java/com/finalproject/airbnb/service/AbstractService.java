@@ -1,7 +1,7 @@
 package com.finalproject.airbnb.service;
 
 
-import com.finalproject.airbnb.model.entities.User;
+import com.finalproject.airbnb.model.entities.UserEntity;
 import com.finalproject.airbnb.model.exceptions.NotFoundException;
 import com.finalproject.airbnb.model.repositories.*;
 import org.modelmapper.ModelMapper;
@@ -35,7 +35,7 @@ public class AbstractService {
     @Autowired
     protected AmenitiesRepository amenitiesRepository;
 
-    protected User getUserById(int id){
+    protected UserEntity getUserById(int id){
         return userRepository.findById(id).orElseThrow(() -> new NotFoundException("User not found"));
     }
 }

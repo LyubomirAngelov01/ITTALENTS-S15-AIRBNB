@@ -1,6 +1,5 @@
 package com.finalproject.airbnb.model.DTOs;
 
-import com.finalproject.airbnb.model.entities.Property;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

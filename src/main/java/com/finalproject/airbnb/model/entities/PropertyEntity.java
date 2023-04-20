@@ -1,18 +1,15 @@
 package com.finalproject.airbnb.model.entities;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.validator.constraints.Range;
 
-import java.io.Serializable;
 import java.util.List;
 
 @Getter
 @Setter
 @Entity(name = "properties")
-public class Property extends BaseEntity{
+public class PropertyEntity extends BaseEntity{
 
 
     @Column
@@ -29,7 +26,7 @@ public class Property extends BaseEntity{
 
     @ManyToOne
     @JoinColumn(name = "country_id")
-    private Country country;
+    private CountryEntity country;
 
     @Column
     private int beds;
@@ -54,21 +51,21 @@ public class Property extends BaseEntity{
 
     @ManyToOne
     @JoinColumn(name = "owner_id")
-    private User owner;
+    private UserEntity owner;
 
     @ManyToOne
     @JoinColumn(name = "category_id")
-    private Category category;
+    private CategoryEntity category;
 
     @Column(name = "rating")
     private double avgRating;
 
     @OneToOne(mappedBy = "property")
-    private Amenities amenities;
+    private AmenitiesEntity amenities;
 
     @OneToMany(mappedBy = "property")
-    private List<Photos> photos;
+    private List<PhotosEntity> photos;
 
     @OneToMany(mappedBy = "property")
-    private List<Review> reviews;
+    private List<ReviewEntity> reviews;
 }
