@@ -2,11 +2,11 @@ package com.finalproject.airbnb.service;
 
 import com.finalproject.airbnb.model.DTOs.DeleteReviewDTO;
 import com.finalproject.airbnb.model.DTOs.ReviewInfoDTO;
-import com.finalproject.airbnb.model.entities.Property;
+
 import com.finalproject.airbnb.model.entities.PropertyEntity;
-import com.finalproject.airbnb.model.entities.Review;
+
 import com.finalproject.airbnb.model.entities.ReviewEntity;
-import com.finalproject.airbnb.model.entities.User;
+
 import com.finalproject.airbnb.model.entities.UserEntity;
 import com.finalproject.airbnb.model.exceptions.BadRequestException;
 import com.finalproject.airbnb.model.exceptions.NotFoundException;

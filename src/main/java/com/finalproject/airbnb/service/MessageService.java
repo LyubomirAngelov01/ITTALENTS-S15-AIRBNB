@@ -1,5 +1,6 @@
 package com.finalproject.airbnb.service;
 
+import com.finalproject.airbnb.model.DTOs.ChatDTO;
 import com.finalproject.airbnb.model.DTOs.InboxUserDTO;
 import com.finalproject.airbnb.model.DTOs.MessageWithUserDTO;
 import com.finalproject.airbnb.model.entities.MessageEntity;
@@ -10,6 +11,8 @@ import com.finalproject.airbnb.model.exceptions.UnauthorizedException;
 import com.finalproject.airbnb.model.repositories.MessageRepository;
 import com.finalproject.airbnb.model.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -32,20 +35,29 @@ public class MessageService extends AbstractService {
         messageRepository.save(new MessageEntity(text, sender, receiver, LocalDateTime.now()));
     }
 
-    public List<MessageWithUserDTO> listChatWithAUser(int loggedId, int receiverId) {
+    public Page<ChatDTO> listChatWithAUser(int loggedId, int receiverId, Pageable pageable) {
         UserEntity sender = userRepository.findById(loggedId).orElseThrow(()-> new UnauthorizedException("log in first"));
         UserEntity receiver = userRepository.findById(receiverId).orElseThrow(()-> new NotFoundException("user not found"));
-        List<MessageEntity> messages = messageRepository.findAllBySenderAndReceiver(sender,receiver);
-        messages.addAll(messageRepository.findAllBySenderAndReceiver(receiver,sender));
-        List<MessageWithUserDTO> messagesWithUser = new ArrayList();
-        for (MessageEntity message: messages) {
-            messagesWithUser.add(new MessageWithUserDTO(message.getSender().getId(),message.getSender().getFirstName(),
-                    message.getSender().getLastName(),message.getMessage(),message.getTimeSent()));
-        }
-        messagesWithUser = messagesWithUser.stream()
-                .sorted(Comparator.comparing(MessageWithUserDTO::getTimeSent))
-                .collect(Collectors.toList());
-        return messagesWithUser;
+        Page<MessageEntity> chats = messageRepository.listAChat(loggedId,receiverId,pageable);
+        Page<ChatDTO> messages = chats.map(messageEntity -> mapper.map(messageEntity,ChatDTO.class));
+
+
+
+
+
+//        Page<MessageEntity> messages = messageRepository.findAllBySenderAndReceiver(sender,receiver,pageable);
+//        messages.addAll(messageRepository.findAllBySenderAndReceiver(receiver,sender,));
+//        List<MessageWithUserDTO> messagesWithUser = new ArrayList();
+//        for (MessageEntity message: messages) {
+//            messagesWithUser.add(new MessageWithUserDTO(message.getSender().getId(),message.getSender().getFirstName(),
+//                    message.getSender().getLastName(),message.getMessage(),message.getTimeSent()));
+//        }
+//        messagesWithUser = messagesWithUser.stream()
+//                .sorted(Comparator.comparing(MessageWithUserDTO::getTimeSent))
+//                .collect(Collectors.toList());
+//
+//        Page<MessageWithUserDTO> page =
+        return messages;
     }
 
     public List<InboxUserDTO> getInbox(int loggedId) {

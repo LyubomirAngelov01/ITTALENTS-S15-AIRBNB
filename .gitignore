@@ -36,3 +36,4 @@ build/
 .mvn
 /uploads
 /appLog.log
+/appLog.log.2023-04-20.0.gz

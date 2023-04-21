@@ -139,6 +139,9 @@ public class UserService extends AbstractService{
 
     public BecomeHostDTO setHostStatus(int id) {
         UserEntity user = getUserById(id);
+        if(user.isHost() == true){
+            throw new BadRequestException("already a host");
+        }
         user.setHost(true);
         userRepository.save(user);
         logger.info(user.getId() + " became a host");

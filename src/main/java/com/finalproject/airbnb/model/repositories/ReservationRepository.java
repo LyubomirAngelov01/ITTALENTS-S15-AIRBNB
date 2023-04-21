@@ -16,6 +16,7 @@ public interface ReservationRepository extends JpaRepository<ReservationEntity,I
     List<ReservationEntity> findAllByUser(UserEntity user);
     List<ReservationEntity> findAllByUserIdAndAndCheckInDateAfter(int userId, LocalDate checkInDate);
     void deleteByIdAndUserId(int id,int userId);
+    List<ReservationEntity> findAllByPropertyId(int propertyId);
     List<ReservationEntity> findAllByProperty(PropertyEntity property);
     @Query("SELECT r FROM reservations AS r WHERE r.checkInDate > curdate()")
     List<ReservationEntity> getAllAfterCurrentDate();
