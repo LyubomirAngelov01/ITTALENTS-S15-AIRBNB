@@ -28,9 +28,9 @@ public class ReservationService extends AbstractService{
     private final PropertyRepository propertyRepository;
 
     public SuccessfulReservationDTO makeReservation(int userId, int propertyId, ReservationDTO reservationDTO){
-        if (!validDates(reservationDTO,propertyId)){
-            throw new BadRequestException("select valid dates for reservation");
-        }
+        validDates(reservationDTO,propertyId);
+
+        checkAvailability(reservationDTO,propertyId);
         ReservationEntity reservation = new ReservationEntity();
 
         PropertyEntity property = propertyRepository.findById(propertyId).orElseThrow(()->new NotFoundException("Property not found"));
@@ -74,25 +74,25 @@ public class ReservationService extends AbstractService{
 
 
 
-
-    private boolean validDates(ReservationDTO reservationDTO,int propertyId) {
-        if ((reservationDTO.getCheckInDate().isBefore(LocalDate.now())) ||
-                (reservationDTO.getCheckOutDate().isBefore(LocalDate.now()))){
-            return false;
+    public void checkAvailability(ReservationDTO dto,int propertyId){
+        List<ReservationEntity> reservationsForProperty = reservationRepository.findAllByPropertyId(propertyId);
+        for(ReservationEntity reservation:reservationsForProperty){
+            if((dto.getCheckInDate().isAfter(reservation.getCheckInDate()) && dto.getCheckInDate().isBefore(reservation.getCheckOutDate()))||
+                    (dto.getCheckOutDate().isAfter(reservation.getCheckInDate()) && dto.getCheckOutDate().isBefore(reservation.getCheckOutDate()))||
+                    ((dto.getCheckInDate().isBefore(reservation.getCheckInDate())||dto.getCheckInDate().isEqual(reservation.getCheckInDate()))
+                            &&( dto.getCheckOutDate().isAfter(reservation.getCheckOutDate())||dto.getCheckOutDate().isEqual(reservation.getCheckOutDate())))||
+                    (dto.getCheckInDate().isEqual(reservation.getCheckInDate())&&dto.getCheckInDate().isEqual(reservation.getCheckInDate()))
+            ){
+                throw new BadRequestException("These days are already reserved");
+            }
         }
-//        Property property = propertyRepository.findById(propertyId).orElseThrow(()-> new NotFoundException("property not found"));
-//        List<Reservation> reservations = reservationRepository.findAllByProperty(property);
-//        for (Reservation reservation: reservations) {
-////            if((reservationDTO.getCheckInDate().isAfter(reservation.getCheckInDate().minusDays(1))) ||
-////                    (reservationDTO.getCheckOutDate().isBefore(reservation.getCheckOutDate().plusDays(1))) ||
-////                    (reservationDTO.getCheckInDate().isBefore(reservation.getCheckOutDate().plusDays(1))) ||
-////                    (reservationDTO.getCheckOutDate().isAfter(reservation.getCheckInDate().minusDays(1)))){
-//            if (reservationDTO.getCheckInDate().isAfter(reservation.getCheckInDate()) ||
-//                reservationDTO.getCheckOutDate().isBefore(reservation.getCheckOutDate())){
-//                return false;
-//            }
-//        }
-        return true;
+    }
+    private void validDates(ReservationDTO reservationDTO,int propertyId) {
+        if ((reservationDTO.getCheckInDate().isBefore(LocalDate.now())) ||
+                (reservationDTO.getCheckOutDate().isBefore(reservationDTO.getCheckInDate()))){
+            throw new BadRequestException("select valid dates for reservation");
+        }
+
     }
 
 }

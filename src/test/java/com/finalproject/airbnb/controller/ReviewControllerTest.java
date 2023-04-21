@@ -66,7 +66,7 @@ class ReviewControllerTest {
     private ModelMapper mapper;
 
     @Test
-    void createReview_Success() {
+    void createReview() {
         int userId = 1;
         int propertyId = 1;
         UserEntity user = new UserEntity();

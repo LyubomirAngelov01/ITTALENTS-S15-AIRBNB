@@ -15,7 +15,10 @@ public class MessageWithUserDTO {
     private int senderId;
     private String senderFirstName;
     private String senderLastName;
-    private String message;
+    private int receiverId;
+    private String receiverFirstName;
+    private String receiverLastName;
     private LocalDateTime timeSent;
+    private String message;
 
 }
