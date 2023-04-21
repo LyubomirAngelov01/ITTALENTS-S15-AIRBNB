@@ -1,5 +1,6 @@
 package com.finalproject.airbnb.controller;
 
+import com.finalproject.airbnb.model.DTOs.ChatDTO;
 import com.finalproject.airbnb.model.DTOs.MessageWithUserDTO;
 import com.finalproject.airbnb.model.entities.MessageEntity;
 import com.finalproject.airbnb.model.entities.UserEntity;
@@ -13,12 +14,18 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 class MessageControllerTest {
@@ -28,6 +35,9 @@ class MessageControllerTest {
 
     @Mock
     private MessageRepository messageRepository;
+
+    @Mock
+    private ModelMapper mapper;
 
     @InjectMocks
     private MessageService messageService;
@@ -61,36 +71,60 @@ class MessageControllerTest {
     void testListChatWithAUser() {
         UserEntity sender = new UserEntity();
         sender.setId(1);
-        sender.setFirstName("John");
-        sender.setLastName("Doe");
-        Mockito.when(userRepository.findById(1)).thenReturn(java.util.Optional.of(sender));
+        sender.setFirstName("sender");
 
         UserEntity receiver = new UserEntity();
         receiver.setId(2);
-        receiver.setFirstName("Jane");
-        receiver.setLastName("Doe");
-        Mockito.when(userRepository.findById(2)).thenReturn(java.util.Optional.of(receiver));
+        receiver.setFirstName("receiver");
 
         List<MessageEntity> messages = new ArrayList<>();
         MessageEntity message1 = new MessageEntity();
+        message1.setId(1);
+        message1.setMessage("Hello");
+        message1.setTimeSent(LocalDateTime.now());
         message1.setSender(sender);
         message1.setReceiver(receiver);
-        message1.setMessage("Hello");
-        message1.setTimeSent(LocalDateTime.of(2022, 1, 1, 10, 0));
         messages.add(message1);
 
-        Mockito.when(messageRepository.findAllBySenderAndReceiver(sender, receiver)).thenReturn(messages);
+        MessageEntity message2 = new MessageEntity();
+        message2.setId(2);
+        message2.setMessage("Hi");
+        message2.setTimeSent(LocalDateTime.now());
+        message2.setSender(receiver);
+        message2.setReceiver(sender);
+        messages.add(message2);
 
-        List<MessageWithUserDTO> messagesWithUser = messageService.listChatWithAUser(1, 2);
+        int loggedId = 1;
+        int receiverId = 2;
+        Pageable pageable = PageRequest.of(0, 10);
 
-        Assertions.assertEquals(1, messagesWithUser.size());
-        Assertions.assertEquals(1, messagesWithUser.get(0).getSenderId());
-        Assertions.assertEquals("John", messagesWithUser.get(0).getSenderFirstName());
-        Assertions.assertEquals("Doe", messagesWithUser.get(0).getSenderLastName());
-        Assertions.assertEquals("Hello", messagesWithUser.get(0).getMessage());
-        Assertions.assertEquals(LocalDateTime.of(2022, 1, 1, 10, 0), messagesWithUser.get(0).getTimeSent());
+        // Mocking repository methods
+        when(userRepository.findById(loggedId)).thenReturn(Optional.of(sender));
+        when(userRepository.findById(receiverId)).thenReturn(Optional.of(receiver));
+        Page<MessageEntity> page = new PageImpl<>(messages, pageable, messages.size());
+        when(messageRepository.listAChat(loggedId, receiverId, pageable)).thenReturn(page);
+        ChatDTO chatDTO1 = new ChatDTO();
+        chatDTO1.setMessage("Hello");
+        chatDTO1.setTimeSent(messages.get(0).getTimeSent());
+        chatDTO1.setSenderId(messages.get(0).getSender().getId());
+        chatDTO1.setReceiverId(messages.get(0).getReceiver().getId());
+        ChatDTO chatDTO2 = new ChatDTO();
+        chatDTO2.setMessage("Hi");
+        chatDTO2.setTimeSent(messages.get(1).getTimeSent());
+        chatDTO2.setSenderId(messages.get(1).getSender().getId());
+        chatDTO2.setReceiverId(messages.get(1).getReceiver().getId());
+        when(mapper.map(messages.get(0), ChatDTO.class)).thenReturn(chatDTO1);
+        when(mapper.map(messages.get(1), ChatDTO.class)).thenReturn(chatDTO2);
+
+        // Call the method under test
+        Page<ChatDTO> result = messageService.listChatWithAUser(loggedId, receiverId, pageable);
+
+        // Assert the result
+        assertEquals(2, result.getTotalElements());
+        assertEquals(2, result.getNumberOfElements());
+        assertEquals(chatDTO1, result.getContent().get(0));
+        assertEquals(chatDTO2, result.getContent().get(1));
     }
-
-
-
 }
+
+

@@ -147,7 +147,7 @@ public class PropertyControllerTest {
     }
 
     @Test
-    void EditProperty() throws Exception {
+    void editProperty() throws Exception {
         PropertyInfoDTO propertyInfoDTO = new PropertyInfoDTO();
         propertyInfoDTO.setStreetAddress("456 Main St");
         propertyInfoDTO.setRegion("New Region");
@@ -310,7 +310,7 @@ public class PropertyControllerTest {
 
     @Test
     @SneakyThrows
-    public void deletePropertyTest() {
+    public void deleteProperty() {
 
         int testId = 1;
         int testLoggedId = 2;
