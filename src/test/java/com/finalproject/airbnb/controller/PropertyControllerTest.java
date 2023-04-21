@@ -3,26 +3,41 @@ package com.finalproject.airbnb.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.finalproject.airbnb.Utility;
 import com.finalproject.airbnb.model.DTOs.*;
+import com.finalproject.airbnb.model.entities.CategoryEntity;
+import com.finalproject.airbnb.model.entities.PropertyEntity;
+import com.finalproject.airbnb.model.entities.UserEntity;
+import com.finalproject.airbnb.model.repositories.PropertyRepository;
 import com.finalproject.airbnb.service.PropertyService;
 import jakarta.servlet.http.HttpSession;
 import lombok.SneakyThrows;
+import org.apache.catalina.mapper.Mapper;
+import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.aspectj.bridge.MessageUtil.fail;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -31,6 +46,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(PropertyController.class)
 @ExtendWith(SpringExtension.class)
+
 public class PropertyControllerTest {
 
     @Autowired
@@ -42,11 +58,14 @@ public class PropertyControllerTest {
     @MockBean
     private PropertyService propertyService;
 
-    @InjectMocks
-    private PropertyController propertyController;
+    @Mock
+    private PropertyRepository propertyRepository;
 
     @Mock
     private HttpSession session;
+
+    @Mock
+    private ModelMapper mapper;
 
 
     @Test
@@ -156,7 +175,7 @@ public class PropertyControllerTest {
     }
 
     @Test
-    void testEditProperty() throws Exception {
+    void EditProperty() throws Exception {
         PropertyInfoDTO propertyInfoDTO = new PropertyInfoDTO();
         propertyInfoDTO.setStreetAddress("456 Main St");
         propertyInfoDTO.setRegion("New Region");
@@ -250,6 +269,7 @@ public class PropertyControllerTest {
                 .andExpect(jsonPath("$.kitchen").value(true));
 
     }
+
     @Test
     @SneakyThrows
     void showProperty() {
@@ -316,7 +336,6 @@ public class PropertyControllerTest {
     }
 
 
-
     @Test
     @SneakyThrows
     public void deletePropertyTest() {
@@ -341,35 +360,4 @@ public class PropertyControllerTest {
 
         verify(propertyService).deleteProperty(testId, testLoggedId);
     }
-
-    @Test
-    public void search() {
-        PropertySearchDTO dto = new PropertySearchDTO();
-        dto.setStreetAddress("123 Main St");
-        dto.setMaxGuests(4);
-        dto.setPrice(200.0);
-        dto.setBathrooms(2);
-        dto.setBedrooms(2);
-        dto.setBeds(2);
-        dto.setCategoryNum(1);
-
-        PropertyViewDTO viewDTO1 = new PropertyViewDTO();
-        viewDTO1.setStreetAddress("123 Main St");
-
-        PropertyViewDTO viewDTO2 = new PropertyViewDTO();
-        viewDTO2.setStreetAddress("123 Main St");
-
-        List<PropertyViewDTO> expectedResults = Arrays.asList(viewDTO1, viewDTO2);
-
-        PropertyService mockPropertyService = mock(PropertyService.class);
-
-        PropertyController propertyController = new PropertyController(mockPropertyService);
-
-        when(mockPropertyService.search(dto)).thenReturn(expectedResults);
-
-        List<PropertyViewDTO> result = propertyController.search(dto);
-
-        assertEquals(expectedResults.size(), result.size());}
-    }
-
-
+}

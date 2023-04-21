@@ -35,6 +35,9 @@ public class AbstractService {
     @Autowired
     protected AmenitiesRepository amenitiesRepository;
 
+    @Autowired
+    protected ReservationRepository reservationRepository;
+
     protected UserEntity getUserById(int id){
         return userRepository.findById(id).orElseThrow(() -> new NotFoundException("User not found"));
     }
