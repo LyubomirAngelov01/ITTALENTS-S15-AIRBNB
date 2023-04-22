@@ -31,7 +31,8 @@ public class MessageService extends AbstractService {
     UserRepository userRepository;
     public void sendMessage(int senderId, int idReceiver,String text) {
         UserEntity sender = getUserById(senderId);
-        UserEntity receiver = userRepository.findById(idReceiver).orElseThrow(()-> new NotFoundException("receiver not found"));
+        UserEntity receiver = getUserById(idReceiver);
+
         messageRepository.save(new MessageEntity(text, sender, receiver, LocalDateTime.now()));
     }
 

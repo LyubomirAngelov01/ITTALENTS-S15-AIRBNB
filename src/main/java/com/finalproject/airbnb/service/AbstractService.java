@@ -15,13 +15,13 @@ public class AbstractService {
     protected ModelMapper mapper;
 
     @Autowired
-    protected UserRepository userRepository;// REMOVE LATER
+    protected UserRepository userRepository;
 
     @Autowired
-    protected PropertyRepository propertyRepository;// REMOVE LATER
+    protected PropertyRepository propertyRepository;
 
     @Autowired
-    protected CountryRepository countryRepository;// REMOVE LATER
+    protected CountryRepository countryRepository;
 
     @Autowired
     protected ReviewRepository reviewRepository;

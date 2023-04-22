@@ -6,6 +6,7 @@ import com.finalproject.airbnb.model.DTOs.MessageWithUserDTO;
 import com.finalproject.airbnb.model.DTOs.SendMessageDTO;
 import com.finalproject.airbnb.model.entities.MessageEntity;
 import com.finalproject.airbnb.service.MessageService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.converters.models.PageableAsQueryParam;
@@ -24,18 +25,19 @@ public class MessageController extends AbstractController{
 
 
     @PostMapping("/users/messages/{idReceiver}")
-    public void sendMessage(@RequestBody SendMessageDTO dto, @PathVariable int idReceiver, HttpSession session){
-        int senderId = getLoggedId(session);
+    public void sendMessage(@RequestBody SendMessageDTO dto, @PathVariable int idReceiver, HttpServletRequest request){
+        int senderId = extractUserIdFromToken(request);
         messageService.sendMessage(senderId,idReceiver, dto.getText());
     }
     @GetMapping("/users/messages/{receiverId}")
-    public Page<ChatDTO> listChatWithAUser(@PathVariable int receiverId, HttpSession session, Pageable pageable){
-        int loggedId = getLoggedId(session);
+    public Page<ChatDTO> listChatWithAUser(@PathVariable int receiverId, HttpServletRequest request, Pageable pageable){
+        int loggedId = extractUserIdFromToken(request);
         return messageService.listChatWithAUser(loggedId,receiverId,pageable);
     }
     @GetMapping("/users/messages")
-    public List<InboxUserDTO> getInbox(HttpSession session) {
-        return messageService.getInbox(getLoggedId(session));
+    public List<InboxUserDTO> getInbox(HttpServletRequest request) {
+        int loggedId = extractUserIdFromToken(request);
+        return messageService.getInbox(loggedId);
     }
 
 }

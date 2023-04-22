@@ -31,8 +31,8 @@ public class ReservationService extends AbstractService{
         validDates(reservationDTO,propertyId);
 
         checkAvailability(reservationDTO,propertyId);
-        ReservationEntity reservation = new ReservationEntity();
 
+        ReservationEntity reservation = new ReservationEntity();
         PropertyEntity property = propertyRepository.findById(propertyId).orElseThrow(()->new NotFoundException("Property not found"));
         reservation.setUser(userRepository.findById(userId).orElseThrow(()-> new NotFoundException("user not found")));
         reservation.setProperty(property);
@@ -74,7 +74,7 @@ public class ReservationService extends AbstractService{
 
 
 
-    public void checkAvailability(ReservationDTO dto,int propertyId){
+    private void checkAvailability(ReservationDTO dto,int propertyId){
         List<ReservationEntity> reservationsForProperty = reservationRepository.findAllByPropertyId(propertyId);
         for(ReservationEntity reservation:reservationsForProperty){
             if((dto.getCheckInDate().isAfter(reservation.getCheckInDate()) && dto.getCheckInDate().isBefore(reservation.getCheckOutDate()))||

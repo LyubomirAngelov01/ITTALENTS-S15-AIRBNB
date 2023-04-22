@@ -23,7 +23,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 
@@ -44,6 +46,8 @@ public class UserService extends AbstractService{
     private static Logger logger = LogManager.getLogger(UserService.class);
     @Autowired
     private JavaMailSender mailSender;
+    @Autowired
+    private JwtService jwtService;
 
 
 
@@ -61,18 +65,21 @@ public class UserService extends AbstractService{
 
         emailService.sendEmail(generateMessageOnRegistration(dto));
         logger.info("New user registered with id " + user.getId());
+
         return  mapper.map(user, UserWithoutPasswordDTO.class);
     }
 
-    public UserWithoutPasswordDTO login (LoginDTO dto){
-        UserEntity u = userRepository.getByEmail(dto.getEmail()).orElseThrow(()->new UnauthorizedException("Wrong credentials"));
+    public TokenDTO login (LoginDTO dto){
+        UserEntity user = userRepository.getByEmail(dto.getEmail()).orElseThrow(()->new UnauthorizedException("Wrong credentials"));
 
-        if(!encoder.matches(dto.getPassword(), u.getPassword())){
-            logger.error("user " + u.getId() + " tried to log in with wrong credentials");
+        if(!encoder.matches(dto.getPassword(), user.getPassword())){
+            logger.error("user " + user.getId() + " tried to log in with wrong credentials");
             throw new UnauthorizedException("Wrong credentials");
         }
-        logger.info(u.getId() + " user logged in");
-        return mapper.map(u, UserWithoutPasswordDTO.class);
+        String token = jwtService.generateToken(user);
+
+        logger.info(user.getId() + " user logged in");
+        return new TokenDTO(token);
     }
     public UserWithoutPasswordDTO checkProfile(int id){
         UserEntity u = getUserById(id);
@@ -201,5 +208,6 @@ public class UserService extends AbstractService{
 
         mailSender.send(message);
     }
+
 
 }

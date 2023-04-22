@@ -5,7 +5,10 @@ package com.finalproject.airbnb.controller;
         import com.finalproject.airbnb.model.exceptions.BadRequestException;
         import com.finalproject.airbnb.model.exceptions.NotFoundException;
         import com.finalproject.airbnb.model.exceptions.UnauthorizedException;
+        import com.finalproject.airbnb.service.JwtService;
+        import jakarta.servlet.http.HttpServletRequest;
         import jakarta.servlet.http.HttpSession;
+        import org.springframework.beans.factory.annotation.Autowired;
         import org.springframework.http.HttpStatus;
         import org.springframework.validation.FieldError;
         import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -17,7 +20,8 @@ package com.finalproject.airbnb.controller;
         import java.util.Map;
 
 public abstract class AbstractController {
-
+    @Autowired
+    private JwtService jwtService;
     @ExceptionHandler(BadRequestException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorDTO handleBadRequest(Exception e){
@@ -79,6 +83,10 @@ public abstract class AbstractController {
             throw new UnauthorizedException("You have to login first");
         }
         return (int) s.getAttribute(Utility.LOGGED_ID);
+    }
+    protected int extractUserIdFromToken(HttpServletRequest request){
+        String token = jwtService.extractTokenFromHeader(request);
+        return (int) jwtService.extractClaim(token, claims -> claims.get("id"));
     }
 }
 
