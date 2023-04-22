@@ -3,41 +3,21 @@ package com.finalproject.airbnb.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.finalproject.airbnb.Utility;
 import com.finalproject.airbnb.model.DTOs.*;
-import com.finalproject.airbnb.model.entities.CategoryEntity;
-import com.finalproject.airbnb.model.entities.PropertyEntity;
-import com.finalproject.airbnb.model.entities.UserEntity;
-import com.finalproject.airbnb.model.repositories.PropertyRepository;
 import com.finalproject.airbnb.service.PropertyService;
 import jakarta.servlet.http.HttpSession;
 import lombok.SneakyThrows;
-import org.apache.catalina.mapper.Mapper;
-import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.mockito.junit.MockitoJUnitRunner;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
 import static org.aspectj.bridge.MessageUtil.fail;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -46,7 +26,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(PropertyController.class)
 @ExtendWith(SpringExtension.class)
-
 public class PropertyControllerTest {
 
     @Autowired
@@ -59,19 +38,12 @@ public class PropertyControllerTest {
     private PropertyService propertyService;
 
     @Mock
-    private PropertyRepository propertyRepository;
-
-    @Mock
     private HttpSession session;
-
-    @Mock
-    private ModelMapper mapper;
 
 
     @Test
     @SneakyThrows
     void createProperty() {
-        // Given
         PropertyInfoDTO propertyInfoDTO = new PropertyInfoDTO();
         propertyInfoDTO.setStreetAddress("123 Main St");
         propertyInfoDTO.setRegion("Some Region");
@@ -175,7 +147,7 @@ public class PropertyControllerTest {
     }
 
     @Test
-    void EditProperty() throws Exception {
+    void editProperty() throws Exception {
         PropertyInfoDTO propertyInfoDTO = new PropertyInfoDTO();
         propertyInfoDTO.setStreetAddress("456 Main St");
         propertyInfoDTO.setRegion("New Region");
@@ -338,7 +310,7 @@ public class PropertyControllerTest {
 
     @Test
     @SneakyThrows
-    public void deletePropertyTest() {
+    public void deleteProperty() {
 
         int testId = 1;
         int testLoggedId = 2;

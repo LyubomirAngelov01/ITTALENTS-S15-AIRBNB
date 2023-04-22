@@ -1,110 +1,110 @@
-<databaseChangeLog
-        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
-        xmlns:pro="http://www.liquibase.org/xml/ns/pro"
-        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
-        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
-        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
-        http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
+<!--<databaseChangeLog-->
+<!--        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"-->
+<!--        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"-->
+<!--        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"-->
+<!--        xmlns:pro="http://www.liquibase.org/xml/ns/pro"-->
+<!--        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-->
+<!--        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd-->
+<!--        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd-->
+<!--        http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">-->
 
-    <changeSet id="1" author="yourname">
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <tableExists tableName="countries"/>
-            </not>
-        </preConditions>
-        <createTable tableName="countries" schemaName="airbnb_project">
-            <column name="id" type="INT" autoIncrement="true">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-            <column name="country_name" type="VARCHAR(100)">
-                <constraints nullable="false" unique="true"/>
-            </column>
-        </createTable>
-    </changeSet>
+<!--    <changeSet id="1" author="yourname">-->
+<!--        <preConditions onFail="MARK_RAN">-->
+<!--            <not>-->
+<!--                <tableExists tableName="countries"/>-->
+<!--            </not>-->
+<!--        </preConditions>-->
+<!--        <createTable tableName="countries" schemaName="airbnb_project">-->
+<!--            <column name="id" type="INT" autoIncrement="true">-->
+<!--                <constraints primaryKey="true" nullable="false"/>-->
+<!--            </column>-->
+<!--            <column name="country_name" type="VARCHAR(100)">-->
+<!--                <constraints nullable="false" unique="true"/>-->
+<!--            </column>-->
+<!--        </createTable>-->
+<!--    </changeSet>-->
 
-    <changeSet id="2" author="yourname">
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <tableExists tableName="country_codes"/>
-            </not>
-        </preConditions>
-        <createTable tableName="country_codes" schemaName="airbnb_project">
-            <column name="id" type="INT" autoIncrement="true">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-            <column name="code" type="VARCHAR(5)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="country_id" type="INT">
-                <constraints nullable="false" foreignKeyName="country_codes_country_id" referencedTableName="countries" referencedColumnNames="id"/>
-            </column>
-        </createTable>
-    </changeSet>
-    <changeSet id="1" author="your_name">
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <tableExists tableName="users"/>
-            </not>
-        </preConditions>
-        <sql>
-            CREATE TABLE IF NOT EXISTS airbnb_project.users (
-                                                                id INT NOT NULL AUTO_INCREMENT,
-                                                                first_name VARCHAR(100) NOT NULL,
-                last_name VARCHAR(100) NOT NULL,
-                birthdate DATE NOT NULL,
-                country_code_id INT NOT NULL,
-                phone_number VARCHAR(45) NOT NULL,
-                email VARCHAR(100) NOT NULL,
-                password VARCHAR(255) NOT NULL,
-                is_host TINYINT NULL,
-                verification_code VARCHAR(64) NOT NULL,
-                enabled TINYINT NULL,
-                UNIQUE INDEX email_UNIQUE (email ASC) VISIBLE,
-                INDEX fk_users_country_codes_idx (country_code_id ASC) VISIBLE,
-                PRIMARY KEY (id),
-                CONSTRAINT fk_users_country_codes
-                FOREIGN KEY (country_code_id)
-                REFERENCES airbnb_project.country_codes (id)
-                ON DELETE NO ACTION
-                ON UPDATE NO ACTION)
-                ENGINE = InnoDB;
-        </sql>
-    </changeSet>
+<!--    <changeSet id="2" author="yourname">-->
+<!--        <preConditions onFail="MARK_RAN">-->
+<!--            <not>-->
+<!--                <tableExists tableName="country_codes"/>-->
+<!--            </not>-->
+<!--        </preConditions>-->
+<!--        <createTable tableName="country_codes" schemaName="airbnb_project">-->
+<!--            <column name="id" type="INT" autoIncrement="true">-->
+<!--                <constraints primaryKey="true" nullable="false"/>-->
+<!--            </column>-->
+<!--            <column name="code" type="VARCHAR(5)">-->
+<!--                <constraints nullable="false"/>-->
+<!--            </column>-->
+<!--            <column name="country_id" type="INT">-->
+<!--                <constraints nullable="false" foreignKeyName="country_codes_country_id" referencedTableName="countries" referencedColumnNames="id"/>-->
+<!--            </column>-->
+<!--        </createTable>-->
+<!--    </changeSet>-->
+<!--    <changeSet id="1" author="your_name">-->
+<!--        <preConditions onFail="MARK_RAN">-->
+<!--            <not>-->
+<!--                <tableExists tableName="users"/>-->
+<!--            </not>-->
+<!--        </preConditions>-->
+<!--        <sql>-->
+<!--            CREATE TABLE IF NOT EXISTS airbnb_project.users (-->
+<!--                                                                id INT NOT NULL AUTO_INCREMENT,-->
+<!--                                                                first_name VARCHAR(100) NOT NULL,-->
+<!--                last_name VARCHAR(100) NOT NULL,-->
+<!--                birthdate DATE NOT NULL,-->
+<!--                country_code_id INT NOT NULL,-->
+<!--                phone_number VARCHAR(45) NOT NULL,-->
+<!--                email VARCHAR(100) NOT NULL,-->
+<!--                password VARCHAR(255) NOT NULL,-->
+<!--                is_host TINYINT NULL,-->
+<!--                verification_code VARCHAR(64) NOT NULL,-->
+<!--                enabled TINYINT NULL,-->
+<!--                UNIQUE INDEX email_UNIQUE (email ASC) VISIBLE,-->
+<!--                INDEX fk_users_country_codes_idx (country_code_id ASC) VISIBLE,-->
+<!--                PRIMARY KEY (id),-->
+<!--                CONSTRAINT fk_users_country_codes-->
+<!--                FOREIGN KEY (country_code_id)-->
+<!--                REFERENCES airbnb_project.country_codes (id)-->
+<!--                ON DELETE NO ACTION-->
+<!--                ON UPDATE NO ACTION)-->
+<!--                ENGINE = InnoDB;-->
+<!--        </sql>-->
+<!--    </changeSet>-->
 
-    <changeSet id="2" author="your_name">
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <tableExists tableName="messages"/>
-            </not>
-        </preConditions>
-        <sql>
-            CREATE TABLE IF NOT EXISTS airbnb_project.messages (
-                                                                   id INT NOT NULL AUTO_INCREMENT,
-                                                                   message TEXT NOT NULL,
-                                                                   sender_id INT NOT NULL,
-                                                                   receiver_id INT NOT NULL,
-                                                                   time_sent DATETIME NOT NULL,
-                                                                   PRIMARY KEY (id),
-                UNIQUE INDEX id_UNIQUE (id ASC) VISIBLE,
-                INDEX messages_sender_id_idx (sender_id ASC) VISIBLE,
-                INDEX messages_receiver_id_idx (receiver_id ASC) VISIBLE,
-                CONSTRAINT messages_sender_id
-                FOREIGN KEY (sender_id)
-                REFERENCES airbnb_project.users (id)
-                ON DELETE NO ACTION
-                ON UPDATE NO ACTION,
-                CONSTRAINT messages_receiver_id
-                FOREIGN KEY (receiver_id)
-                REFERENCES airbnb_project.users (id)
-                ON DELETE NO ACTION
-                ON UPDATE NO ACTION)
-                ENGINE = InnoDB;
-        </sql>
-    </changeSet>
-
-
+<!--    <changeSet id="2" author="your_name">-->
+<!--        <preConditions onFail="MARK_RAN">-->
+<!--            <not>-->
+<!--                <tableExists tableName="messages"/>-->
+<!--            </not>-->
+<!--        </preConditions>-->
+<!--        <sql>-->
+<!--            CREATE TABLE IF NOT EXISTS airbnb_project.messages (-->
+<!--                                                                   id INT NOT NULL AUTO_INCREMENT,-->
+<!--                                                                   message TEXT NOT NULL,-->
+<!--                                                                   sender_id INT NOT NULL,-->
+<!--                                                                   receiver_id INT NOT NULL,-->
+<!--                                                                   time_sent DATETIME NOT NULL,-->
+<!--                                                                   PRIMARY KEY (id),-->
+<!--                UNIQUE INDEX id_UNIQUE (id ASC) VISIBLE,-->
+<!--                INDEX messages_sender_id_idx (sender_id ASC) VISIBLE,-->
+<!--                INDEX messages_receiver_id_idx (receiver_id ASC) VISIBLE,-->
+<!--                CONSTRAINT messages_sender_id-->
+<!--                FOREIGN KEY (sender_id)-->
+<!--                REFERENCES airbnb_project.users (id)-->
+<!--                ON DELETE NO ACTION-->
+<!--                ON UPDATE NO ACTION,-->
+<!--                CONSTRAINT messages_receiver_id-->
+<!--                FOREIGN KEY (receiver_id)-->
+<!--                REFERENCES airbnb_project.users (id)-->
+<!--                ON DELETE NO ACTION-->
+<!--                ON UPDATE NO ACTION)-->
+<!--                ENGINE = InnoDB;-->
+<!--        </sql>-->
+<!--    </changeSet>-->
 
 
-</databaseChangeLog>
+
+
+<!--</databaseChangeLog>-->

@@ -19,7 +19,7 @@ public interface MessageRepository extends JpaRepository<MessageEntity,Integer> 
 
 
 
-
+    List<MessageEntity> findAllBySenderAndReceiver(UserEntity sender, UserEntity receiver);
 
 
 
