@@ -20,12 +20,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 public class ReservationService extends AbstractService{
 
-    private final ReservationRepository reservationRepository;
-    private final UserRepository userRepository;
-    private final PropertyRepository propertyRepository;
+
 
     public SuccessfulReservationDTO makeReservation(int userId, int propertyId, ReservationDTO reservationDTO){
         validDates(reservationDTO,propertyId);
@@ -34,6 +31,10 @@ public class ReservationService extends AbstractService{
 
         ReservationEntity reservation = new ReservationEntity();
         PropertyEntity property = propertyRepository.findById(propertyId).orElseThrow(()->new NotFoundException("Property not found"));
+
+        if (property.getOwner().getId() == userId){
+            throw new BadRequestException("you can't make a reservation on your own property");
+        }
         reservation.setUser(userRepository.findById(userId).orElseThrow(()-> new NotFoundException("user not found")));
         reservation.setProperty(property);
         reservation.setCheckInDate(reservationDTO.getCheckInDate());

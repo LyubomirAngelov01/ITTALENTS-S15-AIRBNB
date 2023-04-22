@@ -44,11 +44,7 @@ public class UserEntity extends BaseEntity{
     @Column(name = "is_host")
     private boolean isHost;
 
-    @Column(name = "verification_code")
-    private String verificationCode;
 
-    @Column
-    private boolean enabled;
 
 
 }

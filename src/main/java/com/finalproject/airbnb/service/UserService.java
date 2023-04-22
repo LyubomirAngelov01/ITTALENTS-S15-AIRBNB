@@ -57,9 +57,8 @@ public class UserService extends AbstractService{
         UserEntity user = mapper.map(dto,UserEntity.class);
         user.setPassword(encoder.encode(user.getPassword()));
         user.setCountryCode(countryCodeService.findById(dto.getCountryCode()));
-        String randomCode = RandomString.make(64);
-        user.setVerificationCode(randomCode);
-        user.setEnabled(false);
+
+
 
         userRepository.save(user);
 
@@ -179,7 +178,8 @@ public class UserService extends AbstractService{
             throw new BadRequestException("not a valid birthdate");
         }
     }
-    @SneakyThrows
+
+    @SneakyThrows //todo remove method if not used
     private void sendVerificationEmail(UserEntity user, String siteUrl){
         String toAddress = user.getEmail();
         String fromAddress = "aliubomir@gmail.com";
@@ -200,9 +200,9 @@ public class UserService extends AbstractService{
         helper.setSubject(subject);
 
         content = content.replace("[[name]]", user.getFirstName() + " " + user.getLastName());
-        String verifyURL = siteUrl + "/verify?code=" + user.getVerificationCode();
+//        String verifyURL = siteUrl + "/verify?code=" + user.getVerificationCode();
 
-        content = content.replace("[[URL]]", verifyURL);
+//        content = content.replace("[[URL]]", verifyURL);
 
         helper.setText(content, true);
 

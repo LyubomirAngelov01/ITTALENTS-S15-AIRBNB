@@ -1,20 +1,20 @@
 package com.finalproject.airbnb.controller;
 
 import com.finalproject.airbnb.model.DTOs.WishlistPropertyDTO;
-import com.finalproject.airbnb.model.repositories.UserRepository;
 import com.finalproject.airbnb.service.WishlistService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
+
 @RestController
-@RequiredArgsConstructor
+@SecurityRequirement(name = "JWT token")
 public class WishlistController extends AbstractController{
 
-    private final WishlistService wishlistService;
-    private final UserRepository userRepository;
+    @Autowired
+    private WishlistService wishlistService;
+
     @GetMapping("/users/wishlist")
     public List<WishlistPropertyDTO> wishlist(HttpServletRequest request){
         int id = extractUserIdFromToken(request);

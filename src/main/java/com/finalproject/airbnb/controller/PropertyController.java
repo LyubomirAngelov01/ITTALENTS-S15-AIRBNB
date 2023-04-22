@@ -2,17 +2,16 @@ package com.finalproject.airbnb.controller;
 
 import com.finalproject.airbnb.model.DTOs.*;
 import com.finalproject.airbnb.service.PropertyService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDate;
 import java.util.List;
 
 @RestController
-@AllArgsConstructor
+@SecurityRequirement(name = "JWT token")
 public class PropertyController extends AbstractController {
 
     @Autowired

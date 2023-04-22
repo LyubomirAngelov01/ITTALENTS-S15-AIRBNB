@@ -4,6 +4,7 @@ import com.finalproject.airbnb.model.DTOs.ChatDTO;
 import com.finalproject.airbnb.model.DTOs.InboxUserDTO;
 import com.finalproject.airbnb.model.DTOs.MessageWithUserDTO;
 import com.finalproject.airbnb.model.entities.MessageEntity;
+import com.finalproject.airbnb.model.entities.ReservationEntity;
 import com.finalproject.airbnb.model.entities.UserEntity;
 import com.finalproject.airbnb.model.exceptions.BadRequestException;
 import com.finalproject.airbnb.model.exceptions.NotFoundException;
@@ -29,11 +30,16 @@ public class MessageService extends AbstractService {
 
     @Autowired
     UserRepository userRepository;
-    public void sendMessage(int senderId, int idReceiver,String text) {
+    public String sendMessage(int senderId, int receiverId,String text) {
         UserEntity sender = getUserById(senderId);
-        UserEntity receiver = getUserById(idReceiver);
+        UserEntity receiver = getUserById(receiverId);
+
+        if (!(reservationRepository.reservationsBetweenUsers(receiverId,senderId) > 0)){
+            throw new BadRequestException("you dont have a reservation with that user");
+        }
 
         messageRepository.save(new MessageEntity(text, sender, receiver, LocalDateTime.now()));
+        return text;
     }
 
     public Page<ChatDTO> listChatWithAUser(int loggedId, int receiverId, Pageable pageable) {
@@ -43,21 +49,6 @@ public class MessageService extends AbstractService {
         Page<ChatDTO> messages = chats.map(messageEntity -> mapper.map(messageEntity,ChatDTO.class));
 
 
-
-
-
-//        Page<MessageEntity> messages = messageRepository.findAllBySenderAndReceiver(sender,receiver,pageable);
-//        messages.addAll(messageRepository.findAllBySenderAndReceiver(receiver,sender,));
-//        List<MessageWithUserDTO> messagesWithUser = new ArrayList();
-//        for (MessageEntity message: messages) {
-//            messagesWithUser.add(new MessageWithUserDTO(message.getSender().getId(),message.getSender().getFirstName(),
-//                    message.getSender().getLastName(),message.getMessage(),message.getTimeSent()));
-//        }
-//        messagesWithUser = messagesWithUser.stream()
-//                .sorted(Comparator.comparing(MessageWithUserDTO::getTimeSent))
-//                .collect(Collectors.toList());
-//
-//        Page<MessageWithUserDTO> page =
         return messages;
     }
 

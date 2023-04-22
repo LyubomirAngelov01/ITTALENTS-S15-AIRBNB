@@ -26,6 +26,10 @@ public interface ReservationRepository extends JpaRepository<ReservationEntity,I
     @Query("SELECT r FROM reservations AS r WHERE r.checkInDate > curdate()")
     List<ReservationEntity> getAllAfterCurrentDate();
 
+    @Query(value = "SELECT COUNT(r.id) FROM reservations r " +
+            "JOIN properties p ON r.property_id = p.id " +
+            "WHERE r.user_id IN(:firstUserId,:secondUserId) AND p.owner_id IN(:firstUserId,:secondUserId);",nativeQuery = true)
+    int reservationsBetweenUsers(int firstUserId,int secondUserId);
     void deleteById(int id);
 
 

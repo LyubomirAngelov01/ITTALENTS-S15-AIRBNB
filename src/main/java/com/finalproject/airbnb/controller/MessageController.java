@@ -2,32 +2,31 @@ package com.finalproject.airbnb.controller;
 
 import com.finalproject.airbnb.model.DTOs.ChatDTO;
 import com.finalproject.airbnb.model.DTOs.InboxUserDTO;
-import com.finalproject.airbnb.model.DTOs.MessageWithUserDTO;
 import com.finalproject.airbnb.model.DTOs.SendMessageDTO;
-import com.finalproject.airbnb.model.entities.MessageEntity;
 import com.finalproject.airbnb.service.MessageService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
-import lombok.RequiredArgsConstructor;
-import org.springdoc.core.converters.models.PageableAsQueryParam;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RequiredArgsConstructor
+
 @RestController
+@SecurityRequirement(name = "JWT token")
 public class MessageController extends AbstractController{
 
 
-    private final MessageService messageService;
+    @Autowired
+    private MessageService messageService;
 
 
     @PostMapping("/users/messages/{idReceiver}")
-    public void sendMessage(@RequestBody SendMessageDTO dto, @PathVariable int idReceiver, HttpServletRequest request){
+    public String sendMessage(@RequestBody SendMessageDTO dto, @PathVariable int idReceiver, HttpServletRequest request){
         int senderId = extractUserIdFromToken(request);
-        messageService.sendMessage(senderId,idReceiver, dto.getText());
+        return messageService.sendMessage(senderId,idReceiver, dto.getText());
     }
     @GetMapping("/users/messages/{receiverId}")
     public Page<ChatDTO> listChatWithAUser(@PathVariable int receiverId, HttpServletRequest request, Pageable pageable){

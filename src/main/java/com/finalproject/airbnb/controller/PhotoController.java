@@ -4,18 +4,20 @@ import com.finalproject.airbnb.model.DTOs.DeleteAllPhotosDTO;
 import com.finalproject.airbnb.model.DTOs.DeletePhotoDTO;
 import com.finalproject.airbnb.model.DTOs.PhotoDTO;
 import com.finalproject.airbnb.service.PhotoService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.File;
+
 import java.nio.file.Files;
 import java.util.List;
 
 @RestController
+@SecurityRequirement(name = "JWT token")
 public class PhotoController extends AbstractController {
 
     @Autowired

@@ -4,18 +4,19 @@ import com.finalproject.airbnb.model.DTOs.ReservationDTO;
 import com.finalproject.airbnb.model.DTOs.SuccessfulReservationDTO;
 import com.finalproject.airbnb.model.DTOs.UpcomingReservationClientDTO;
 import com.finalproject.airbnb.service.ReservationService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequiredArgsConstructor
+@SecurityRequirement(name = "JWT token")
 public class ReservationController extends AbstractController{
-    private final ReservationService reservationService;
+    @Autowired
+    private ReservationService reservationService;
 
     @PostMapping("/properties/{id}/reservations")
     public SuccessfulReservationDTO makeReservation(@PathVariable int id, @Valid @RequestBody ReservationDTO reservationDTO, HttpServletRequest request){

@@ -1,110 +1,373 @@
-<!--<databaseChangeLog-->
-<!--        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"-->
-<!--        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"-->
-<!--        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"-->
-<!--        xmlns:pro="http://www.liquibase.org/xml/ns/pro"-->
-<!--        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-->
-<!--        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd-->
-<!--        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd-->
-<!--        http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">-->
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet author="initial(generated)" id="1682182569090-1">
+        <createTable tableName="amenities">
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="property_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="wifi" type="TINYINT(3)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="pool" type="TINYINT(3)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="tv" type="TINYINT(3)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="parking" type="TINYINT(3)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="air_conditioning" type="TINYINT(3)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="barbecue" type="TINYINT(3)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="smoke_alarm" type="TINYINT(3)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="first_aid" type="TINYINT(3)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="fire_extinguisher" type="TINYINT(3)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="gym" type="TINYINT(3)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="washer" type="TINYINT(3)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="kitchen" type="TINYINT(3)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="initial(generated)" id="1682182569090-2">
+        <createTable tableName="categories">
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="category" type="VARCHAR(45)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="initial(generated)" id="1682182569090-3">
+        <createTable tableName="countries">
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="country_name" type="VARCHAR(100)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="initial(generated)" id="1682182569090-4">
+        <createTable tableName="country_codes">
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="code" type="VARCHAR(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="country_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="initial(generated)" id="1682182569090-5">
+        <createTable tableName="messages">
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="message" type="TEXT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="sender_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="receiver_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="time_sent" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="initial(generated)" id="1682182569090-6">
+        <createTable tableName="photos">
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="property_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="photo_url" type="TEXT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="initial(generated)" id="1682182569090-7">
+        <createTable tableName="properties">
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="address_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="beds" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="max_guests" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="price" type="DOUBLE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="bathrooms" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="bedrooms" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(1000)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="title" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="owner_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="property_type_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="category_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rating" type="DOUBLE"/>
+            <column name="country_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="initial(generated)" id="1682182569090-8">
+        <createTable tableName="reservations">
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="user_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="check_in_date" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="check_out_date" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="property_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="guests" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="initial(generated)" id="1682182569090-9">
+        <createTable tableName="review">
+            <column name="id" type="VARCHAR(45)">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="property_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="comment" type="VARCHAR(1000)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rating" type="DOUBLE">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="initial(generated)" id="1682182569090-10">
+        <createTable tableName="users">
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="first_name" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_name" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="birthdate" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="country_code_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="phone_number" type="VARCHAR(45)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="VARCHAR(100)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="password" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_host" type="TINYINT(3)"/>
+            <column name="verification_code" type="VARCHAR(64)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="enabled" type="TINYINT(3)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="initial(generated)" id="1682182569090-11">
+        <createTable tableName="wishlist">
+            <column name="user_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="property_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="initial(generated)" id="1682182569090-12">
+        <createIndex indexName="amenities_property_id_idx" tableName="amenities">
+            <column name="property_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="initial(generated)" id="1682182569090-13">
+        <createIndex indexName="category_id_idx" tableName="properties">
+            <column name="category_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="initial(generated)" id="1682182569090-14">
+        <createIndex indexName="country_id_idx" tableName="country_codes">
+            <column name="country_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="initial(generated)" id="1682182569090-15">
+        <createIndex indexName="fk_users_country_codes_idx" tableName="users">
+            <column name="country_code_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="initial(generated)" id="1682182569090-16">
+        <createIndex indexName="messages_receiver_id_idx" tableName="messages">
+            <column name="receiver_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="initial(generated)" id="1682182569090-17">
+        <createIndex indexName="messages_sender_id_idx" tableName="messages">
+            <column name="sender_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="initial(generated)" id="1682182569090-18">
+        <createIndex indexName="owner_id_idx" tableName="properties">
+            <column name="owner_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="initial(generated)" id="1682182569090-19">
+        <createIndex indexName="property_country_id_idx" tableName="properties">
+            <column name="country_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="initial(generated)" id="1682182569090-20">
+        <createIndex indexName="property_id _idx" tableName="review">
+            <column name="property_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="initial(generated)" id="1682182569090-21">
+        <createIndex indexName="property_id_idx" tableName="photos">
+            <column name="property_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="initial(generated)" id="1682182569090-22">
+        <createIndex indexName="property_id_idx" tableName="reservations">
+            <column name="property_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="initial(generated)" id="1682182569090-23">
+        <createIndex indexName="property_id_idx" tableName="wishlist">
+            <column name="property_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="initial(generated)" id="1682182569090-24">
+        <createIndex indexName="user_id_idx" tableName="reservations">
+            <column name="user_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="initial(generated)" id="1682182569090-25">
+        <createIndex indexName="user_id_idx" tableName="review">
+            <column name="user_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="initial(generated)" id="1682182569090-26">
+        <createIndex indexName="user_id_idx" tableName="wishlist">
+            <column name="user_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="initial(generated)" id="1682182569090-27">
+        <addForeignKeyConstraint baseColumnNames="property_id" baseTableName="amenities" constraintName="amenities_property_id" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="properties" validate="true"/>
+    </changeSet>
+    <changeSet author="initial(generated)" id="1682182569090-28">
+        <addForeignKeyConstraint baseColumnNames="category_id" baseTableName="properties" constraintName="category_id" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="categories" validate="true"/>
+    </changeSet>
+    <changeSet author="initial(generated)" id="1682182569090-29">
+        <addForeignKeyConstraint baseColumnNames="country_id" baseTableName="country_codes" constraintName="country_codes_country_id" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="countries" validate="true"/>
+    </changeSet>
+    <changeSet author="initial(generated)" id="1682182569090-30">
+        <addForeignKeyConstraint baseColumnNames="country_code_id" baseTableName="users" constraintName="fk_users_country_codes" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="country_codes" validate="true"/>
+    </changeSet>
+    <changeSet author="initial(generated)" id="1682182569090-31">
+        <addForeignKeyConstraint baseColumnNames="receiver_id" baseTableName="messages" constraintName="messages_receiver_id" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="users" validate="true"/>
+    </changeSet>
+    <changeSet author="initial(generated)" id="1682182569090-32">
+        <addForeignKeyConstraint baseColumnNames="sender_id" baseTableName="messages" constraintName="messages_sender_id" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="users" validate="true"/>
+    </changeSet>
+    <changeSet author="initial(generated)" id="1682182569090-33">
+        <addForeignKeyConstraint baseColumnNames="owner_id" baseTableName="properties" constraintName="owner_id" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="users" validate="true"/>
+    </changeSet>
+    <changeSet author="initial(generated)" id="1682182569090-34">
+        <addForeignKeyConstraint baseColumnNames="property_id" baseTableName="photos" constraintName="photos_property_id" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="properties" validate="true"/>
+    </changeSet>
+    <changeSet author="initial(generated)" id="1682182569090-35">
+        <addForeignKeyConstraint baseColumnNames="country_id" baseTableName="properties" constraintName="property_country_id_fk" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="countries" validate="true"/>
+    </changeSet>
+    <changeSet author="initial(generated)" id="1682182569090-36">
+        <addForeignKeyConstraint baseColumnNames="property_id" baseTableName="reservations" constraintName="reservations_property_id" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="properties" validate="true"/>
+    </changeSet>
+    <changeSet author="initial(generated)" id="1682182569090-37">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="reservations" constraintName="reservations_user_id" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="users" validate="true"/>
+    </changeSet>
+    <changeSet author="initial(generated)" id="1682182569090-38">
+        <addForeignKeyConstraint baseColumnNames="property_id" baseTableName="review" constraintName="review_property_id" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="properties" validate="true"/>
+    </changeSet>
+    <changeSet author="initial(generated)" id="1682182569090-39">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="review" constraintName="review_user_id" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="users" validate="true"/>
+    </changeSet>
+    <changeSet author="initial(generated)" id="1682182569090-40">
+        <addForeignKeyConstraint baseColumnNames="property_id" baseTableName="wishlist" constraintName="wihlist_property_id" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="properties" validate="true"/>
+    </changeSet>
+    <changeSet author="initial(generated)" id="1682182569090-41">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="wishlist" constraintName="wishlist_user_id" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="users" validate="true"/>
+    </changeSet>
+    <changeSet id="remove users enabled and verification code" author="Lyubo">
+        <dropColumn tableName="users" columnName="enabled"/>
+        <dropColumn tableName="users" columnName="verification_code"/>
+    </changeSet>
+    <changeSet id="countries import" author="Lyubo">
+        <sqlFile path="db/countries.sql"/>
+    </changeSet>
+    <changeSet id="country codes import" author="Lyubo">
+        <sqlFile path="db/country_codes.sql"/>
+    </changeSet>
 
-<!--    <changeSet id="1" author="yourname">-->
-<!--        <preConditions onFail="MARK_RAN">-->
-<!--            <not>-->
-<!--                <tableExists tableName="countries"/>-->
-<!--            </not>-->
-<!--        </preConditions>-->
-<!--        <createTable tableName="countries" schemaName="airbnb_project">-->
-<!--            <column name="id" type="INT" autoIncrement="true">-->
-<!--                <constraints primaryKey="true" nullable="false"/>-->
-<!--            </column>-->
-<!--            <column name="country_name" type="VARCHAR(100)">-->
-<!--                <constraints nullable="false" unique="true"/>-->
-<!--            </column>-->
-<!--        </createTable>-->
-<!--    </changeSet>-->
-
-<!--    <changeSet id="2" author="yourname">-->
-<!--        <preConditions onFail="MARK_RAN">-->
-<!--            <not>-->
-<!--                <tableExists tableName="country_codes"/>-->
-<!--            </not>-->
-<!--        </preConditions>-->
-<!--        <createTable tableName="country_codes" schemaName="airbnb_project">-->
-<!--            <column name="id" type="INT" autoIncrement="true">-->
-<!--                <constraints primaryKey="true" nullable="false"/>-->
-<!--            </column>-->
-<!--            <column name="code" type="VARCHAR(5)">-->
-<!--                <constraints nullable="false"/>-->
-<!--            </column>-->
-<!--            <column name="country_id" type="INT">-->
-<!--                <constraints nullable="false" foreignKeyName="country_codes_country_id" referencedTableName="countries" referencedColumnNames="id"/>-->
-<!--            </column>-->
-<!--        </createTable>-->
-<!--    </changeSet>-->
-<!--    <changeSet id="1" author="your_name">-->
-<!--        <preConditions onFail="MARK_RAN">-->
-<!--            <not>-->
-<!--                <tableExists tableName="users"/>-->
-<!--            </not>-->
-<!--        </preConditions>-->
-<!--        <sql>-->
-<!--            CREATE TABLE IF NOT EXISTS airbnb_project.users (-->
-<!--                                                                id INT NOT NULL AUTO_INCREMENT,-->
-<!--                                                                first_name VARCHAR(100) NOT NULL,-->
-<!--                last_name VARCHAR(100) NOT NULL,-->
-<!--                birthdate DATE NOT NULL,-->
-<!--                country_code_id INT NOT NULL,-->
-<!--                phone_number VARCHAR(45) NOT NULL,-->
-<!--                email VARCHAR(100) NOT NULL,-->
-<!--                password VARCHAR(255) NOT NULL,-->
-<!--                is_host TINYINT NULL,-->
-<!--                verification_code VARCHAR(64) NOT NULL,-->
-<!--                enabled TINYINT NULL,-->
-<!--                UNIQUE INDEX email_UNIQUE (email ASC) VISIBLE,-->
-<!--                INDEX fk_users_country_codes_idx (country_code_id ASC) VISIBLE,-->
-<!--                PRIMARY KEY (id),-->
-<!--                CONSTRAINT fk_users_country_codes-->
-<!--                FOREIGN KEY (country_code_id)-->
-<!--                REFERENCES airbnb_project.country_codes (id)-->
-<!--                ON DELETE NO ACTION-->
-<!--                ON UPDATE NO ACTION)-->
-<!--                ENGINE = InnoDB;-->
-<!--        </sql>-->
-<!--    </changeSet>-->
-
-<!--    <changeSet id="2" author="your_name">-->
-<!--        <preConditions onFail="MARK_RAN">-->
-<!--            <not>-->
-<!--                <tableExists tableName="messages"/>-->
-<!--            </not>-->
-<!--        </preConditions>-->
-<!--        <sql>-->
-<!--            CREATE TABLE IF NOT EXISTS airbnb_project.messages (-->
-<!--                                                                   id INT NOT NULL AUTO_INCREMENT,-->
-<!--                                                                   message TEXT NOT NULL,-->
-<!--                                                                   sender_id INT NOT NULL,-->
-<!--                                                                   receiver_id INT NOT NULL,-->
-<!--                                                                   time_sent DATETIME NOT NULL,-->
-<!--                                                                   PRIMARY KEY (id),-->
-<!--                UNIQUE INDEX id_UNIQUE (id ASC) VISIBLE,-->
-<!--                INDEX messages_sender_id_idx (sender_id ASC) VISIBLE,-->
-<!--                INDEX messages_receiver_id_idx (receiver_id ASC) VISIBLE,-->
-<!--                CONSTRAINT messages_sender_id-->
-<!--                FOREIGN KEY (sender_id)-->
-<!--                REFERENCES airbnb_project.users (id)-->
-<!--                ON DELETE NO ACTION-->
-<!--                ON UPDATE NO ACTION,-->
-<!--                CONSTRAINT messages_receiver_id-->
-<!--                FOREIGN KEY (receiver_id)-->
-<!--                REFERENCES airbnb_project.users (id)-->
-<!--                ON DELETE NO ACTION-->
-<!--                ON UPDATE NO ACTION)-->
-<!--                ENGINE = InnoDB;-->
-<!--        </sql>-->
-<!--    </changeSet>-->
-
-
-
-
-<!--</databaseChangeLog>-->
+</databaseChangeLog>

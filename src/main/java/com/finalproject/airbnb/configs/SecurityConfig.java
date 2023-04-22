@@ -23,7 +23,7 @@ public class SecurityConfig {
         httpSecurity.csrf()
                 .disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/users/signup","/users/login","/swagger-ui/**")            //all requests that dont need a token(SWAGGER,LOGIN AND REGISTER  )
+                .requestMatchers("/users/signup","/users/login","/swagger-ui/**","/v3/api-docs/**")            //all requests that don't need a token(SWAGGER,LOGIN AND REGISTER  )
                 .permitAll()
                 .anyRequest()                                   /// all other requests should be authenticated
                 .authenticated()
