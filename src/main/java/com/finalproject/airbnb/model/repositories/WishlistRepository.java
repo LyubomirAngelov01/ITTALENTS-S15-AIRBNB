@@ -9,6 +9,7 @@ import java.util.List;
 public interface WishlistRepository extends JpaRepository<WishlistEntity, WishlistKeys> {
 
     List<WishlistEntity> findAllByUserId(int userId);
+
     void deleteByUserIdAndPropertyId(int userId,int propertyId);
 
 }

@@ -1,7 +1,6 @@
 package com.finalproject.airbnb.controller;
 
 import com.finalproject.airbnb.model.DTOs.*;
-import com.finalproject.airbnb.service.CustomUserDetailService;
 import com.finalproject.airbnb.service.UserService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,22 +13,20 @@ import java.util.List;
 
 @RestController
 
-public class UserController extends  AbstractController{
+public class UserController extends AbstractController {
 
 
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private CustomUserDetailService customUserDetailService;
 
     @PostMapping("/users/signup")
-    public UserWithoutPasswordDTO register(@Valid @RequestBody RegisterDTO dto){
+    public UserWithoutPasswordDTO register(@Valid @RequestBody RegisterDTO dto) {
         return userService.register(dto);
     }
 
     @PostMapping("/users/login")
-    public TokenDTO login(@RequestBody LoginDTO dto){
+    public TokenDTO login(@RequestBody LoginDTO dto) {
         TokenDTO responseDto = userService.login(dto);
         return responseDto;
     }
@@ -37,40 +34,41 @@ public class UserController extends  AbstractController{
 
     @PutMapping("/users/profile/info")
     @SecurityRequirement(name = "JWT token")
-    public UserWithoutPasswordDTO editProfile(@Valid @RequestBody EditProfileInfoDTO dto, HttpServletRequest request){
-
+    public UserWithoutPasswordDTO editProfile(@Valid @RequestBody EditProfileInfoDTO dto, HttpServletRequest request) {
         int id = extractUserIdFromToken(request);
-        return userService.editProfileInfo(dto,id);
+        return userService.editProfileInfo(dto, id);
     }
 
     @PutMapping("/users/profile/loginCredentials")
     @SecurityRequirement(name = "JWT token")
-    public UserWithoutPasswordDTO editLoginCredentials(@Valid @RequestBody EditLoginCredentialsDTO dto, HttpServletRequest request){
+    public UserWithoutPasswordDTO editLoginCredentials(@Valid @RequestBody EditLoginCredentialsDTO dto, HttpServletRequest request) {
         int id = extractUserIdFromToken(request);
-        return userService.editLoginCredentials(id,dto);
+        return userService.editLoginCredentials(id, dto);
     }
+
     @DeleteMapping("/users")
     @SecurityRequirement(name = "JWT token")
-    public void deleteAccount(HttpServletRequest request){
+    public void deleteAccount(HttpServletRequest request) {
         userService.deleteAccount(extractUserIdFromToken(request));
     }
+
     @GetMapping("/users/{id}")
     @SecurityRequirement(name = "JWT token")
-    public UserWithoutPasswordDTO checkUserProfile(@PathVariable int id){
+    public UserWithoutPasswordDTO checkUserProfile(@PathVariable int id) {
         return userService.checkProfile(id);
     }
+
     @GetMapping("/users/trips")
     @SecurityRequirement(name = "JWT token")
-    public List<TripDTO> checkTrips(HttpServletRequest request){
+    public List<TripDTO> checkTrips(HttpServletRequest request) {
         int id = extractUserIdFromToken(request);
         return userService.listAllTrips(id);
     }
+
     @PutMapping("/users/become_host")
     @SecurityRequirement(name = "JWT token")
-    public BecomeHostDTO becomeHost(HttpServletRequest request){
+    public BecomeHostDTO becomeHost(HttpServletRequest request) {
         int id = extractUserIdFromToken(request);
         return userService.setHostStatus(id);
     }
-
-
 }

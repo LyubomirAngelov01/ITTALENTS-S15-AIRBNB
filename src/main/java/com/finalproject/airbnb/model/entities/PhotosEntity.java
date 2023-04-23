@@ -12,8 +12,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity(name = "photos")
-public class PhotosEntity extends BaseEntity{
-
+public class PhotosEntity extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "property_id")

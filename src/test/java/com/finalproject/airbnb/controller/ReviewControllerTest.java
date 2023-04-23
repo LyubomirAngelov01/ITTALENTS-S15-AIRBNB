@@ -48,7 +48,7 @@ class ReviewControllerTest {
     private ModelMapper mapper;
 
     @Test
-    void createReviewSuccess() {
+    void createReview() {
         int propertyId = 1;
         int loggedId = 1;
 
@@ -70,11 +70,14 @@ class ReviewControllerTest {
         when(userRepository.findById(loggedId)).thenReturn(Optional.of(user));
         when(propertyRepository.findById(propertyId)).thenReturn(Optional.of(property));
         when(reservationRepository.existsByUserAndProperty(user, property)).thenReturn(true);
-        when(reservationRepository.findByUserAndProperty(user, property)).thenReturn(reservation);
+        doReturn(reservation).when(reservationRepository).findFirstByUserAndPropertyRAnd(anyInt(), anyInt());
         when(reviewRepository.existsByOwnerAndProperty(user, property)).thenReturn(false);
         when(mapper.map(dto, ReviewEntity.class)).thenReturn(review);
         when(reviewRepository.save(review)).thenReturn(review);
         when(mapper.map(review, ReviewInfoDTO.class)).thenReturn(dto);
+        when(reviewRepository.calculateAvgRatingForProperty(property.getId())).thenReturn(4.5);
+        doNothing().when(reviewRepository).updatePropertyAvgRating(property.getId(), 4.5);
+        when(propertyRepository.save(property)).thenReturn(property);
 
         ReviewInfoDTO result = reviewService.createReview(propertyId, dto, loggedId);
 
@@ -88,6 +91,7 @@ class ReviewControllerTest {
 
         UserEntity user = new UserEntity();
         ReviewEntity review = new ReviewEntity();
+        review.setOwner(user);
 
         when(userRepository.findById(loggedId)).thenReturn(Optional.of(user));
         when(reviewRepository.findById(reviewId)).thenReturn(Optional.of(review));

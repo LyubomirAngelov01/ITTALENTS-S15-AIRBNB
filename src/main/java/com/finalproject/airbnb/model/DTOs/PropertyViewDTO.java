@@ -8,43 +8,44 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 public class PropertyViewDTO {
-        private String streetAddress;
 
-        private String region;
+    private String streetAddress;
 
-        private String zipCode;
+    private String region;
 
-        private String city;
+    private String zipCode;
 
-        private String countryName;
+    private String city;
 
-        private int beds;
+    private String countryName;
 
-        private int maxGuests;
+    private int beds;
 
-        private double price;
+    private int maxGuests;
 
-        private int bathrooms;
+    private double price;
 
-        private int bedrooms;
+    private int bathrooms;
 
-        private String description;
+    private int bedrooms;
 
-        private String title;
+    private String description;
 
-        private String categoryName;
+    private String title;
 
-        private boolean wifiConnection;
+    private String categoryName;
 
-        private boolean pool;
-        private boolean tv;
-        private boolean parking;
-        private boolean airConditioning;
-        private boolean barbecue;
-        private boolean smokeAlarm;
-        private boolean firstAid;
-        private boolean fireExtinguisher;
-        private boolean gym;
-        private boolean washer;
-        private boolean kitchen;
-    }
+    private boolean wifiConnection;
+
+    private boolean pool;
+    private boolean tv;
+    private boolean parking;
+    private boolean airConditioning;
+    private boolean barbecue;
+    private boolean smokeAlarm;
+    private boolean firstAid;
+    private boolean fireExtinguisher;
+    private boolean gym;
+    private boolean washer;
+    private boolean kitchen;
+}

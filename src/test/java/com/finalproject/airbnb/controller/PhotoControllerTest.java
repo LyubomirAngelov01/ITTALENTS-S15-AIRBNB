@@ -59,7 +59,6 @@ class PhotoControllerTest {
 
         DeleteAllPhotosDTO result = photoService.deleteAllPhotos(propertyId, loggedUserId);
 
-        // Verify that all photos were deleted and the correct DTO was returned
         Mockito.verify(photosRepository).deleteAllByPropertyId(propertyId);
         Assertions.assertEquals("ALL PHOTOS HAVE BEEN DELETED", result.getMsg());
     }

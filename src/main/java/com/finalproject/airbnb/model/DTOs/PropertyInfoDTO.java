@@ -1,8 +1,6 @@
 package com.finalproject.airbnb.model.DTOs;
 
 
-import com.finalproject.airbnb.model.entities.*;
-import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,7 +8,6 @@ import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.Range;
 
-import java.util.List;
 
 @Setter
 @Getter

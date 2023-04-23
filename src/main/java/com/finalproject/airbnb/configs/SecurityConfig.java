@@ -1,7 +1,7 @@
 package com.finalproject.airbnb.configs;
 
 
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -13,17 +13,20 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
-@RequiredArgsConstructor
 public class SecurityConfig {
-    private final JwtAuthenticationFilter jwtAuthFilter;
-    private final AuthenticationProvider authenticationProvider;
+
+    @Autowired
+    private JwtAuthenticationFilter jwtAuthFilter;
+
+    @Autowired
+    private AuthenticationProvider authenticationProvider;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.csrf()
                 .disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/users/signup","/users/login","/swagger-ui/**","/v3/api-docs/**")            //all requests that don't need a token(SWAGGER,LOGIN AND REGISTER  )
+                .requestMatchers("/users/signup", "/users/login", "/swagger-ui/**", "/v3/api-docs/**")            //all requests that don't need a token(SWAGGER,LOGIN AND REGISTER  )
                 .permitAll()
                 .anyRequest()                                   /// all other requests should be authenticated
                 .authenticated()

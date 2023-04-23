@@ -8,5 +8,6 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 public class DeletedAccountDTO {
+
     private final String msg = "ACCOUNT HAS BEEN DELETED";
 }

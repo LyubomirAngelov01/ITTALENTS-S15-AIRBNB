@@ -10,6 +10,7 @@ import java.time.LocalDate;
 @Getter
 @NoArgsConstructor
 public class SuccessfulReservationDTO {
+
     private int propertyId;
     private LocalDate checkInDate;
     private LocalDate checkOutDate;

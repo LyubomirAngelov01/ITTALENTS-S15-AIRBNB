@@ -3,11 +3,11 @@ package com.finalproject.airbnb.controller;
 import com.finalproject.airbnb.model.DTOs.*;
 import com.finalproject.airbnb.service.PropertyService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -19,24 +19,27 @@ public class PropertyController extends AbstractController {
 
 
     @PostMapping("/properties")
-    public PropertyViewDTO createProperty(@Valid @RequestBody PropertyInfoDTO dto, HttpSession s){
-        return propertyService.createProperty(dto, getLoggedId(s));
+    public PropertyViewDTO createProperty(@Valid @RequestBody PropertyInfoDTO dto, HttpServletRequest s) {
+        int userId = extractUserIdFromToken(s);
+        return propertyService.createProperty(dto, userId);
     }
 
 
     @PutMapping("/properties/{id}")
-    public PropertyViewDTO editProperty(@PathVariable int id,@Valid @RequestBody PropertyInfoDTO dto, HttpSession s) {
-        return propertyService.editProperty(id, dto, getLoggedId(s));
+    public PropertyViewDTO editProperty(@PathVariable int id, @Valid @RequestBody PropertyInfoDTO dto, HttpServletRequest s) {
+        int userId = extractUserIdFromToken(s);
+        return propertyService.editProperty(id, dto, userId);
     }
 
     @GetMapping("/properties/{id}")
-    public PropertyViewDTO showProperty(@PathVariable int id){
+    public PropertyViewDTO showProperty(@PathVariable int id) {
         return propertyService.showProperty(id);
     }
 
     @DeleteMapping("/properties/{id}")
-    public DeletedPropertyDTO deleteProperty(@PathVariable int id, HttpSession s) {
-        return propertyService.deleteProperty(id, getLoggedId(s));
+    public DeletedPropertyDTO deleteProperty(@PathVariable int id, HttpServletRequest s) {
+        int userId = extractUserIdFromToken(s);
+        return propertyService.deleteProperty(id, userId);
     }
 
     @GetMapping("/properties/{id}/reviews/{page}")
@@ -46,6 +49,6 @@ public class PropertyController extends AbstractController {
 
     @PostMapping("/properties/all/{page}")
     public List<PropertyViewDTO> search(@Valid @RequestBody PropertySearchDTO dto, @PathVariable int page) {
-        return propertyService.search(dto,  page);
+        return propertyService.search(dto, page);
     }
 }

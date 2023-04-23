@@ -14,23 +14,24 @@ import java.util.List;
 
 @RestController
 @SecurityRequirement(name = "JWT token")
-public class ReservationController extends AbstractController{
+public class ReservationController extends AbstractController {
     @Autowired
     private ReservationService reservationService;
 
     @PostMapping("/properties/{id}/reservations")
-    public SuccessfulReservationDTO makeReservation(@PathVariable int id, @Valid @RequestBody ReservationDTO reservationDTO, HttpServletRequest request){
+    public SuccessfulReservationDTO makeReservation(@PathVariable int id, @Valid @RequestBody ReservationDTO reservationDTO, HttpServletRequest request) {
         int userId = extractUserIdFromToken(request);
-        return reservationService.makeReservation(userId,id,reservationDTO);
+        return reservationService.makeReservation(userId, id, reservationDTO);
     }
 
     @DeleteMapping("/users/reservations/{reservation_id}")
-    public void removeReservation(@PathVariable("reservation_id") int reservationId, HttpServletRequest request){
+    public void removeReservation(@PathVariable("reservation_id") int reservationId, HttpServletRequest request) {
         int userId = extractUserIdFromToken(request);
-        reservationService.removeReservation(reservationId,userId);
+        reservationService.removeReservation(reservationId, userId);
     }
+
     @GetMapping("/users/reservations")
-    public List<UpcomingReservationClientDTO> checkUpcomingReservations(HttpServletRequest request){
+    public List<UpcomingReservationClientDTO> checkUpcomingReservations(HttpServletRequest request) {
         int userId = extractUserIdFromToken(request);
         return reservationService.listUpcomingReservationsForAClient(userId);
     }

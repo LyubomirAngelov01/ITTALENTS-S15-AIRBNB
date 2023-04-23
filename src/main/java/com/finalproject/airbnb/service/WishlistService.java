@@ -8,10 +8,7 @@ import com.finalproject.airbnb.model.entities.WishlistEntity;
 import com.finalproject.airbnb.model.exceptions.NotFoundException;
 import com.finalproject.airbnb.model.repositories.PropertyRepository;
 import com.finalproject.airbnb.model.repositories.WishlistRepository;
-import jakarta.transaction.Transactional;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,7 +20,8 @@ import java.util.stream.Collectors;
 @Service
 @Getter
 @Setter
-public class WishlistService extends AbstractService{
+public class WishlistService extends AbstractService {
+
     @Autowired
     private WishlistRepository wishlistRepository;
     @Autowired
@@ -32,7 +30,7 @@ public class WishlistService extends AbstractService{
     @Autowired
     private UserService userService;
 
-    public List<WishlistPropertyDTO> takeWishlistOfUser(int userId){
+    public List<WishlistPropertyDTO> takeWishlistOfUser(int userId) {
         List<WishlistEntity> wishlists = wishlistRepository.findAllByUserId(userId);
         List<PropertyEntity> properties = wishlists.stream()
                 .map(wishlist -> wishlist.getProperty())
@@ -44,21 +42,21 @@ public class WishlistService extends AbstractService{
         for (int i = 0; i < properties.size(); i++) {
             List<PhotosEntity> photos = properties.get(i).getPhotos();
             List<String> urls = new ArrayList();
-            for (PhotosEntity photo: photos) {
+            for (PhotosEntity photo : photos) {
                 urls.add(photo.getPhotoUrl());
             }
             wishlistProperties.get(i).setPhotosUrl(urls);
         }
         return wishlistProperties;
     }
-    public void addToWishlist(int propertyId,int userId){
-        PropertyEntity property = propertyRepository.findById(propertyId).orElseThrow(()->new NotFoundException("Property not found"));
+
+    public void addToWishlist(int propertyId, int userId) {
+        PropertyEntity property = propertyRepository.findById(propertyId).orElseThrow(() -> new NotFoundException("Property not found"));
         UserEntity user = userService.getUserById(userId);
-        wishlistRepository.save(new WishlistEntity(user,property));
+        wishlistRepository.save(new WishlistEntity(user, property));
     }
 
-    @Transactional
     public void removeFromWishlist(int propertyId, int loggedId) {
-         wishlistRepository.deleteByUserIdAndPropertyId(loggedId,propertyId);
+        wishlistRepository.deleteByUserIdAndPropertyId(loggedId, propertyId);
     }
 }

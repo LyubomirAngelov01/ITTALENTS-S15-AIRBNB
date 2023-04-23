@@ -1,51 +1,52 @@
 package com.finalproject.airbnb.controller;
 
 
-        import com.finalproject.airbnb.model.DTOs.ErrorDTO;
-        import com.finalproject.airbnb.model.exceptions.BadRequestException;
-        import com.finalproject.airbnb.model.exceptions.NotFoundException;
-        import com.finalproject.airbnb.model.exceptions.UnauthorizedException;
-        import com.finalproject.airbnb.service.JwtService;
-        import jakarta.servlet.http.HttpServletRequest;
-        import jakarta.servlet.http.HttpSession;
-        import org.springframework.beans.factory.annotation.Autowired;
-        import org.springframework.http.HttpStatus;
-        import org.springframework.validation.FieldError;
-        import org.springframework.web.bind.MethodArgumentNotValidException;
-        import org.springframework.web.bind.annotation.ExceptionHandler;
-        import org.springframework.web.bind.annotation.ResponseStatus;
-        import com.finalproject.airbnb.Utility;
-        import java.time.LocalDateTime;
-        import java.util.HashMap;
-        import java.util.Map;
+import com.finalproject.airbnb.model.DTOs.ErrorDTO;
+import com.finalproject.airbnb.model.exceptions.BadRequestException;
+import com.finalproject.airbnb.model.exceptions.NotFoundException;
+import com.finalproject.airbnb.model.exceptions.UnauthorizedException;
+import com.finalproject.airbnb.service.JwtService;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 public abstract class AbstractController {
+
     @Autowired
     private JwtService jwtService;
+
     @ExceptionHandler(BadRequestException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorDTO handleBadRequest(Exception e){
+    public ErrorDTO handleBadRequest(Exception e) {
         e.printStackTrace();
         return generateErrorDTO(e, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(UnauthorizedException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    public ErrorDTO handleUnauthorized(Exception e){
+    public ErrorDTO handleUnauthorized(Exception e) {
         e.printStackTrace();
         return generateErrorDTO(e, HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorDTO handleNotFound(Exception e){
+    public ErrorDTO handleNotFound(Exception e) {
         e.printStackTrace();
         return generateErrorDTO(e, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ErrorDTO handleRest(Exception e){
+    public ErrorDTO handleRest(Exception e) {
         e.printStackTrace();
         return generateErrorDTO(e, HttpStatus.INTERNAL_SERVER_ERROR);
     }
@@ -61,7 +62,7 @@ public abstract class AbstractController {
         return generateValidationErrorDTO(errors, HttpStatus.BAD_REQUEST);
     }
 
-    private ErrorDTO generateErrorDTO(Exception e, HttpStatus s){
+    private ErrorDTO generateErrorDTO(Exception e, HttpStatus s) {
         return ErrorDTO.builder()
                 .msg(e.getMessage())
                 .time(LocalDateTime.now())
@@ -69,7 +70,7 @@ public abstract class AbstractController {
                 .build();
     }
 
-    private ErrorDTO generateValidationErrorDTO(Object e, HttpStatus s){
+    private ErrorDTO generateValidationErrorDTO(Object e, HttpStatus s) {
         return ErrorDTO.builder()
                 .msg(e)
                 .time(LocalDateTime.now())
@@ -77,14 +78,7 @@ public abstract class AbstractController {
                 .build();
     }
 
-
-    protected int getLoggedId(HttpSession s){
-        if(s.getAttribute(Utility.LOGGED) == null){
-            throw new UnauthorizedException("You have to login first");
-        }
-        return (int) s.getAttribute(Utility.LOGGED_ID);
-    }
-    protected int extractUserIdFromToken(HttpServletRequest request){
+    protected int extractUserIdFromToken(HttpServletRequest request) {
         String token = jwtService.extractTokenFromHeader(request);
         return (int) jwtService.extractClaim(token, claims -> claims.get("id"));
     }

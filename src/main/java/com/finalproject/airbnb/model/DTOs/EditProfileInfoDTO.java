@@ -12,14 +12,19 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class EditProfileInfoDTO {
+
     @NotBlank(message = "enter a valid first name")
     private String firstName;
+
     @NotBlank(message = "enter a valid last name")
     private String lastName;
+
     @Email(message = "invalid email, email should be structured as shown by this example: example@mailexample.com")
     private String email;
+
     @NotBlank
     @Pattern(regexp = "^[0-9]+$",message = "invalid phone number")
     private String phoneNumber;
+
     private int countryCode;
 }

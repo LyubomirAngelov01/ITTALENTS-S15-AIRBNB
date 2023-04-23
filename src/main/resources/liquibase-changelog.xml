@@ -8,7 +8,7 @@
             <column name="property_id" type="INT">
                 <constraints nullable="false"/>
             </column>
-            <column name="wifi" type="TINYINT(3)">
+            <column name="wifi_connection" type="TINYINT(3)">
                 <constraints nullable="false"/>
             </column>
             <column name="pool" type="TINYINT(3)">
@@ -116,7 +116,16 @@
             <column autoIncrement="true" name="id" type="INT">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
-            <column name="address_id" type="INT">
+            <column name="street_address" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="zip_code" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="city" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="region" type="VARCHAR(100)">
                 <constraints nullable="false"/>
             </column>
             <column name="beds" type="INT">
@@ -141,9 +150,6 @@
                 <constraints nullable="false"/>
             </column>
             <column name="owner_id" type="INT">
-                <constraints nullable="false"/>
-            </column>
-            <column name="property_type_id" type="INT">
                 <constraints nullable="false"/>
             </column>
             <column name="category_id" type="INT">
@@ -178,8 +184,8 @@
         </createTable>
     </changeSet>
     <changeSet author="initial(generated)" id="1682182569090-9">
-        <createTable tableName="review">
-            <column name="id" type="VARCHAR(45)">
+        <createTable tableName="reviews">
+            <column autoIncrement="true" name="id" type="INT">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
             <column name="property_id" type="INT">
@@ -280,7 +286,7 @@
         </createIndex>
     </changeSet>
     <changeSet author="initial(generated)" id="1682182569090-20">
-        <createIndex indexName="property_id _idx" tableName="review">
+        <createIndex indexName="property_id _idx" tableName="reviews">
             <column name="property_id"/>
         </createIndex>
     </changeSet>
@@ -305,7 +311,7 @@
         </createIndex>
     </changeSet>
     <changeSet author="initial(generated)" id="1682182569090-25">
-        <createIndex indexName="user_id_idx" tableName="review">
+        <createIndex indexName="user_id_idx" tableName="reviews">
             <column name="user_id"/>
         </createIndex>
     </changeSet>
@@ -348,13 +354,13 @@
         <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="reservations" constraintName="reservations_user_id" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="users" validate="true"/>
     </changeSet>
     <changeSet author="initial(generated)" id="1682182569090-38">
-        <addForeignKeyConstraint baseColumnNames="property_id" baseTableName="review" constraintName="review_property_id" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="properties" validate="true"/>
+        <addForeignKeyConstraint baseColumnNames="property_id" baseTableName="reviews" constraintName="reviews_property_id" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="properties" validate="true"/>
     </changeSet>
     <changeSet author="initial(generated)" id="1682182569090-39">
-        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="review" constraintName="review_user_id" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="users" validate="true"/>
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="reviews" constraintName="reviews_user_id" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="users" validate="true"/>
     </changeSet>
     <changeSet author="initial(generated)" id="1682182569090-40">
-        <addForeignKeyConstraint baseColumnNames="property_id" baseTableName="wishlist" constraintName="wihlist_property_id" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="properties" validate="true"/>
+        <addForeignKeyConstraint baseColumnNames="property_id" baseTableName="wishlist" constraintName="wishlist_property_id" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="properties" validate="true"/>
     </changeSet>
     <changeSet author="initial(generated)" id="1682182569090-41">
         <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="wishlist" constraintName="wishlist_user_id" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="users" validate="true"/>
@@ -368,6 +374,9 @@
     </changeSet>
     <changeSet id="country codes import" author="Lyubo">
         <sqlFile path="db/country_codes.sql"/>
+    </changeSet>
+    <changeSet id="categories import" author="Teo">
+        <sqlFile path="db/categories.sql"/>
     </changeSet>
 
 </databaseChangeLog>

@@ -16,7 +16,7 @@ import java.util.List;
 
 @RestController
 @SecurityRequirement(name = "JWT token")
-public class MessageController extends AbstractController{
+public class MessageController extends AbstractController {
 
 
     @Autowired
@@ -24,15 +24,17 @@ public class MessageController extends AbstractController{
 
 
     @PostMapping("/users/messages/{idReceiver}")
-    public String sendMessage(@RequestBody SendMessageDTO dto, @PathVariable int idReceiver, HttpServletRequest request){
+    public String sendMessage(@RequestBody SendMessageDTO dto, @PathVariable int idReceiver, HttpServletRequest request) {
         int senderId = extractUserIdFromToken(request);
-        return messageService.sendMessage(senderId,idReceiver, dto.getText());
+        return messageService.sendMessage(senderId, idReceiver, dto.getText());
     }
+
     @GetMapping("/users/messages/{receiverId}")
-    public Page<ChatDTO> listChatWithAUser(@PathVariable int receiverId, HttpServletRequest request, Pageable pageable){
+    public Page<ChatDTO> listChatWithAUser(@PathVariable int receiverId, HttpServletRequest request, Pageable pageable) {
         int loggedId = extractUserIdFromToken(request);
-        return messageService.listChatWithAUser(loggedId,receiverId,pageable);
+        return messageService.listChatWithAUser(loggedId, receiverId, pageable);
     }
+
     @GetMapping("/users/messages")
     public List<InboxUserDTO> getInbox(HttpServletRequest request) {
         int loggedId = extractUserIdFromToken(request);

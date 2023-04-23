@@ -5,6 +5,7 @@ import com.finalproject.airbnb.model.entities.UserEntity;
 import lombok.*;
 
 import java.io.Serializable;
+
 @Getter
 @Setter
 @NoArgsConstructor

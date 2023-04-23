@@ -6,30 +6,31 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
 @SecurityRequirement(name = "JWT token")
-public class WishlistController extends AbstractController{
+public class WishlistController extends AbstractController {
 
     @Autowired
     private WishlistService wishlistService;
 
     @GetMapping("/users/wishlist")
-    public List<WishlistPropertyDTO> wishlist(HttpServletRequest request){
+    public List<WishlistPropertyDTO> wishlist(HttpServletRequest request) {
         int id = extractUserIdFromToken(request);
         return wishlistService.takeWishlistOfUser(id);
     }
+
     @PostMapping("/properties/{propertyId}/wishlist")
-    public void addToWishlist(@PathVariable int propertyId, HttpServletRequest request){
+    public void addToWishlist(@PathVariable int propertyId, HttpServletRequest request) {
         int id = extractUserIdFromToken(request);
-        wishlistService.addToWishlist(propertyId,id);
+        wishlistService.addToWishlist(propertyId, id);
     }
 
     @DeleteMapping("/users/{propertyId}/wishlist")
-    public void removeFromWishlist(@PathVariable int propertyId,HttpServletRequest request){
+    public void removeFromWishlist(@PathVariable int propertyId, HttpServletRequest request) {
         int id = extractUserIdFromToken(request);
-        wishlistService.removeFromWishlist(propertyId,id);
+        wishlistService.removeFromWishlist(propertyId, id);
     }
-
 }

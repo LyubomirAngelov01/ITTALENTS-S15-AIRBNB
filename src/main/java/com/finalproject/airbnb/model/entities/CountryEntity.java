@@ -12,8 +12,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity(name = "countries")
-public class CountryEntity extends BaseEntity{
-
+public class CountryEntity extends BaseEntity {
 
     @Column
     @NotBlank

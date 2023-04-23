@@ -10,6 +10,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BecomeHostDTO {
+
     private int id;
     private String firstName;
     private String lastName;

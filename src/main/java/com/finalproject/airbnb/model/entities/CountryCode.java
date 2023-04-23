@@ -9,9 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "country_codes")
-public class CountryCode extends BaseEntity{
-
-
+public class CountryCode extends BaseEntity {
 
     @Column(name = "code")
     private String code;

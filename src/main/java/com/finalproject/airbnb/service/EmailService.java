@@ -11,23 +11,23 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 @Service
-public class EmailService extends AbstractService{
+public class EmailService extends AbstractService {
 
     @Autowired
     private JavaMailSender emailSender;
 
-    @Autowired
     private static final Logger logger = LogManager.getLogger(UserService.class);
+
     @Value("${spring.mail.from}")
     private String emailFrom;
 
-    public void sendEmail(SimpleMessageDTO dto){
+    public void sendEmail(SimpleMessageDTO dto) {
         SimpleMailMessage simpleMailMessage = createSimpleMailMessage(dto);
         emailSender.send(simpleMailMessage);
     }
 
-    private SimpleMailMessage createSimpleMailMessage(SimpleMessageDTO dto){
-        if (dto.getSendTo().isEmpty()){
+    private SimpleMailMessage createSimpleMailMessage(SimpleMessageDTO dto) {
+        if (dto.getSendTo().isEmpty()) {
             throw new EmailServiceException("no recipients");
         }
 

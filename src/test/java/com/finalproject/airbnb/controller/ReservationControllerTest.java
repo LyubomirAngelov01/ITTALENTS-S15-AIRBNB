@@ -89,5 +89,4 @@ class ReservationControllerTest {
         verify(reservationRepository).findById(reservationId);
         verify(reservationRepository).deleteById(reservationId);
     }
-
 }

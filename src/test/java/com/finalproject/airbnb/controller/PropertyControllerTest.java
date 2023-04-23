@@ -29,25 +29,28 @@ public class PropertyControllerTest {
     @InjectMocks
     private PropertyService propertyService;
 
-    @Mock(lenient = true)
+    @Mock
     private UserRepository userRepository;
 
-    @Mock(lenient = true)
+    @Mock
     private ReviewRepository reviewRepository;
 
-    @Mock(lenient = true)
+    @Mock
     private CategoryRepository categoryRepository;
 
-    @Mock(lenient = true)
+    @Mock
     private CountryRepository countryRepository;
 
-    @Mock(lenient = true)
+    @Mock
     private AmenitiesRepository amenitiesRepository;
 
-    @Mock(lenient = true)
+    @Mock
     private PropertyRepository propertyRepository;
 
-    @Mock(lenient = true)
+    @Mock
+    private PhotosRepository photosRepository;
+
+    @Mock
     private ModelMapper mapper;
 
     @Test
@@ -117,18 +120,18 @@ public class PropertyControllerTest {
         property.setOwner(u);
         CategoryEntity category = new CategoryEntity();
         dto.setCategoryNum(1);
-        when(categoryRepository.findById(dto.getCategoryNum())).thenReturn(Optional.of(category));
+        lenient().when(categoryRepository.findById(dto.getCategoryNum())).thenReturn(Optional.of(category));
         CountryEntity country = new CountryEntity();
         dto.setCountryNum(1);
-        when(countryRepository.findById(dto.getCountryNum())).thenReturn(Optional.of(country));
+        lenient().when(countryRepository.findById(dto.getCountryNum())).thenReturn(Optional.of(country));
         AmenitiesEntity amenities = new AmenitiesEntity();
-        when(amenitiesRepository.getByProperty(property)).thenReturn(amenities);
+        lenient().when(amenitiesRepository.getByProperty(property)).thenReturn(amenities);
         PropertyViewDTO propertyViewDTO = new PropertyViewDTO();
         mapper.map(dto, amenities);
         mapper.map(dto, property);
         mapper.map(dto, propertyViewDTO);
-        when(propertyRepository.findById(id)).thenReturn(Optional.of(property));
-        when(propertyRepository.userOwnsProperty(loggedId, id)).thenReturn(true);
+        lenient().when(propertyRepository.findById(id)).thenReturn(Optional.of(property));
+        lenient().when(propertyRepository.userOwnsProperty(loggedId, id)).thenReturn(true);
     }
 
     @Test
@@ -189,22 +192,28 @@ public class PropertyControllerTest {
 
     @Test
     public void deleteProperty() {
+        int userId = 1;
+        int propertyId = 2;
+        int amenitiesId = 3;
+
         UserEntity user = new UserEntity();
-        user.setId(1);
+        user.setId(userId);
 
         PropertyEntity property = new PropertyEntity();
-        property.setId(2);
+        property.setId(propertyId);
 
         AmenitiesEntity amenities = new AmenitiesEntity();
-        amenities.setId(3);
+        amenities.setId(amenitiesId);
         property.setAmenities(amenities);
 
-        when(userRepository.findById(anyInt())).thenReturn(Optional.of(user));
-        when(propertyRepository.findById(anyInt())).thenReturn(Optional.of(property));
-        when(propertyRepository.userOwnsProperty(anyInt(), anyInt())).thenReturn(true);
-        doNothing().when(propertyRepository).delete(any(PropertyEntity.class));
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+        when(propertyRepository.findById(propertyId)).thenReturn(Optional.of(property));
+        when(propertyRepository.userOwnsProperty(userId, propertyId)).thenReturn(true);
+        doNothing().when(photosRepository).deleteAllByPropertyId(propertyId);
+        doNothing().when(amenitiesRepository).deleteById(amenitiesId);
+        doNothing().when(propertyRepository).delete(property);
 
-        DeletedPropertyDTO result = propertyService.deleteProperty(2, 1);
+        DeletedPropertyDTO result = propertyService.deleteProperty(propertyId, userId);
 
         assertEquals("PROPERTY HAS BEEN DELETED", result.getMsg());
     }
@@ -250,7 +259,7 @@ public class PropertyControllerTest {
         Page<PropertyEntity> propertyPage = new PageImpl<>(properties);
 
         when(propertyRepository.findBySearchParams(
-                searchDTO.getStreetAddress(),
+                searchDTO.getCity(),
                 searchDTO.getMaxGuests(),
                 searchDTO.getPrice(),
                 searchDTO.getBathrooms(),

@@ -1,6 +1,5 @@
 package com.finalproject.airbnb.model.entities;
 
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;

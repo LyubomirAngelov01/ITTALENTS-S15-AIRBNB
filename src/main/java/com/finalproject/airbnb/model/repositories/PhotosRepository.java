@@ -6,7 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface PhotosRepository extends JpaRepository<PhotosEntity, Integer> {
@@ -17,19 +16,4 @@ public interface PhotosRepository extends JpaRepository<PhotosEntity, Integer> {
 
     List<PhotosEntity> findByProperty(PropertyEntity property);
 
-    List<PhotosEntity> findAllById(int id);
-
-    void deleteAllById(int id);
-
-    default boolean propertyOwnsPhoto(int propertyId, int photoId){
-        Optional<PhotosEntity> optionalPhotos = findById(photoId);
-        if (optionalPhotos.isPresent()) {
-            PhotosEntity photos = optionalPhotos.get();
-            PropertyEntity property = photos.getProperty();
-            if (property != null && property.getId() == propertyId) {
-                return true;
-            }
-        }
-        return false;
-    }
-    }
+}

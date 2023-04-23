@@ -1,6 +1,5 @@
 package com.finalproject.airbnb.model.entities;
 
-
 import com.finalproject.airbnb.compositeKeysClasses.WishlistKeys;
 import jakarta.persistence.*;
 import lombok.*;

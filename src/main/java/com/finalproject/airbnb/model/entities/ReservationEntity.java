@@ -16,7 +16,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "reservations")
-public class ReservationEntity extends BaseEntity{
+public class ReservationEntity extends BaseEntity {
 
 
     @ManyToOne

@@ -23,7 +23,6 @@ public interface ReviewRepository extends JpaRepository<ReviewEntity, Integer> {
 
    boolean existsByOwnerAndProperty(UserEntity owner, PropertyEntity property);
 
-
    @Query(value = "SELECT AVG(rating) FROM reviews WHERE property_id = :propertyId", nativeQuery = true)
    Double calculateAvgRatingForProperty(@Param("propertyId") int propertyId);
 

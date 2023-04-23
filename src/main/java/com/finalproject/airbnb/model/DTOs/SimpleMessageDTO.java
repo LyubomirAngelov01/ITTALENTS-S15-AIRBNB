@@ -8,6 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 
 public class SimpleMessageDTO {
+
     private String sendTo;
     private String subject;
     private String content;

@@ -35,10 +35,7 @@ public class PhotoService extends AbstractService {
             throw new UnauthorizedException("Property is not owned by the user!");
         }
         if (photosRepository.findAllByPropertyId(id).size() > 10) {
-            List <PhotosEntity> photos = photosRepository.findAllByPropertyId(id);
-            return photos.stream()
-                    .map(p -> mapper.map(p, PhotoDTO.class))
-                    .collect(Collectors.toList());
+            throw new BadRequestException("Maximum of 15 photos per property!");
         }
         if (files.length < 5) {
             throw new BadRequestException("Minimum of 5 pictures!");
@@ -74,8 +71,8 @@ public class PhotoService extends AbstractService {
                 .collect(Collectors.toList());
     }
 
-    public List<PhotoDTO> listAllPhotos(int id){
-        if(propertyRepository.findById(id).isEmpty()) {
+    public List<PhotoDTO> listAllPhotos(int id) {
+        if (propertyRepository.findById(id).isEmpty()) {
             throw new NotFoundException("Property not found!");
         }
         List<PhotoDTO> photos = photosRepository.findAllByPropertyId(id)
@@ -86,11 +83,7 @@ public class PhotoService extends AbstractService {
     }
 
 
-
-    public File viewPhoto(int id, String name) {
-        if (propertyRepository.findById(id).isEmpty()) {
-            throw new NotFoundException("Property not found!");
-        }
+    public File viewPhoto(String name) {
         name = "uploads" + File.separator + name;
         File f = new File(name);
         if (f.exists()) {
@@ -114,7 +107,7 @@ public class PhotoService extends AbstractService {
                     return new DeletePhotoDTO();
                 }
         }
-        throw new BadRequestException("Photo does not belong to the property");
+        throw new BadRequestException("Photo does not belong to your property");
     }
 
     @Transactional
@@ -125,7 +118,7 @@ public class PhotoService extends AbstractService {
         if (!propertyRepository.userOwnsProperty(u.getId(), property.getId())) {
             throw new UnauthorizedException("Property is not owned by the user!");
         }
-        if(photosRepository.findAllByPropertyId(id).isEmpty()){
+        if (photosRepository.findAllByPropertyId(id).isEmpty()) {
             throw new NotFoundException("Photos do not exist!");
         }
         photosRepository.deleteAllByPropertyId(id);

@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MessageWithUserDTO {
+
     private int senderId;
     private String senderFirstName;
     private String senderLastName;

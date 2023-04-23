@@ -5,24 +5,26 @@ import com.finalproject.airbnb.model.entities.ReservationEntity;
 import com.finalproject.airbnb.model.entities.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
 import java.util.List;
 
 public interface ReservationRepository extends JpaRepository<ReservationEntity,Integer> {
 
-    LocalDate findByCheckInDate(LocalDate date);
-    LocalDate findByCheckOutDate(LocalDate date);
     List<ReservationEntity> findAllByUser(UserEntity user);
+
     List<ReservationEntity> findAllByUserIdAndAndCheckInDateAfter(int userId, LocalDate checkInDate);
 
     boolean existsByUserAndProperty(UserEntity user, PropertyEntity property);
 
     ReservationEntity findByUserAndProperty(UserEntity user, PropertyEntity property);
 
-    void deleteByIdAndUserId(int id,int userId);
+    @Query(value = "SELECT * FROM reservations r WHERE r.user_id = :user_id AND r.property_id = :property_id ORDER BY r.check_out_date LIMIT 1", nativeQuery = true)
+    ReservationEntity findFirstByUserAndPropertyRAnd(@Param("user_id") int userId, @Param("property_id") int propertyId);
+
     List<ReservationEntity> findAllByPropertyId(int propertyId);
-    List<ReservationEntity> findAllByProperty(PropertyEntity property);
+
     @Query("SELECT r FROM reservations AS r WHERE r.checkInDate > curdate()")
     List<ReservationEntity> getAllAfterCurrentDate();
 

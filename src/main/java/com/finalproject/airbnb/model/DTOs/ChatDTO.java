@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 public class ChatDTO {
+
     private String message;
     private LocalDateTime timeSent;
     private int senderId;
