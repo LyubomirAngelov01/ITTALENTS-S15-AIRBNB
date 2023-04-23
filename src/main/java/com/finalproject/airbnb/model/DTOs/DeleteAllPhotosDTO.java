@@ -9,6 +9,6 @@ import lombok.Setter;
 @NoArgsConstructor
 public class DeleteAllPhotosDTO {
 
-    private final String msg = "ALl PHOTOS HAVE BEEN DELETED";
+    private final String msg = "ALL PHOTOS HAVE BEEN DELETED";
 
 }

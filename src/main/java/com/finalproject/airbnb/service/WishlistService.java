@@ -9,7 +9,9 @@ import com.finalproject.airbnb.model.exceptions.NotFoundException;
 import com.finalproject.airbnb.model.repositories.PropertyRepository;
 import com.finalproject.airbnb.model.repositories.WishlistRepository;
 import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,7 +23,6 @@ import java.util.stream.Collectors;
 @Service
 @Getter
 @Setter
-
 public class WishlistService extends AbstractService{
     @Autowired
     private WishlistRepository wishlistRepository;
@@ -54,7 +55,6 @@ public class WishlistService extends AbstractService{
         PropertyEntity property = propertyRepository.findById(propertyId).orElseThrow(()->new NotFoundException("Property not found"));
         UserEntity user = userService.getUserById(userId);
         wishlistRepository.save(new WishlistEntity(user,property));
-
     }
 
     @Transactional

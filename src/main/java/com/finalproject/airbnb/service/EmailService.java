@@ -24,8 +24,6 @@ public class EmailService extends AbstractService{
     public void sendEmail(SimpleMessageDTO dto){
         SimpleMailMessage simpleMailMessage = createSimpleMailMessage(dto);
         emailSender.send(simpleMailMessage);
-
-
     }
 
     private SimpleMailMessage createSimpleMailMessage(SimpleMessageDTO dto){

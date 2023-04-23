@@ -1,13 +1,12 @@
 package com.finalproject.airbnb.controller;
 
 import com.finalproject.airbnb.model.DTOs.ChatDTO;
-import com.finalproject.airbnb.model.DTOs.MessageWithUserDTO;
 import com.finalproject.airbnb.model.entities.MessageEntity;
 import com.finalproject.airbnb.model.entities.UserEntity;
 import com.finalproject.airbnb.model.repositories.MessageRepository;
+import com.finalproject.airbnb.model.repositories.ReservationRepository;
 import com.finalproject.airbnb.model.repositories.UserRepository;
 import com.finalproject.airbnb.service.MessageService;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -34,6 +33,9 @@ class MessageControllerTest {
     private UserRepository userRepository;
 
     @Mock
+    private ReservationRepository reservationRepository;
+
+    @Mock
     private MessageRepository messageRepository;
 
     @Mock
@@ -49,7 +51,6 @@ class MessageControllerTest {
 
     @Test
     void sendMessage() {
-        // Arrange
         int senderId = 1;
         int receiverId = 3;
         String text = "Hello!";
@@ -60,10 +61,13 @@ class MessageControllerTest {
 
         doReturn(Optional.of(sender)).when(userRepository).findById(senderId);
         doReturn(Optional.of(receiver)).when(userRepository).findById(receiverId);
+        doReturn(1).when(reservationRepository).reservationsBetweenUsers(receiverId, senderId);
+
 
         messageService.sendMessage(senderId, receiverId, text);
 
         verify(userRepository, Mockito.times(1)).findById(receiverId);
+        verify(reservationRepository, Mockito.times(1)).reservationsBetweenUsers(receiverId, senderId);
         verify(messageRepository, Mockito.times(1)).save(Mockito.any(MessageEntity.class));
     }
 
@@ -98,7 +102,6 @@ class MessageControllerTest {
         int receiverId = 2;
         Pageable pageable = PageRequest.of(0, 10);
 
-        // Mocking repository methods
         when(userRepository.findById(loggedId)).thenReturn(Optional.of(sender));
         when(userRepository.findById(receiverId)).thenReturn(Optional.of(receiver));
         Page<MessageEntity> page = new PageImpl<>(messages, pageable, messages.size());
@@ -116,10 +119,8 @@ class MessageControllerTest {
         when(mapper.map(messages.get(0), ChatDTO.class)).thenReturn(chatDTO1);
         when(mapper.map(messages.get(1), ChatDTO.class)).thenReturn(chatDTO2);
 
-        // Call the method under test
         Page<ChatDTO> result = messageService.listChatWithAUser(loggedId, receiverId, pageable);
 
-        // Assert the result
         assertEquals(2, result.getTotalElements());
         assertEquals(2, result.getNumberOfElements());
         assertEquals(chatDTO1, result.getContent().get(0));
