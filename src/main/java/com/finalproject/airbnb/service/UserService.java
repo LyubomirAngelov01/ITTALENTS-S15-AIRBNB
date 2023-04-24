@@ -17,6 +17,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.modelmapper.internal.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMailMessage;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -110,12 +112,13 @@ public class UserService extends AbstractService {
     }
 
 
-    public List<TripDTO> listAllTrips(int userId) {
+    public List<TripDTO> listAllTrips(int userId, Pageable pageable) {
         UserEntity u = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("user not found"));
         List<ReservationEntity> reservations = reservationRepository.findAllByUser(u);
         List<TripDTO> trips = reservations.stream()
-                .map(reservation -> new TripDTO(reservation.getCheckInDate(), reservation.getCheckOutDate(), reservation.getProperty().getId(), reservation.getProperty().getTitle()))
-                .collect(Collectors.toList());
+                .map(reservation -> new TripDTO(reservation.getCheckInDate(), reservation.getCheckOutDate(),
+                        reservation.getProperty().getId(), reservation.getProperty().getTitle())).collect(Collectors.toList());
+
         return trips;
     }
 

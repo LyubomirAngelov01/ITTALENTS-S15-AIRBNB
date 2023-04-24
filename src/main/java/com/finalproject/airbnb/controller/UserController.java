@@ -6,6 +6,8 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -60,9 +62,9 @@ public class UserController extends AbstractController {
 
     @GetMapping("/users/trips")
     @SecurityRequirement(name = "JWT token")
-    public List<TripDTO> checkTrips(HttpServletRequest request) {
+    public List<TripDTO> checkTrips(HttpServletRequest request, Pageable pageable) {
         int id = extractUserIdFromToken(request);
-        return userService.listAllTrips(id);
+        return userService.listAllTrips(id,pageable);
     }
 
     @PutMapping("/users/become_host")

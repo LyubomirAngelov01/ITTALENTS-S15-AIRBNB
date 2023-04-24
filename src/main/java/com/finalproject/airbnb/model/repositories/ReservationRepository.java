@@ -3,6 +3,7 @@ package com.finalproject.airbnb.model.repositories;
 import com.finalproject.airbnb.model.entities.PropertyEntity;
 import com.finalproject.airbnb.model.entities.ReservationEntity;
 import com.finalproject.airbnb.model.entities.UserEntity;
+import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

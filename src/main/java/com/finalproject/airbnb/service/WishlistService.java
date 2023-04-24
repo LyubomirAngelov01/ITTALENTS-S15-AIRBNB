@@ -5,6 +5,7 @@ import com.finalproject.airbnb.model.entities.PhotosEntity;
 import com.finalproject.airbnb.model.entities.PropertyEntity;
 import com.finalproject.airbnb.model.entities.UserEntity;
 import com.finalproject.airbnb.model.entities.WishlistEntity;
+import com.finalproject.airbnb.model.exceptions.BadRequestException;
 import com.finalproject.airbnb.model.exceptions.NotFoundException;
 import com.finalproject.airbnb.model.repositories.PropertyRepository;
 import com.finalproject.airbnb.model.repositories.WishlistRepository;
@@ -50,13 +51,23 @@ public class WishlistService extends AbstractService {
         return wishlistProperties;
     }
 
-    public void addToWishlist(int propertyId, int userId) {
+    public String addToWishlist(int propertyId, int userId) {
         PropertyEntity property = propertyRepository.findById(propertyId).orElseThrow(() -> new NotFoundException("Property not found"));
         UserEntity user = userService.getUserById(userId);
+        if (wishlistRepository.existsByUserAndProperty(user,property)){
+            throw new BadRequestException("you already have that property in your wishlist");
+        }
         wishlistRepository.save(new WishlistEntity(user, property));
+        return "added to wishlist";
     }
 
-    public void removeFromWishlist(int propertyId, int loggedId) {
-        wishlistRepository.deleteByUserIdAndPropertyId(loggedId, propertyId);
+    public String removeFromWishlist(int propertyId, int loggedId) {
+        PropertyEntity property = propertyRepository.findById(propertyId).orElseThrow(() -> new NotFoundException("Property not found"));
+        UserEntity user = userService.getUserById(loggedId);
+        if (!wishlistRepository.existsByUserAndProperty(user,property)){
+            throw new BadRequestException("you dont have that property in your wishlist");
+        }
+        wishlistRepository.deleteByUserAndProperty(user, property);
+        return "property removed from the wishlist";
     }
 }

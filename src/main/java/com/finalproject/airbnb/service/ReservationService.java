@@ -54,17 +54,16 @@ public class ReservationService extends AbstractService {
                 .collect(Collectors.toList());
 
         return upcomingReservations;
-
     }
 
 
-    @Transactional
-    public void removeReservation(int reservationId, int loggedId) {
+    public String removeReservation(int reservationId, int loggedId) {
         ReservationEntity reservation = reservationRepository.findById(reservationId).orElseThrow(() -> new NotFoundException("reservation not found"));
         if (reservation.getUser().getId() != loggedId) {
             throw new UnauthorizedException("you can remove your reservations only");
         }
         reservationRepository.deleteById(reservationId);
+        return "successfully removed reservation";
     }
 
 

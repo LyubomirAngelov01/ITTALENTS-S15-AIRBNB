@@ -23,14 +23,14 @@ public class WishlistController extends AbstractController {
     }
 
     @PostMapping("/properties/{propertyId}/wishlist")
-    public void addToWishlist(@PathVariable int propertyId, HttpServletRequest request) {
+    public String addToWishlist(@PathVariable int propertyId, HttpServletRequest request) {
         int id = extractUserIdFromToken(request);
-        wishlistService.addToWishlist(propertyId, id);
+        return wishlistService.addToWishlist(propertyId, id);
     }
 
     @DeleteMapping("/users/{propertyId}/wishlist")
-    public void removeFromWishlist(@PathVariable int propertyId, HttpServletRequest request) {
+    public String removeFromWishlist(@PathVariable int propertyId, HttpServletRequest request) {
         int id = extractUserIdFromToken(request);
-        wishlistService.removeFromWishlist(propertyId, id);
+        return wishlistService.removeFromWishlist(propertyId, id);
     }
 }

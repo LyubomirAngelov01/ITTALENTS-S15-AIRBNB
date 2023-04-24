@@ -25,9 +25,9 @@ public class ReservationController extends AbstractController {
     }
 
     @DeleteMapping("/users/reservations/{reservation_id}")
-    public void removeReservation(@PathVariable("reservation_id") int reservationId, HttpServletRequest request) {
+    public String removeReservation(@PathVariable("reservation_id") int reservationId, HttpServletRequest request) {
         int userId = extractUserIdFromToken(request);
-        reservationService.removeReservation(reservationId, userId);
+        return reservationService.removeReservation(reservationId, userId);
     }
 
     @GetMapping("/users/reservations")
