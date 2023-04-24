@@ -1,7 +1,6 @@
 package com.finalproject.airbnb.controller;
 
 import com.finalproject.airbnb.model.DTOs.WishlistPropertyDTO;
-import com.finalproject.airbnb.model.entities.WishlistEntity;
 import com.finalproject.airbnb.service.WishlistService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.servlet.http.HttpServletRequest;
@@ -10,7 +9,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
 @SecurityRequirement(name = "JWT token")

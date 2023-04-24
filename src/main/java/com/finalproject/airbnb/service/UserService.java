@@ -15,10 +15,8 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDate;
 
 
@@ -37,8 +35,7 @@ public class UserService extends AbstractService {
     private ReservationRepository reservationRepository;
     @Autowired
     private static Logger logger = LogManager.getLogger(UserService.class);
-    @Autowired
-    private JavaMailSender mailSender;
+
     @Autowired
     private JwtService jwtService;
 

@@ -10,7 +10,6 @@ import com.finalproject.airbnb.model.exceptions.BadRequestException;
 import com.finalproject.airbnb.model.exceptions.NotFoundException;
 import com.finalproject.airbnb.model.exceptions.UnauthorizedException;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDate;
 
 @Service

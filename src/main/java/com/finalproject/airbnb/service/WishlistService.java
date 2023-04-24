@@ -1,7 +1,6 @@
 package com.finalproject.airbnb.service;
 
 import com.finalproject.airbnb.model.DTOs.WishlistPropertyDTO;
-import com.finalproject.airbnb.model.entities.PhotosEntity;
 import com.finalproject.airbnb.model.entities.PropertyEntity;
 import com.finalproject.airbnb.model.entities.UserEntity;
 import com.finalproject.airbnb.model.entities.WishlistEntity;
@@ -13,13 +12,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Getter
