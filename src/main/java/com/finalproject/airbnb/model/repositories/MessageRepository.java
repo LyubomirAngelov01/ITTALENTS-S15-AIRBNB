@@ -13,6 +13,8 @@ import java.util.List;
 public interface MessageRepository extends JpaRepository<MessageEntity,Integer> {
 
 
+    boolean existsBySenderAndReceiver(UserEntity sender, UserEntity receiver);
+
     @Query("SELECT DISTINCT m.receiver.id FROM messages AS m WHERE m.sender.id = :senderId ")
     List<Integer> getAllBySenderId(int senderId);
 

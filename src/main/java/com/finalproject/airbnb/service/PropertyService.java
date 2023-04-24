@@ -72,13 +72,15 @@ public class PropertyService extends AbstractService {
         PropertyViewDTO propertyViewDTO = mapper.map(dto, PropertyViewDTO.class);
         propertyViewDTO.setCategoryName(property.getCategory().getCategoryName());
         propertyViewDTO.setCountryName(property.getCountry().getCountryName());
-        //logger.info("Property created");
+        logger.info("Property" + property.getId() + "edited");
         return propertyViewDTO;
     }
 
     public PropertyViewDTO showProperty(int id) {
         PropertyEntity property = propertyRepository.findById(id).orElseThrow(() -> new NotFoundException("Property not found!"));
+        AmenitiesEntity amenities = amenitiesRepository.getByProperty(property);
         PropertyViewDTO dto = mapper.map(property, PropertyViewDTO.class);
+        mapper.map(amenities, dto);
         dto.setCategoryName(property.getCategory().getCategoryName());
         dto.setCountryName(property.getCountry().getCountryName());
         return dto;

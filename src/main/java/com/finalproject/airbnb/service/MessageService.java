@@ -43,6 +43,10 @@ public class MessageService extends AbstractService {
     public Page<ChatDTO> listChatWithAUser(int loggedId, int receiverId, Pageable pageable) {
         UserEntity sender = userRepository.findById(loggedId).orElseThrow(() -> new UnauthorizedException("log in first"));
         UserEntity receiver = userRepository.findById(receiverId).orElseThrow(() -> new NotFoundException("user not found"));
+        if (!(reservationRepository.reservationsBetweenUsers(receiverId, loggedId) > 0)) {
+            throw new BadRequestException("You cannot open a chat with that user, because you do not have an active" +
+                    " reservation on any of his properties!");
+        }
         Page<MessageEntity> chats = messageRepository.listAChat(sender.getId(), receiver.getId(), pageable);
         Page<ChatDTO> messages = chats.map(messageEntity -> mapper.map(messageEntity, ChatDTO.class));
 

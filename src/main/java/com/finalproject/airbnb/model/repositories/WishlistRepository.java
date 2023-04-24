@@ -12,6 +12,8 @@ public interface WishlistRepository extends JpaRepository<WishlistEntity, Wishli
 
     Page<WishlistEntity> findAllByUserId(int userId, Pageable pageable);
 
+    void deleteByUserIdAndPropertyId(int userId, int propertyId);
+
     void deleteByUserAndProperty(UserEntity user,PropertyEntity property);
 
     boolean existsByUserAndProperty(UserEntity user, PropertyEntity property);

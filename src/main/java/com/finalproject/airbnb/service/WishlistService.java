@@ -8,6 +8,7 @@ import com.finalproject.airbnb.model.exceptions.BadRequestException;
 import com.finalproject.airbnb.model.exceptions.NotFoundException;
 import com.finalproject.airbnb.model.repositories.PropertyRepository;
 import com.finalproject.airbnb.model.repositories.WishlistRepository;
+import jakarta.transaction.Transactional;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,7 @@ public class WishlistService extends AbstractService {
 
     @Autowired
     private WishlistRepository wishlistRepository;
+
     @Autowired
     private PropertyRepository propertyRepository;
 
@@ -45,9 +47,10 @@ public class WishlistService extends AbstractService {
         return "added to wishlist";
     }
 
+    @Transactional
     public String removeFromWishlist(int propertyId, int loggedId) {
         PropertyEntity property = propertyRepository.findById(propertyId).orElseThrow(() -> new NotFoundException("Property not found"));
-        UserEntity user = userService.getUserById(loggedId);
+        UserEntity user = userRepository.findById(loggedId).orElseThrow(() -> new NotFoundException("User not found!"));
         if (!wishlistRepository.existsByUserAndProperty(user,property)){
             throw new BadRequestException("you dont have that property in your wishlist");
         }

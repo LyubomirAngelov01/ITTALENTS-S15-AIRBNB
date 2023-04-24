@@ -11,6 +11,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -54,25 +58,28 @@ class ReservationControllerTest {
         reservations.add(reservationEntity1);
         reservations.add(reservationEntity2);
 
-        when(reservationRepository.findAllByUserIdAndAndCheckInDateAfter(loggedId, LocalDate.now())).thenReturn(reservations);
+        Pageable pageable = PageRequest.of(0, 10);
+        Page<ReservationEntity> reservationsPage = new PageImpl<>(reservations, pageable, reservations.size());
 
-        List<UpcomingReservationClientDTO> upcomingReservations = reservationService.listUpcomingReservationsForAClient(loggedId);
+        when(reservationRepository.findAllByUserIdAndAndCheckInDateAfter(loggedId, LocalDate.now(), pageable)).thenReturn(reservationsPage);
 
-        assertEquals(2, upcomingReservations.size());
-        assertEquals(reservationEntity1.getCheckInDate(), upcomingReservations.get(0).getCheckInDate());
-        assertEquals(reservationEntity1.getCheckOutDate(), upcomingReservations.get(0).getCheckOutDate());
-        assertEquals(property.getId(), upcomingReservations.get(0).getPropertyId());
-        assertEquals(property.getTitle(), upcomingReservations.get(0).getTitle());
+        Page<UpcomingReservationClientDTO> upcomingReservations = reservationService.listUpcomingReservationsForAClient(loggedId, pageable);
 
-        assertEquals(reservationEntity2.getCheckInDate(), upcomingReservations.get(1).getCheckInDate());
-        assertEquals(reservationEntity2.getCheckOutDate(), upcomingReservations.get(1).getCheckOutDate());
-        assertEquals(property.getId(), upcomingReservations.get(1).getPropertyId());
-        assertEquals(property.getTitle(), upcomingReservations.get(1).getTitle());
+        assertEquals(2, upcomingReservations.getTotalElements());
+        assertEquals(reservationEntity1.getCheckInDate(), upcomingReservations.getContent().get(0).getCheckInDate());
+        assertEquals(reservationEntity1.getCheckOutDate(), upcomingReservations.getContent().get(0).getCheckOutDate());
+        assertEquals(property.getId(), upcomingReservations.getContent().get(0).getPropertyId());
+        assertEquals(property.getTitle(), upcomingReservations.getContent().get(0).getTitle());
 
-        verify(reservationRepository).findAllByUserIdAndAndCheckInDateAfter(loggedId, LocalDate.now());
+        assertEquals(reservationEntity2.getCheckInDate(), upcomingReservations.getContent().get(1).getCheckInDate());
+        assertEquals(reservationEntity2.getCheckOutDate(), upcomingReservations.getContent().get(1).getCheckOutDate());
+        assertEquals(property.getId(), upcomingReservations.getContent().get(1).getPropertyId());
+        assertEquals(property.getTitle(), upcomingReservations.getContent().get(1).getTitle());
+
+        verify(reservationRepository).findAllByUserIdAndAndCheckInDateAfter(loggedId, LocalDate.now(), pageable);
     }
 
-    @Test
+        @Test
     void testRemoveReservation_success() {
         int reservationId = 1;
         int loggedId = 1;

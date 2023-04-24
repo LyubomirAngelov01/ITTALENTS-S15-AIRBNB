@@ -37,6 +37,9 @@ public class ReservationService extends AbstractService {
         reservation.setProperty(property);
         reservation.setCheckInDate(reservationDTO.getCheckInDate());
         reservation.setCheckOutDate(reservationDTO.getCheckOutDate());
+        if(reservationDTO.getGuests() > property.getMaxGuests()){
+            throw new BadRequestException("Only " + property.getMaxGuests() + " available slots for guests!");
+        }
         reservation.setGuests(reservationDTO.getGuests());
         reservationRepository.save(reservation);
 

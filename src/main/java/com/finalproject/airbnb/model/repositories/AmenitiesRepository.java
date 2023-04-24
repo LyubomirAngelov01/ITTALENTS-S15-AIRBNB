@@ -9,6 +9,8 @@ import org.springframework.stereotype.Repository;
 public interface AmenitiesRepository extends JpaRepository<AmenitiesEntity, Integer> {
 
     AmenitiesEntity getByProperty(PropertyEntity property);
+
+
 }
 
 

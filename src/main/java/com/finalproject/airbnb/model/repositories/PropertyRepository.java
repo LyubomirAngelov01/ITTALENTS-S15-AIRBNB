@@ -33,11 +33,11 @@ public interface PropertyRepository extends JpaRepository<PropertyEntity, Intege
     @Query
             ("SELECT p FROM properties p WHERE "
                     + "(:city IS NULL OR p.city = :city) AND "
-                    + "(:maxGuests IS NULL OR p.maxGuests <= :maxGuests) AND "
+                    + "(:maxGuests IS NULL OR p.maxGuests >= :maxGuests) AND "
                     + "(:price IS NULL OR p.price <= :price) AND "
-                    + "(:bathrooms IS NULL OR p.bathrooms = :bathrooms) AND "
-                    + "(:bedrooms IS NULL OR p.bedrooms = :bedrooms) AND "
-                    + "(:beds IS NULL OR p.beds = :beds) AND "
+                    + "(:bathrooms IS NULL OR p.bathrooms >= :bathrooms) AND "
+                    + "(:bedrooms IS NULL OR p.bedrooms >= :bedrooms) AND "
+                    + "(:beds IS NULL OR p.beds >= :beds) AND "
                     + "(:categoryNum IS NULL OR p.category.id = :categoryNum)")
     Page<PropertyEntity> findBySearchParams(
             @Param("city") String city,
