@@ -13,8 +13,8 @@ import java.util.List;
 @AllArgsConstructor
 public class WishlistPropertyDTO {
 
+    private int propertyId;
     private String title;
-    private List<String> photosUrl;
     private double avgRating;
     private double price;
 

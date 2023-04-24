@@ -15,6 +15,6 @@ public class UpcomingReservationClientDTO {
 
     private LocalDate checkInDate;
     private LocalDate checkOutDate;
-    private int PropertyId;
+    private int propertyId;
     private String title;
 }

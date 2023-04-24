@@ -9,6 +9,8 @@ import com.finalproject.airbnb.model.exceptions.BadRequestException;
 import com.finalproject.airbnb.model.exceptions.NotFoundException;
 import com.finalproject.airbnb.model.exceptions.UnauthorizedException;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -20,7 +22,11 @@ public class ReservationService extends AbstractService {
 
 
     public SuccessfulReservationDTO makeReservation(int userId, int propertyId, ReservationDTO reservationDTO) {
-        validDates(reservationDTO, propertyId);
+
+        validDates(reservationDTO);
+        if (reservationDTO.getCheckOutDate().equals(reservationDTO.getCheckInDate())){
+            throw new BadRequestException("you have to select different dates for check in and check out");
+        }
 
         checkAvailability(reservationDTO, propertyId);
 
@@ -46,12 +52,10 @@ public class ReservationService extends AbstractService {
     }
 
 
-    public List<UpcomingReservationClientDTO> listUpcomingReservationsForAClient(int loggedId) {
-        List<ReservationEntity> reservations = reservationRepository.findAllByUserIdAndAndCheckInDateAfter(loggedId, LocalDate.now());
-        List<UpcomingReservationClientDTO> upcomingReservations = reservations.stream()
-                .map(reservation -> new UpcomingReservationClientDTO(
-                        reservation.getCheckInDate(), reservation.getCheckOutDate(), reservation.getProperty().getId(), reservation.getProperty().getTitle()))
-                .collect(Collectors.toList());
+    public Page<UpcomingReservationClientDTO> listUpcomingReservationsForAClient(int loggedId, Pageable pageable) {
+        Page<ReservationEntity> reservations = reservationRepository.findAllByUserIdAndAndCheckInDateAfter(loggedId, LocalDate.now(),pageable);
+        Page<UpcomingReservationClientDTO> upcomingReservations = reservations.map(reservationEntity -> new UpcomingReservationClientDTO(
+                reservationEntity.getCheckInDate(),reservationEntity.getCheckOutDate(),reservationEntity.getProperty().getId(),reservationEntity.getProperty().getTitle()));
 
         return upcomingReservations;
     }
@@ -81,7 +85,7 @@ public class ReservationService extends AbstractService {
         }
     }
 
-    private void validDates(ReservationDTO reservationDTO, int propertyId) {
+    private void validDates(ReservationDTO reservationDTO) {
         if ((reservationDTO.getCheckInDate().isBefore(LocalDate.now())) ||
                 (reservationDTO.getCheckOutDate().isBefore(reservationDTO.getCheckInDate()))) {
             throw new BadRequestException("select valid dates for reservation");

@@ -29,8 +29,12 @@ public class MessageService extends AbstractService {
     UserRepository userRepository;
 
     public String sendMessage(int senderId, int receiverId, String text) {
+        if (senderId == receiverId){
+            throw new BadRequestException("you can't send message to yourself");
+        }
         UserEntity sender = getUserById(senderId);
         UserEntity receiver = getUserById(receiverId);
+
 
         if (!(reservationRepository.reservationsBetweenUsers(receiverId, senderId) > 0)) {
             throw new BadRequestException("you dont have a reservation with that user");
@@ -43,27 +47,20 @@ public class MessageService extends AbstractService {
     public Page<ChatDTO> listChatWithAUser(int loggedId, int receiverId, Pageable pageable) {
         UserEntity sender = userRepository.findById(loggedId).orElseThrow(() -> new UnauthorizedException("log in first"));
         UserEntity receiver = userRepository.findById(receiverId).orElseThrow(() -> new NotFoundException("user not found"));
-        Page<MessageEntity> chats = messageRepository.listAChat(loggedId, receiverId, pageable);
+        Page<MessageEntity> chats = messageRepository.listAChat(sender.getId(), receiver.getId(), pageable);
         Page<ChatDTO> messages = chats.map(messageEntity -> mapper.map(messageEntity, ChatDTO.class));
 
 
         return messages;
     }
 
-    public List<InboxUserDTO> getInbox(int loggedId) {
+    public Page<InboxUserDTO> getInbox(int loggedId,Pageable pageable) {
 
-        List<Integer> contactsIds = messageRepository.getAllBySenderId(loggedId);
-        contactsIds.addAll(messageRepository.getAllByReceiverId(loggedId));
+        Page<Integer> contactsIds = messageRepository.getInbox(loggedId,pageable);
+        Page<UserEntity> contacts = contactsIds.map(integer -> getUserById(integer));
 
-        contactsIds = contactsIds.stream().distinct().collect(Collectors.toList());
+        Page<InboxUserDTO> inbox = contacts.map(user -> new InboxUserDTO(user.getFirstName(),user.getLastName(),user.getId()));
 
-        List<InboxUserDTO> inbox = new ArrayList<>();
-        for (Integer id : contactsIds) {
-            UserEntity user = userRepository.findById(id).orElseThrow(() -> new BadRequestException("user not found"));
-
-            inbox.add(new InboxUserDTO(user.getFirstName(), user.getLastName(), user.getId()));
-
-        }
         return inbox;
     }
 }

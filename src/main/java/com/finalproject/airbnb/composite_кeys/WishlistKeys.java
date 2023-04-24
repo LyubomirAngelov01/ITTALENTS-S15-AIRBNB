@@ -1,4 +1,4 @@
-package com.finalproject.airbnb.compositeKeysClasses;
+package com.finalproject.airbnb.composite_кeys;
 
 import com.finalproject.airbnb.model.entities.PropertyEntity;
 import com.finalproject.airbnb.model.entities.UserEntity;

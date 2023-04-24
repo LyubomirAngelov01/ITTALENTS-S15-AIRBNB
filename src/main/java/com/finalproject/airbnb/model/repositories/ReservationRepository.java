@@ -4,6 +4,7 @@ import com.finalproject.airbnb.model.entities.PropertyEntity;
 import com.finalproject.airbnb.model.entities.ReservationEntity;
 import com.finalproject.airbnb.model.entities.UserEntity;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -13,9 +14,9 @@ import java.util.List;
 
 public interface ReservationRepository extends JpaRepository<ReservationEntity,Integer> {
 
-    List<ReservationEntity> findAllByUser(UserEntity user);
+    Page<ReservationEntity> findAllByUserOrderByCheckInDateDesc(UserEntity user,Pageable pageable);
 
-    List<ReservationEntity> findAllByUserIdAndAndCheckInDateAfter(int userId, LocalDate checkInDate);
+    Page<ReservationEntity> findAllByUserIdAndAndCheckInDateAfter(int userId, LocalDate checkInDate, Pageable pageable);
 
     boolean existsByUserAndProperty(UserEntity user, PropertyEntity property);
 

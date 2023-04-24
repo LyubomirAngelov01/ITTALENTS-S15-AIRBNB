@@ -36,9 +36,9 @@ public class MessageController extends AbstractController {
     }
 
     @GetMapping("/users/messages")
-    public List<InboxUserDTO> getInbox(HttpServletRequest request) {
+    public Page<InboxUserDTO> getInbox(HttpServletRequest request,Pageable pageable) {
         int loggedId = extractUserIdFromToken(request);
-        return messageService.getInbox(loggedId);
+        return messageService.getInbox(loggedId,pageable);
     }
 
 }

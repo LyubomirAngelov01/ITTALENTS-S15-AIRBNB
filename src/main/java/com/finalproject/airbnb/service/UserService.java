@@ -10,26 +10,16 @@ import com.finalproject.airbnb.model.exceptions.UnauthorizedException;
 import com.finalproject.airbnb.model.repositories.CountryCodeRepository;
 import com.finalproject.airbnb.model.repositories.ReservationRepository;
 import com.finalproject.airbnb.model.repositories.UserRepository;
-import jakarta.mail.internet.MimeMessage;
-import jakarta.transaction.Transactional;
-import lombok.SneakyThrows;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.modelmapper.internal.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMailMessage;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 
 @Service
@@ -69,17 +59,17 @@ public class UserService extends AbstractService {
         return mapper.map(user, UserWithoutPasswordDTO.class);
     }
 
-    public TokenDTO login(LoginDTO dto) {
+    public LoginTokenDTO login(LoginDTO dto) {
         UserEntity user = userRepository.getByEmail(dto.getEmail()).orElseThrow(() -> new UnauthorizedException("Wrong credentials"));
 
         if (!encoder.matches(dto.getPassword(), user.getPassword())) {
-            logger.error("user " + user.getId() + " tried to log in with wrong credentials");
+            logger.error("user " + user.getId() + " tried to log in with wrong password");
             throw new UnauthorizedException("Wrong credentials");
         }
         String token = jwtService.generateToken(user);
 
         logger.info(user.getId() + " user logged in");
-        return new TokenDTO(token);
+        return new LoginTokenDTO(user.getId(), user.getFirstName(), user.getLastName(), token);
     }
 
     public UserWithoutPasswordDTO checkProfile(int id) {
@@ -105,19 +95,19 @@ public class UserService extends AbstractService {
     }
 
 
-    public void deleteAccount(int id) {
+    public String deleteAccount(int id) {
         logger.info(id + " user have been deleted from the database");
 
         userRepository.deleteById(id);
+        return "succesfully deleted account";
     }
 
 
-    public List<TripDTO> listAllTrips(int userId, Pageable pageable) {
+    public Page<TripDTO> listAllTrips(int userId, Pageable pageable) {
         UserEntity u = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("user not found"));
-        List<ReservationEntity> reservations = reservationRepository.findAllByUser(u);
-        List<TripDTO> trips = reservations.stream()
-                .map(reservation -> new TripDTO(reservation.getCheckInDate(), reservation.getCheckOutDate(),
-                        reservation.getProperty().getId(), reservation.getProperty().getTitle())).collect(Collectors.toList());
+        Page<ReservationEntity> reservations = reservationRepository.findAllByUserOrderByCheckInDateDesc(u,pageable);
+        Page<TripDTO> trips = reservations.map(reservationEntity -> new TripDTO(
+                reservationEntity.getCheckInDate(),reservationEntity.getCheckOutDate(),reservationEntity.getProperty().getId(),reservationEntity.getProperty().getTitle()));
 
         return trips;
     }

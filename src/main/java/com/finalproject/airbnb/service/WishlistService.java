@@ -12,6 +12,9 @@ import com.finalproject.airbnb.model.repositories.WishlistRepository;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -31,24 +34,11 @@ public class WishlistService extends AbstractService {
     @Autowired
     private UserService userService;
 
-    public List<WishlistPropertyDTO> takeWishlistOfUser(int userId) {
-        List<WishlistEntity> wishlists = wishlistRepository.findAllByUserId(userId);
-        List<PropertyEntity> properties = wishlists.stream()
-                .map(wishlist -> wishlist.getProperty())
-                .collect(Collectors.toList());
-        List<WishlistPropertyDTO> wishlistProperties = properties.stream()
-                .map(property -> mapper.map(property, WishlistPropertyDTO.class))
-                .collect(Collectors.toList());
-
-        for (int i = 0; i < properties.size(); i++) {
-            List<PhotosEntity> photos = properties.get(i).getPhotos();
-            List<String> urls = new ArrayList();
-            for (PhotosEntity photo : photos) {
-                urls.add(photo.getPhotoUrl());
-            }
-            wishlistProperties.get(i).setPhotosUrl(urls);
-        }
-        return wishlistProperties;
+    public Page<WishlistPropertyDTO> takeWishlistOfUser(int userId, Pageable pageable) {
+        Page<WishlistEntity> wishlists = wishlistRepository.findAllByUserId(userId,pageable);
+        Page<WishlistPropertyDTO> wishlist = wishlists.map(wishlistEntity -> new WishlistPropertyDTO(wishlistEntity.getProperty().getId(),wishlistEntity.getProperty().getTitle(),
+                wishlistEntity.getProperty().getAvgRating(),wishlistEntity.getProperty().getPrice()));
+        return wishlist;
     }
 
     public String addToWishlist(int propertyId, int userId) {

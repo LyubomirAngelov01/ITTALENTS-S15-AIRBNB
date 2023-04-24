@@ -8,6 +8,8 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,8 +33,8 @@ public class ReservationController extends AbstractController {
     }
 
     @GetMapping("/users/reservations")
-    public List<UpcomingReservationClientDTO> checkUpcomingReservations(HttpServletRequest request) {
+    public Page<UpcomingReservationClientDTO> checkUpcomingReservations(HttpServletRequest request, Pageable pageable) {
         int userId = extractUserIdFromToken(request);
-        return reservationService.listUpcomingReservationsForAClient(userId);
+        return reservationService.listUpcomingReservationsForAClient(userId,pageable);
     }
 }

@@ -10,9 +10,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
-
-import java.util.List;
-
 @RestController
 
 public class UserController extends AbstractController {
@@ -28,8 +25,8 @@ public class UserController extends AbstractController {
     }
 
     @PostMapping("/users/login")
-    public TokenDTO login(@RequestBody LoginDTO dto) {
-        TokenDTO responseDto = userService.login(dto);
+    public LoginTokenDTO login(@RequestBody LoginDTO dto) {
+        LoginTokenDTO responseDto = userService.login(dto);
         return responseDto;
     }
 
@@ -50,8 +47,8 @@ public class UserController extends AbstractController {
 
     @DeleteMapping("/users")
     @SecurityRequirement(name = "JWT token")
-    public void deleteAccount(HttpServletRequest request) {
-        userService.deleteAccount(extractUserIdFromToken(request));
+    public String deleteAccount(HttpServletRequest request) {
+        return userService.deleteAccount(extractUserIdFromToken(request));
     }
 
     @GetMapping("/users/{id}")
@@ -62,7 +59,7 @@ public class UserController extends AbstractController {
 
     @GetMapping("/users/trips")
     @SecurityRequirement(name = "JWT token")
-    public List<TripDTO> checkTrips(HttpServletRequest request, Pageable pageable) {
+    public Page<TripDTO> checkTrips(HttpServletRequest request, Pageable pageable) {
         int id = extractUserIdFromToken(request);
         return userService.listAllTrips(id,pageable);
     }
