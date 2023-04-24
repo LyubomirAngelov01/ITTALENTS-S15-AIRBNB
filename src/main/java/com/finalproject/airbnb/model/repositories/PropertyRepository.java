@@ -17,6 +17,8 @@ public interface PropertyRepository extends JpaRepository<PropertyEntity, Intege
 
     List<PropertyEntity> findAllByOwner(UserEntity owner);
 
+    void deleteAllByOwner(UserEntity owner);
+
 
     default boolean userOwnsProperty(int userId, int propertyId) {
         Optional<PropertyEntity> optionalProperty = findById(propertyId);

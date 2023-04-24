@@ -19,6 +19,8 @@ public interface ReviewRepository extends JpaRepository<ReviewEntity, Integer> {
 
    List<ReviewEntity> findAllByProperty(PropertyEntity property, Pageable pageable);
 
+   void deleteAllByOwner(UserEntity user);
+
    boolean existsByOwner(UserEntity owner);
 
    boolean existsByOwnerAndProperty(UserEntity owner, PropertyEntity property);

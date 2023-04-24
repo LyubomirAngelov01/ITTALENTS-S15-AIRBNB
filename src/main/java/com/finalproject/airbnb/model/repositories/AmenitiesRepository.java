@@ -10,6 +10,8 @@ public interface AmenitiesRepository extends JpaRepository<AmenitiesEntity, Inte
 
     AmenitiesEntity getByProperty(PropertyEntity property);
 
+    void deleteByProperty(PropertyEntity property);
+
 
 }
 

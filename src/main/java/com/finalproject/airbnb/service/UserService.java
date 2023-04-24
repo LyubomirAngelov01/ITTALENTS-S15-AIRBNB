@@ -2,6 +2,7 @@ package com.finalproject.airbnb.service;
 
 import com.finalproject.airbnb.Utility;
 import com.finalproject.airbnb.model.DTOs.*;
+import com.finalproject.airbnb.model.entities.PropertyEntity;
 import com.finalproject.airbnb.model.entities.ReservationEntity;
 import com.finalproject.airbnb.model.entities.UserEntity;
 import com.finalproject.airbnb.model.exceptions.BadRequestException;
@@ -10,6 +11,7 @@ import com.finalproject.airbnb.model.exceptions.UnauthorizedException;
 import com.finalproject.airbnb.model.repositories.CountryCodeRepository;
 import com.finalproject.airbnb.model.repositories.ReservationRepository;
 import com.finalproject.airbnb.model.repositories.UserRepository;
+import jakarta.transaction.Transactional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
+import java.util.List;
 
 
 @Service
@@ -92,9 +95,21 @@ public class UserService extends AbstractService {
     }
 
 
+    @Transactional
     public String deleteAccount(int id) {
         logger.info(id + " user have been deleted from the database");
-
+        UserEntity user = getUserById(id);
+        List<PropertyEntity> propertyEntities = propertyRepository.findAllByOwner(user);
+        for(PropertyEntity p : propertyEntities){
+            amenitiesRepository.deleteByProperty(p);
+            photosRepository.deleteAllByPropertyId(p.getId());
+        }
+        propertyRepository.deleteAllByOwner(user);
+        reservationRepository.deleteAllByUser(user);
+        wishlistRepository.deleteAllByUser(user);
+        messageRepository.deleteAllBySender(user);
+        messageRepository.deleteAllByReceiver(user);
+        reviewRepository.deleteAllByOwner(user);
         userRepository.deleteById(id);
         return "succesfully deleted account";
     }

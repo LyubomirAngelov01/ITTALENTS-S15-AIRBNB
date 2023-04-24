@@ -20,6 +20,7 @@ public interface ReservationRepository extends JpaRepository<ReservationEntity,I
 
     boolean existsByUserAndProperty(UserEntity user, PropertyEntity property);
 
+    void deleteAllByUser(UserEntity user);
     ReservationEntity findByUserAndProperty(UserEntity user, PropertyEntity property);
 
     @Query(value = "SELECT * FROM reservations r WHERE r.user_id = :user_id AND r.property_id = :property_id ORDER BY r.check_out_date LIMIT 1", nativeQuery = true)
