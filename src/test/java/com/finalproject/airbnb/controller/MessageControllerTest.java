@@ -72,7 +72,7 @@ class MessageControllerTest {
     }
 
     @Test
-    void testListChatWithAUser() {
+    void listChatWithAUser() {
         UserEntity sender = new UserEntity();
         sender.setId(1);
         sender.setFirstName("sender");
@@ -104,6 +104,7 @@ class MessageControllerTest {
 
         when(userRepository.findById(loggedId)).thenReturn(Optional.of(sender));
         when(userRepository.findById(receiverId)).thenReturn(Optional.of(receiver));
+        when(reservationRepository.reservationsBetweenUsers(receiverId, loggedId)).thenReturn(1);
         Page<MessageEntity> page = new PageImpl<>(messages, pageable, messages.size());
         when(messageRepository.listAChat(loggedId, receiverId, pageable)).thenReturn(page);
         ChatDTO chatDTO1 = new ChatDTO();
